@@ -130,16 +130,8 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
         }
     }
 
-    private void showException(Thread t, Throwable e) {
-        String msg;
-        StackTraceElement[] ste = e.getStackTrace();
-        if (ste.length == 0)
-            msg = "Empty Stacktrace";
-        else {
-            msg = String.format("Exception in \"%s\" %s: %s\n\tat %s",
-                    t.getName(), e.getClass().getCanonicalName(), e.getMessage(), ste[0]);
-        }
-        JOptionPane.showMessageDialog(null, msg + "\nNO CONNECTION!", "Exception", JOptionPane.ERROR_MESSAGE);
+    private void showConnectionError(Thread t, Throwable e) {
+        JOptionPane.showMessageDialog(null,"connection to the server is not established" , "Connection ERROR", JOptionPane.ERROR_MESSAGE);
     }
 
     private void registration() {
@@ -151,7 +143,7 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
             try {
                 HANDLER.login(ip, port, this, HANDLER, LOGIN_FIELD.getText());
             } catch (IOException exception) {
-                showException(Thread.currentThread(), exception);
+                showConnectionError(Thread.currentThread(), exception);
             }
         }
     }
