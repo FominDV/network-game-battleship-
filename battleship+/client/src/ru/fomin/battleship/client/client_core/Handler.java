@@ -14,7 +14,7 @@ public class Handler implements SocketThreadListener {
 private SocketThread socketThread;
 private ClientAuthenticationFrame clientAuthenticationFrame;
     public void login(String ip, int port, ClientAuthenticationFrame authenticationFrame, Handler handler, String login) throws IOException {
-        this.clientAuthenticationFrame=clientAuthenticationFrame;
+        this.clientAuthenticationFrame=authenticationFrame;
         Socket socket = new Socket(ip, port);
         socketThread=new SocketThread(this, login, socket );
 

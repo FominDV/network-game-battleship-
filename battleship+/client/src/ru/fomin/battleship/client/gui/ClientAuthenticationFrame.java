@@ -13,7 +13,7 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
     private final String INVALID_PORT = "Invalid port: ";
     private final String EDIT_IP_TEXT = "Input new ip address\nNow ip: ";
     private final String EDIT_PORT_TEXT = "Input new port\nNow port: ";
-    private final Handler HANDLER = new Handler();
+    public final Handler HANDLER = new Handler();
     private final int WIDTH = 300;
     private final int HEIGHT = 300;
     private final JPanel MAIN_PANEL = new JPanel(new GridLayout(7, 1));
@@ -37,7 +37,6 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
     private final Font TEXT_FONT_CONNECTION = new Font(Font.SANS_SERIF, Font.BOLD, 16);
     private final String[] TEXT_LABEL_CONNECTING = {"OFFLINE", "ONLINE"};
     private final JLabel LABEL_CONNECTING = new JLabel(TEXT_LABEL_CONNECTING[0]);
-    private Thread connection;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new ClientAuthenticationFrame());
@@ -74,7 +73,6 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
         LABEL_CONNECTING.setFont(TEXT_FONT_CONNECTION);
         LABEL_CONNECTING.setHorizontalAlignment(SwingConstants.CENTER);
         add(MAIN_PANEL);
-
         setVisible(true);
 
     }
@@ -136,7 +134,7 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
             msg = String.format("Exception in \"%s\" %s: %s\n\tat %s",
                     t.getName(), e.getClass().getCanonicalName(), e.getMessage(), ste[0]);
         }
-        JOptionPane.showMessageDialog(null, msg + "\nNOT CONNECTION!", "Exception", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, msg + "\nNO CONNECTION!", "Exception", JOptionPane.ERROR_MESSAGE);
     }
 
     private void registration() {
