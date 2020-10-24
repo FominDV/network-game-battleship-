@@ -35,8 +35,8 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
     private int port = 8189;
     private final Font TEXT_FONT = new Font(Font.SANS_SERIF, Font.ITALIC, 16);
     private final Font TEXT_FONT_CONNECTION = new Font(Font.SANS_SERIF, Font.BOLD, 16);
-    private final String[] TEXT_LABEL_CONNECTING = {"OFFLINE", "ONLINE"};
-    private final JLabel LABEL_CONNECTING = new JLabel(TEXT_LABEL_CONNECTING[0]);
+    private final String TEXT_LABEL_CONNECTING = "AUTHORIZATION";
+    private final JLabel LABEL_CONNECTING = new JLabel(TEXT_LABEL_CONNECTING);
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new ClientAuthenticationFrame());
@@ -100,12 +100,16 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
     }
 
     private void editIP() {
-        String newIP = JOptionPane.showInputDialog(EDIT_IP_TEXT + ip);
-        if (isValidIP(newIP)) {
-            ip = newIP;
-            LABEL_IP.setText(LABEL_IP_TEXT + ip);
-        } else {
-            JOptionPane.showMessageDialog(null, INVALID_IP + newIP, "Invalid IP ERROR", JOptionPane.ERROR_MESSAGE);
+        try {
+            String newIP = JOptionPane.showInputDialog(EDIT_IP_TEXT + ip);
+            if (isValidIP(newIP)) {
+                ip = newIP;
+                LABEL_IP.setText(LABEL_IP_TEXT + ip);
+            } else {
+                JOptionPane.showMessageDialog(null, INVALID_IP + newIP, "Invalid IP ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
     }
 
@@ -113,6 +117,7 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
         String stringPort = "unknown";
         try {
             stringPort = JOptionPane.showInputDialog(EDIT_PORT_TEXT + port);
+            if(stringPort.equals("")) return;
             int newPort = Integer.parseInt(stringPort);
             if (isValidPort(newPort)) {
                 port = newPort;
@@ -173,8 +178,6 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
     private void showValidPortError(String port) {
         JOptionPane.showMessageDialog(null, INVALID_PORT + port, "Invalid port ERROR", JOptionPane.ERROR_MESSAGE);
     }
-    public void setLabelOnline(){
-        LABEL_CONNECTING.setText(TEXT_LABEL_CONNECTING[1]);
-    }
+
 
 }

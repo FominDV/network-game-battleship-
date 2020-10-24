@@ -22,7 +22,7 @@ private ClientAuthenticationFrame clientAuthenticationFrame;
 
     @Override
     public void onSocketStart(SocketThread thread, Socket socket) {
-        clientAuthenticationFrame.setLabelOnline();
+
     }
 
     @Override
