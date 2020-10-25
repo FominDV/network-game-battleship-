@@ -1,12 +1,20 @@
 package ru.fomin.battleship.client.gui;
 
+import ru.fomin.battleship.common.LibraryOfPrefixes;
+import ru.fomin.network.SocketThread;
+
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class PreparingForGameFrame extends JFrame {
     private final int WIDTH=600;
     private final int HEIGHT=500;
     private final String WINDOW_TITLE="Map-Maker";
-    public PreparingForGameFrame(){
+    private final JButton send = new JButton("send");
+    private SocketThread socketThread;
+    public PreparingForGameFrame(SocketThread socketThread){
+        this.socketThread=socketThread;
         SwingUtilities.invokeLater(()->initialization());
     }
     private void initialization(){
@@ -14,6 +22,8 @@ public class PreparingForGameFrame extends JFrame {
         setLocationRelativeTo(null);
         setSize(WIDTH, HEIGHT);
         setTitle(WINDOW_TITLE);
+        send.addActionListener(e -> socketThread.sendMessage("A"+ LibraryOfPrefixes.DELIMITER+"a"));
+        add(send);
         setVisible(true);
     }
 

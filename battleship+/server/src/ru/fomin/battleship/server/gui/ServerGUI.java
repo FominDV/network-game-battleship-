@@ -12,14 +12,18 @@ public class ServerGUI extends JFrame implements ActionListener, Thread.Uncaught
 
     private static final int POS_X = 800;
     private static final int POS_Y = 200;
-    private static final int WIDTH = 600;
+    private static final int WIDTH = 400;
     private static final int HEIGHT = 300;
 
-    private final Server Server = new Server(this);
-    private final JButton btnStart = new JButton("Start");
-    private final JButton btnStop = new JButton("Stop");
-    private final JPanel panelTop = new JPanel(new GridLayout(1, 2));
-    private final JTextArea log = new JTextArea();
+    private final Server SERVER = new Server(this);
+    private final JButton BTN_START = new JButton("Start");
+    private final JButton BTN_STOP = new JButton("Stop");
+    private final JPanel MAIN_PANEL_TOP =new JPanel(new GridLayout(2,1));
+    private final JPanel PANEL_TOP = new JPanel(new GridLayout(1, 2));
+    private final JTextArea LOG = new JTextArea();
+    private final JLabel HEADER_LABEL =new JLabel("Server GUI");
+    Font TEXT_HEADER=new Font(Font.SANS_SERIF, Font.BOLD, 26);
+    Font TEXT_BUTTON=new Font(Font.SANS_SERIF, Font.BOLD, 20);
 
 
     public static void main(String[] args) {
@@ -37,16 +41,21 @@ public class ServerGUI extends JFrame implements ActionListener, Thread.Uncaught
         setBounds(POS_X, POS_Y, WIDTH, HEIGHT);
         setResizable(false);
         setTitle("Chat server");
+        HEADER_LABEL.setFont(TEXT_HEADER);
+        HEADER_LABEL.setHorizontalAlignment(SwingConstants.CENTER);
         setAlwaysOnTop(true);
-        log.setEditable(false);
-        log.setLineWrap(true);
-        JScrollPane scrollLog = new JScrollPane(log);
-        btnStart.addActionListener(this);
-        btnStop.addActionListener(this);
-
-        panelTop.add(btnStart);
-        panelTop.add(btnStop);
-        add(panelTop, BorderLayout.NORTH);
+        LOG.setEditable(false);
+        LOG.setLineWrap(true);
+        JScrollPane scrollLog = new JScrollPane(LOG);
+        BTN_START.addActionListener(this);
+        BTN_STOP.addActionListener(this);
+        BTN_START.setFont(TEXT_BUTTON);
+        BTN_STOP.setFont(TEXT_BUTTON);
+        PANEL_TOP.add(BTN_START);
+        PANEL_TOP.add(BTN_STOP);
+        MAIN_PANEL_TOP.add(HEADER_LABEL);
+        MAIN_PANEL_TOP.add(PANEL_TOP);
+        add(MAIN_PANEL_TOP, BorderLayout.NORTH);
         add(scrollLog, BorderLayout.CENTER);
         setVisible(true);
     }
@@ -54,19 +63,19 @@ public class ServerGUI extends JFrame implements ActionListener, Thread.Uncaught
     @Override
     public void onServerMessage(String msg) {
         SwingUtilities.invokeLater(() -> {
-            log.append(msg + "\n");
-            log.setCaretPosition(log.getDocument().getLength());
+            LOG.append(msg + "\n");
+            LOG.setCaretPosition(LOG.getDocument().getLength());
         });
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
-        if (src == btnStop) {
-            Server.stop();
-        } else if (src == btnStart) {
+        if (src == BTN_STOP) {
+            SERVER.stop();
+        } else if (src == BTN_START) {
 //            throw new RuntimeException("Hello from EDT!");
-            Server.start(8189);
+            SERVER.start(8189);
         } else {
             throw new RuntimeException("Unknown source: " + src);
         }
