@@ -135,7 +135,7 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
 
     private void registration() {
         this.setVisible(false);
-        new RegistrationFrame(this, ip, port);
+        new RegistrationFrame(this, ip, port, HANDLER);
     }
 
     private void login() {

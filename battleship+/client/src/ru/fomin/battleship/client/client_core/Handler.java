@@ -2,6 +2,7 @@ package ru.fomin.battleship.client.client_core;
 
 import ru.fomin.battleship.client.gui.ClientAuthenticationFrame;
 import ru.fomin.battleship.client.gui.PreparingForGameFrame;
+import ru.fomin.battleship.client.gui.RegistrationFrame;
 import ru.fomin.battleship.common.LibraryOfPrefixes;
 import ru.fomin.network.SocketThread;
 import ru.fomin.network.SocketThreadListener;
@@ -11,15 +12,25 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class Handler implements SocketThreadListener {
+    private boolean isRegistration = false;
     private boolean isValidAuthentication = false;
     private SocketThread socketThread;
     private ClientAuthenticationFrame clientAuthenticationFrame;
     private PreparingForGameFrame preparingForGameFrame;
+    private RegistrationFrame registrationFrame;
 
     public void login(String ip, int port, ClientAuthenticationFrame authenticationFrame, Handler handler, String login) throws IOException {
         this.clientAuthenticationFrame = authenticationFrame;
+        this.isRegistration = isRegistration;
         Socket socket = new Socket(ip, port);
         socketThread = new SocketThread(this, login, socket);
+    }
+
+    public void login(String ip, int port, RegistrationFrame registrationFrame, Handler handler, Boolean isRegistration) throws IOException {
+        this.registrationFrame = registrationFrame;
+        this.isRegistration = isRegistration;
+        Socket socket = new Socket(ip, port);
+        socketThread = new SocketThread(this, "registration", socket);
     }
 
     @Override
@@ -57,11 +68,19 @@ public class Handler implements SocketThreadListener {
 
     @Override
     public void onSocketReady(SocketThread thread, Socket socket) {
-        String login = clientAuthenticationFrame.getLogin();
-        if(login.equals("")) login="Invalid_login";
-        String password = new String(clientAuthenticationFrame.getPassword());
-        if(password.equals("")) password="Invalid_password";
-        thread.sendMessage(LibraryOfPrefixes.getAuthRequest(login, password));
+        if (isRegistration) {
+            String nickName = registrationFrame.getNickName()
+            String login = registrationFrame.getLogin();
+            String password = new String(registrationFrame.getPassword());
+            thread.sendMessage("");
+            isRegistration = false;
+        } else {
+            String login = clientAuthenticationFrame.getLogin();
+            if (login.equals("")) login = "Invalid_login";
+            String password = new String(clientAuthenticationFrame.getPassword());
+            if (password.equals("")) password = "Invalid_password";
+            thread.sendMessage(LibraryOfPrefixes.getAuthRequest(login, password));
+        }
     }
 
     @Override
