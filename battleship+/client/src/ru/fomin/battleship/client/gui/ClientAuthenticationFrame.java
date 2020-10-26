@@ -34,9 +34,9 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
     private String ip = "127.0.0.1";
     private int port = 8189;
     private final Font TEXT_FONT = new Font(Font.SANS_SERIF, Font.ITALIC, 16);
-    private final Font TEXT_FONT_CONNECTION = new Font(Font.SANS_SERIF, Font.BOLD, 16);
-    private final String TEXT_LABEL_CONNECTING = "AUTHORIZATION";
-    private final JLabel LABEL_CONNECTING = new JLabel(TEXT_LABEL_CONNECTING);
+    private final Font TEXT_FONT_HEADER = new Font(Font.SANS_SERIF, Font.BOLD, 20);
+    private final String TEXT_LABEL_HEADER = "AUTHORIZATION";
+    private final JLabel LABEL_HEADER = new JLabel(TEXT_LABEL_HEADER);
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new ClientAuthenticationFrame());
@@ -47,6 +47,7 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
         setLocationRelativeTo(null);
         setSize(WIDTH, HEIGHT);
         setTitle(WINDOW_TITLE);
+        setResizable(false);
         LABEL_IP.setText(LABEL_IP_TEXT + ip);
         LABEL_PORT.setText(LABEL_PORT_TEXT + port);
         BTN_EDIT_IP.addActionListener(this);
@@ -57,6 +58,8 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
         LABEL_PORT.setFont(TEXT_FONT);
         LABEL_LOGIN.setFont(TEXT_FONT);
         LABEL_PASSWORD.setFont(TEXT_FONT);
+        LOGIN_FIELD.setFont(TEXT_FONT);
+        PASSWORD_FIELD.setFont(TEXT_FONT);
         for (int i = 0; i < SUB_PANEL.length; i++) SUB_PANEL[i] = new JPanel(new GridLayout(1, 2));
         SUB_PANEL[0].add(LABEL_IP);
         SUB_PANEL[0].add(BTN_EDIT_IP);
@@ -66,12 +69,12 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
         SUB_PANEL[2].add(LOGIN_FIELD);
         SUB_PANEL[3].add(LABEL_PASSWORD);
         SUB_PANEL[3].add(PASSWORD_FIELD);
-        MAIN_PANEL.add(LABEL_CONNECTING);
+        MAIN_PANEL.add(LABEL_HEADER);
         for (JPanel panel : SUB_PANEL) MAIN_PANEL.add(panel);
         MAIN_PANEL.add(BTN_LOGIN);
         MAIN_PANEL.add(BTN_REGISTRATION);
-        LABEL_CONNECTING.setFont(TEXT_FONT_CONNECTION);
-        LABEL_CONNECTING.setHorizontalAlignment(SwingConstants.CENTER);
+        LABEL_HEADER.setFont(TEXT_FONT_HEADER);
+        LABEL_HEADER.setHorizontalAlignment(SwingConstants.CENTER);
         add(MAIN_PANEL);
         setVisible(true);
 
@@ -117,7 +120,7 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
         String stringPort = "unknown";
         try {
             stringPort = JOptionPane.showInputDialog(EDIT_PORT_TEXT + port);
-            if(stringPort.equals("")) return;
+            if (stringPort.equals("")) return;
             int newPort = Integer.parseInt(stringPort);
             if (isValidPort(newPort)) {
                 port = newPort;
@@ -130,12 +133,9 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
         }
     }
 
-    private void showConnectionError(Thread t, Throwable e) {
-        JOptionPane.showMessageDialog(null,"connection to the server is not established" , "Connection ERROR", JOptionPane.ERROR_MESSAGE);
-    }
-
     private void registration() {
-
+        this.setVisible(false);
+        new RegistrationFrame(this, ip, port);
     }
 
     private void login() {
@@ -143,7 +143,7 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
             try {
                 HANDLER.login(ip, port, this, HANDLER, LOGIN_FIELD.getText());
             } catch (IOException exception) {
-                showConnectionError(Thread.currentThread(), exception);
+                HANDLER.showConnectError();
             }
         }
     }
@@ -180,7 +180,8 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
     public String getLogin() {
         return LOGIN_FIELD.getText();
     }
-    public char[] getPassword(){
+
+    public char[] getPassword() {
         return PASSWORD_FIELD.getPassword();
     }
 }

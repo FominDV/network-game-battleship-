@@ -22,6 +22,7 @@ public class PreparingForGameFrame extends JFrame {
         setLocationRelativeTo(null);
         setSize(WIDTH, HEIGHT);
         setTitle(WINDOW_TITLE);
+        setResizable(false);
         send.addActionListener(e -> socketThread.sendMessage("A"+ LibraryOfPrefixes.DELIMITER+"a"));
         add(send);
         setVisible(true);

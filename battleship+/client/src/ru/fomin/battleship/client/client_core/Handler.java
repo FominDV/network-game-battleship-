@@ -9,8 +9,6 @@ import ru.fomin.network.SocketThreadListener;
 import javax.swing.*;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Arrays;
-
 
 public class Handler implements SocketThreadListener {
     private boolean isValidAuthentication = false;
@@ -53,7 +51,7 @@ public class Handler implements SocketThreadListener {
         JOptionPane.showMessageDialog(null, "Invalid login or password", "Authentication error", JOptionPane.ERROR_MESSAGE);
     }
 
-    private void showConnectError() {
+    public void showConnectError() {
         JOptionPane.showMessageDialog(null, "The connection was lost", "Connection error", JOptionPane.ERROR_MESSAGE);
     }
 
