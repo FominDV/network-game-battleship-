@@ -117,12 +117,29 @@ public class RegistrationFrame extends JFrame implements ActionListener {
     }
 
     private boolean isValidData() {
-
+        String password=new String(FIELD_PASSWORD.getPassword());
+        String repeatPassword=new String(FIELD_REPEAT_PASSWORD.getPassword());
+        if(FIELD_PASSWORD.getPassword().length==0){
+            showInvalidDataError("Field of login should be not empty");
+            return false;
+        }
+        if(FIELD_PASSWORD.getPassword().toString().equals("")){
+            showInvalidDataError("Field of password should be not empty");
+            return false;
+        }
+        if(FIELD_NICKNAME.getText().equals("")){
+            showInvalidDataError("Field of nickname should be not empty");
+            return false;
+        }
+        if(!password.equals(repeatPassword)){
+            showInvalidDataError("Passwords into field should be equal");
+            return false;
+        }
         return true;
     }
 
-    private void showInvalidDataError(String message, String errorName) {
-        JOptionPane.showMessageDialog(null, message, errorName, JOptionPane.ERROR_MESSAGE);
+    private void showInvalidDataError(String message) {
+        JOptionPane.showMessageDialog(null, message, "Invalid registration's data", JOptionPane.ERROR_MESSAGE);
     }
 
     private void cancel() {
@@ -152,7 +169,7 @@ public class RegistrationFrame extends JFrame implements ActionListener {
         JOptionPane.showMessageDialog(null, message);
     }
     public void registrationNotSuccessful() {
-        showInvalidDataError("Login or nickname is already registered\nLogin: " + getLogin() + "\nNickName: " + FIELD_NICKNAME.getText(), "Error registration");
+        showInvalidDataError("Login or nickname is already registered\nLogin: " + getLogin() + "\nNickName: " + FIELD_NICKNAME.getText());
         FIELD_NICKNAME.setText("");
         FIELD_LOGIN.setText("");
         FIELD_PASSWORD.setText("");

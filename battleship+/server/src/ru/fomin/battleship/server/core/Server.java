@@ -8,6 +8,7 @@ import ru.fomin.network.SocketThreadListener;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
@@ -129,9 +130,17 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
     private void handleNonAuthMessage(ClientThread client, String msg) {
         String[] arr = msg.split(LibraryOfPrefixes.DELIMITER);
         if (arr.length == 4 && arr[0].equals(LibraryOfPrefixes.REGISTRATION)) {
-            if (SQLClient.setLoginData(arr[1], arr[2], arr[3]))
-                client.sendMessage(LibraryOfPrefixes.getRegistrationAnswer("true"));
-            else client.sendMessage(LibraryOfPrefixes.getRegistrationAnswer("false"));
+            try {
+                if (SQLClient.setLoginData(arr[1], arr[2], arr[3])) {
+                    client.sendMessage(LibraryOfPrefixes.getRegistrationAnswer("true"));
+                    putLog(String.format("New client '%s' with nickname '%s' was created into database.", arr[1], arr[3]));
+                } else {
+                    client.sendMessage(LibraryOfPrefixes.getRegistrationAnswer("false"));
+                    putLog(String.format("Error of creating new client. Client '%s' is already registered.", arr[1]));
+                }
+            } catch (SQLException e) {
+                putLog("SQL error: " + e.getStackTrace().toString());
+            }
             return;
         }
         if (arr.length != 3 || !arr[0].equals(LibraryOfPrefixes.AUTH_REQUEST)) {

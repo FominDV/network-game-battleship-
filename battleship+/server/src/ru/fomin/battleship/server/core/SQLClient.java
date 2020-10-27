@@ -38,7 +38,17 @@ public class SQLClient {
         }
     }
 
-    public static boolean setLoginData(String login, String password, String nickName) {
-        return true;
+    public static boolean setLoginData(String login, String password, String nickName) throws SQLException {
+        String query = String.format("select login from clients where login = '%s'",
+                login);
+        ResultSet set = statement.executeQuery(query);
+        if (set.next()) {
+            return false;
+        } else {
+            query = String.format("insert into clients (login, password, nickname) values ('%s','%s','%s')",
+                    login, password, nickName);
+            statement.execute(query);
+            return true;
+        }
     }
 }
