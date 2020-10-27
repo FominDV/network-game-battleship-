@@ -184,4 +184,8 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
     public char[] getPassword() {
         return PASSWORD_FIELD.getPassword();
     }
+    public void setLoginAndPasswordFields(String login, String password){
+        LOGIN_FIELD.setText(login);
+        PASSWORD_FIELD.setText(password);
+    }
 }

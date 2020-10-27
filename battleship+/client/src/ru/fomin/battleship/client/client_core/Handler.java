@@ -69,10 +69,10 @@ public class Handler implements SocketThreadListener {
     @Override
     public void onSocketReady(SocketThread thread, Socket socket) {
         if (isRegistration) {
-            String nickName = registrationFrame.getNickName()
+            String nickName = registrationFrame.getNickName();
             String login = registrationFrame.getLogin();
             String password = new String(registrationFrame.getPassword());
-            thread.sendMessage("");
+            thread.sendMessage(LibraryOfPrefixes.getRegistrationRequest(login, password, nickName));
             isRegistration = false;
         } else {
             String login = clientAuthenticationFrame.getLogin();
@@ -122,7 +122,14 @@ public class Handler implements SocketThreadListener {
             case LibraryOfPrefixes.MSG_FORMAT_ERROR:
                 socketThread.close();
                 break;
-
+            case LibraryOfPrefixes.REGISTRATION:
+                if(arr[1].equals("true")){
+                    registrationFrame.registrationSuccessful();
+                }else{
+                    registrationFrame.registrationNotSuccessful();
+                }
+                socketThread.close();
+                break;
         }
     }
 }

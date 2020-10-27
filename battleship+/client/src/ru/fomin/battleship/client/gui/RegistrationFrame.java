@@ -106,7 +106,7 @@ public class RegistrationFrame extends JFrame implements ActionListener {
     }
 
     private void registration() {
-        if(isValidData()) {
+        if (isValidData()) {
             try {
                 HANDLER.login(IP, PORT, this, HANDLER, true);
             } catch (IOException exception) {
@@ -129,13 +129,32 @@ public class RegistrationFrame extends JFrame implements ActionListener {
         CLIENT_AUTHENTICATION_FRAME.setVisible(true);
         dispose();
     }
-    public String getNickName(){
+
+    public String getNickName() {
         return FIELD_NICKNAME.getText();
     }
-    public String getLogin(){
+
+    public String getLogin() {
         return FIELD_LOGIN.getText();
     }
-    public char[] getPassword(){
+
+    public char[] getPassword() {
         return FIELD_PASSWORD.getPassword();
+    }
+
+    public void registrationSuccessful() {
+        CLIENT_AUTHENTICATION_FRAME.setLoginAndPasswordFields(getLogin(), String.valueOf(getPassword()));
+        showResultRegistration("Registration is successful\nLogin: " + getLogin() + "\nNickName: " + FIELD_NICKNAME.getText());
+        cancel();
+    }
+
+    private void showResultRegistration(String message) {
+        JOptionPane.showMessageDialog(null, message);
+    }
+    public void registrationNotSuccessful() {
+        showInvalidDataError("Login or nickname is already registered\nLogin: " + getLogin() + "\nNickName: " + FIELD_NICKNAME.getText(), "Error registration");
+        FIELD_NICKNAME.setText("");
+        FIELD_LOGIN.setText("");
+        FIELD_PASSWORD.setText("");
     }
 }

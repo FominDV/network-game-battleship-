@@ -17,7 +17,6 @@ public class SQLClient {
     }
 
     synchronized static String getNickname(String login, String password) {
-//        select nickname from clients where login = 'ivan' and password = '123'
         String query = String.format("select nickname from clients where login = '%s' and password = '%s'",
                 login, password);
 
@@ -37,5 +36,9 @@ public class SQLClient {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static boolean setLoginData(String login, String password, String nickName) {
+        return true;
     }
 }

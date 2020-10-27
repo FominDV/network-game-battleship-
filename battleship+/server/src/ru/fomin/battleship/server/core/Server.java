@@ -20,7 +20,7 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
 
     public Server(ServerListener listener) {
         this.listener = listener;
-        CLIENTS =new Vector<>(2);
+        CLIENTS = new Vector<>(2);
     }
 
     public void start(int port) {
@@ -55,7 +55,7 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
     public void onServerStop(ServerSocketThread thread) {
         putLog("Server thread stopped");
         SQLClient.disconnect();
-        for (SocketThread socket: CLIENTS) {
+        for (SocketThread socket : CLIENTS) {
             socket.close();
         }
         CLIENTS.clear();
@@ -112,20 +112,28 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
     public void onSocketException(SocketThread thread, Exception exception) {
 
     }
+
     private void handleAuthMessage(ClientThread client, String msg) {
         String[] arr = msg.split(LibraryOfPrefixes.DELIMITER);
         String msgType = arr[0];
         switch (msgType) {
             case "A":
                 System.out.println(arr[1]);
-            break;
+                break;
             default:
                 client.msgFormatError(msg);
 
         }
     }
+
     private void handleNonAuthMessage(ClientThread client, String msg) {
         String[] arr = msg.split(LibraryOfPrefixes.DELIMITER);
+        if (arr.length == 4 && arr[0].equals(LibraryOfPrefixes.REGISTRATION)) {
+            if (SQLClient.setLoginData(arr[1], arr[2], arr[3]))
+                client.sendMessage(LibraryOfPrefixes.getRegistrationAnswer("true"));
+            else client.sendMessage(LibraryOfPrefixes.getRegistrationAnswer("false"));
+            return;
+        }
         if (arr.length != 3 || !arr[0].equals(LibraryOfPrefixes.AUTH_REQUEST)) {
             client.msgFormatError(msg);
             return;
@@ -141,15 +149,16 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
             ClientThread oldClient = findClientByNickname(nickname);
             client.authAccept(nickname);
             if (oldClient == null) {
-             putLog("Connect with "+nickname);
+                putLog("Connect with " + nickname);
             } else {
-                putLog("Reconnect "+nickname);
+                putLog("Reconnect " + nickname);
                 oldClient.reconnect();
                 CLIENTS.remove(oldClient);
             }
         }
         //Send information of athorization
     }
+
     private synchronized ClientThread findClientByNickname(String nickname) {
         for (int i = 0; i < CLIENTS.size(); i++) {
             ClientThread client = (ClientThread) CLIENTS.get(i);
