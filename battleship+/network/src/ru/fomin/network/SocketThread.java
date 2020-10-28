@@ -6,6 +6,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 
 public class SocketThread extends Thread {
     private final SocketThreadListener listener;

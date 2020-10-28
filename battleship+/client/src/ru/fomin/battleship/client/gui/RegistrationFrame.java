@@ -9,6 +9,9 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class RegistrationFrame extends JFrame implements ActionListener {
+    private final int maxLoginLength = 15;
+    private final int maxPasswordLength = 20;
+    private final int maxNicknameLength = 15;
     public final Handler HANDLER;
     private final String TITLE = "Registration";
     private final int WIDTH = 300;
@@ -108,7 +111,7 @@ public class RegistrationFrame extends JFrame implements ActionListener {
     private void registration() {
         if (isValidData()) {
             try {
-                HANDLER.login(IP, PORT, this, HANDLER, true);
+                HANDLER.login(IP, PORT, this, true);
             } catch (IOException exception) {
                 HANDLER.showConnectError();
                 cancel();
@@ -117,21 +120,47 @@ public class RegistrationFrame extends JFrame implements ActionListener {
     }
 
     private boolean isValidData() {
-        String password=new String(FIELD_PASSWORD.getPassword());
-        String repeatPassword=new String(FIELD_REPEAT_PASSWORD.getPassword());
-        if(FIELD_PASSWORD.getPassword().length==0){
+        String password = new String(FIELD_PASSWORD.getPassword());
+        String repeatPassword = new String(FIELD_REPEAT_PASSWORD.getPassword());
+        String nickname = FIELD_NICKNAME.getText();
+        String login = FIELD_LOGIN.getText();
+        if (login.equals("")) {
             showInvalidDataError("Field of login should be not empty");
             return false;
         }
-        if(FIELD_PASSWORD.getPassword().toString().equals("")){
+        if (password.equals("")) {
             showInvalidDataError("Field of password should be not empty");
             return false;
         }
-        if(FIELD_NICKNAME.getText().equals("")){
+        if (nickname.equals("")) {
             showInvalidDataError("Field of nickname should be not empty");
             return false;
         }
-        if(!password.equals(repeatPassword)){
+        if (nickname.contains(" ")) {
+            showInvalidDataError("Nickname should not contain spaces");
+            return false;
+        }
+        if (login.contains(" ")) {
+            showInvalidDataError("Login should not contain spaces");
+            return false;
+        }
+        if (password.contains(" ")) {
+            showInvalidDataError("Password should not contain spaces");
+            return false;
+        }
+        if (login.length() > maxLoginLength) {
+            showInvalidDataError("Length of login should not be greater than " + maxLoginLength);
+            return false;
+        }
+        if (nickname.length() > maxNicknameLength) {
+            showInvalidDataError("Length of nickname should not be greater than " + maxNicknameLength);
+            return false;
+        }
+        if (password.length() > maxLoginLength) {
+            showInvalidDataError("Length of password should not be greater than " + maxPasswordLength);
+            return false;
+        }
+        if (!password.equals(repeatPassword)) {
             showInvalidDataError("Passwords into field should be equal");
             return false;
         }
@@ -168,6 +197,7 @@ public class RegistrationFrame extends JFrame implements ActionListener {
     private void showResultRegistration(String message) {
         JOptionPane.showMessageDialog(null, message);
     }
+
     public void registrationNotSuccessful() {
         showInvalidDataError("Login or nickname is already registered\nLogin: " + getLogin() + "\nNickName: " + FIELD_NICKNAME.getText());
         FIELD_NICKNAME.setText("");

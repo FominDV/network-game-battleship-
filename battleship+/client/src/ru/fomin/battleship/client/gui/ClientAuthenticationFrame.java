@@ -25,8 +25,8 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
     private final JButton BTN_EDIT_PORT = new JButton("Edit port");
     private final JLabel LABEL_LOGIN = new JLabel("Login: ");
     private final JLabel LABEL_PASSWORD = new JLabel("Password: ");
-    private final JPasswordField PASSWORD_FIELD = new JPasswordField();
-    private final JTextField LOGIN_FIELD = new JTextField();
+    private final JPasswordField PASSWORD_FIELD = new JPasswordField("test");
+    private final JTextField LOGIN_FIELD = new JTextField("test");
     private final JLabel LABEL_IP = new JLabel();
     private final JLabel LABEL_PORT = new JLabel();
     private final String LABEL_IP_TEXT = "ip: ";
@@ -141,7 +141,7 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
     private void login() {
         {
             try {
-                HANDLER.login(ip, port, this, HANDLER, LOGIN_FIELD.getText());
+                HANDLER.login(ip, port, this, LOGIN_FIELD.getText());
             } catch (IOException exception) {
                 HANDLER.showConnectError();
             }

@@ -19,14 +19,13 @@ public class Handler implements SocketThreadListener {
     private PreparingForGameFrame preparingForGameFrame;
     private RegistrationFrame registrationFrame;
 
-    public void login(String ip, int port, ClientAuthenticationFrame authenticationFrame, Handler handler, String login) throws IOException {
+    public void login(String ip, int port, ClientAuthenticationFrame authenticationFrame, String login) throws IOException {
         this.clientAuthenticationFrame = authenticationFrame;
-        this.isRegistration = isRegistration;
         Socket socket = new Socket(ip, port);
         socketThread = new SocketThread(this, login, socket);
     }
 
-    public void login(String ip, int port, RegistrationFrame registrationFrame, Handler handler, Boolean isRegistration) throws IOException {
+    public void login(String ip, int port, RegistrationFrame registrationFrame, Boolean isRegistration) throws IOException {
         this.registrationFrame = registrationFrame;
         this.isRegistration = isRegistration;
         Socket socket = new Socket(ip, port);
@@ -113,7 +112,7 @@ public class Handler implements SocketThreadListener {
             case LibraryOfPrefixes.AUTH_ACCEPT:
                 isValidAuthentication = true;
                 clientAuthenticationFrame.dispose();
-                preparingForGameFrame = new PreparingForGameFrame(socketThread);
+                preparingForGameFrame = new PreparingForGameFrame(socketThread, arr[1]);
                 break;
             case LibraryOfPrefixes.AUTH_DENIED:
                 showAuthenticationError();
