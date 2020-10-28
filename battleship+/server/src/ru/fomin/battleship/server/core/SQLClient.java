@@ -5,12 +5,14 @@ import java.sql.*;
 public class SQLClient {
     private static Connection connection;
     private static Statement statement;
+    private static PreparedStatement insertClientData;
 
     synchronized static void connect() {
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:server.db");
             statement = connection.createStatement();
+            insertClientData=connection.prepareStatement("insert into clients (login, password, nickname) values (?,?,?)");
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
@@ -38,16 +40,17 @@ public class SQLClient {
         }
     }
 
-    public static boolean setLoginData(String login, String password, String nickName) throws SQLException {
+    public static boolean setClientData(String login, String password, String nickName) throws SQLException {
         String query = String.format("select login from clients where login = '%s'",
                 login);
         ResultSet set = statement.executeQuery(query);
         if (set.next()) {
             return false;
         } else {
-            query = String.format("insert into clients (login, password, nickname) values ('%s','%s','%s')",
-                    login, password, nickName);
-            statement.execute(query);
+            insertClientData.setString(1,login);
+            insertClientData.setString(2,password);
+            insertClientData.setString(3,nickName);
+            insertClientData.executeUpdate();
             return true;
         }
     }

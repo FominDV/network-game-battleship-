@@ -131,7 +131,7 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
         String[] arr = msg.split(LibraryOfPrefixes.DELIMITER);
         if (arr.length == 4 && arr[0].equals(LibraryOfPrefixes.REGISTRATION)) {
             try {
-                if (SQLClient.setLoginData(arr[1], arr[2], arr[3])) {
+                if (SQLClient.setClientData(arr[1], arr[2], arr[3])) {
                     client.sendMessage(LibraryOfPrefixes.getRegistrationAnswer("true"));
                     putLog(String.format("New client '%s' with nickname '%s' was created into database.", arr[1], arr[3]));
                 } else {
