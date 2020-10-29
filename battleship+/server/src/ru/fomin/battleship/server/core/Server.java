@@ -118,8 +118,16 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
         String[] arr = msg.split(LibraryOfPrefixes.DELIMITER);
         String msgType = arr[0];
         switch (msgType) {
-            case "A":
-                System.out.println(arr[1]);
+            case LibraryOfPrefixes.SEARCH_OPPONENT:
+                for (SocketThread searchingClient : CLIENTS) {
+                    if (((ClientThread) searchingClient).getOtherNickname().equals("empty") && !(client.getNickname().equals(((ClientThread) searchingClient).getNickname()))&&((ClientThread) searchingClient).getNickname()!=null) {
+                        client.setOtherNickname(((ClientThread) searchingClient).getNickname());
+                        ((ClientThread) searchingClient).setOtherNickname(client.getNickname());
+                        client.sendMessage(LibraryOfPrefixes.getSearchOpponent(((ClientThread) searchingClient).getNickname()));
+                        searchingClient.sendMessage((LibraryOfPrefixes.getSearchOpponent(client.getNickname())));
+                        putLog(client.getNickname()+" connected with "+((ClientThread) searchingClient).getNickname());
+                    }
+                }
                 break;
             default:
                 client.msgFormatError(msg);

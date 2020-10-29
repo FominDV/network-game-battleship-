@@ -130,6 +130,9 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                 }
                 socketThread.close();
                 break;
+            case LibraryOfPrefixes.SEARCH_OPPONENT:
+                preparingForGameFrame.setOpponentNickname(arr[1]);
+                break;
         }
     }
 

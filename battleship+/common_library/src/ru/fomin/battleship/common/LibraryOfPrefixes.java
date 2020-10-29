@@ -9,6 +9,7 @@ public class LibraryOfPrefixes {
     public static final String MSG_FORMAT_ERROR = "/msg_format_error";
     public static final String AUTH_REQUEST = "/auth_request";
     public static final String REGISTRATION = "/registration";
+    public static final String SEARCH_OPPONENT = "/search_opponent";
 
 
     public static String getAuthAccept(String nickname) {
@@ -32,5 +33,9 @@ public class LibraryOfPrefixes {
     }
     public static String getRegistrationAnswer(String answer) {
         return REGISTRATION + DELIMITER + answer;
+    }
+
+    public static String getSearchOpponent(String nickname) {
+        return SEARCH_OPPONENT+DELIMITER+nickname;
     }
 }
