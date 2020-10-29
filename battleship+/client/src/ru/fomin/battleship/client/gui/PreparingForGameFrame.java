@@ -11,10 +11,12 @@ public class PreparingForGameFrame extends JFrame {
 
     private final SocketThread SOCKET_THREAD;
     private final String NICK_NAME;
+    private final WorkingWithNetwork listener;
 
-    public PreparingForGameFrame(SocketThread socketThread, String nickname) {
+    public PreparingForGameFrame(SocketThread socketThread, String nickname, WorkingWithNetwork listener) {
         NICK_NAME = nickname;
         SOCKET_THREAD = socketThread;
+        this.listener=listener;
         SwingUtilities.invokeLater(() -> initialization());
     }
 

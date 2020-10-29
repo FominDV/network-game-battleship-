@@ -10,6 +10,7 @@ public class ClientThread extends SocketThread {
     private String nickname;
     private boolean isAuthorized;
     private boolean isReconnecting;
+    private String otherNickname = null;
 
     public ClientThread(SocketThreadListener listener, String name, Socket socket) {
         super(listener, name, socket);
@@ -30,6 +31,10 @@ public class ClientThread extends SocketThread {
     void reconnect() {
         isReconnecting = true;
         close();
+    }
+
+    public void setOtherNickname(String otherNickname) {
+        this.otherNickname = otherNickname;
     }
 
     void authAccept(String nickname) {

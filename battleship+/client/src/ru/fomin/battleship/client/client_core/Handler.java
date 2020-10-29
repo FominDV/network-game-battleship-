@@ -3,6 +3,7 @@ package ru.fomin.battleship.client.client_core;
 import ru.fomin.battleship.client.gui.ClientAuthenticationFrame;
 import ru.fomin.battleship.client.gui.PreparingForGameFrame;
 import ru.fomin.battleship.client.gui.RegistrationFrame;
+import ru.fomin.battleship.client.gui.WorkingWithNetwork;
 import ru.fomin.battleship.common.LibraryOfPrefixes;
 import ru.fomin.network.SocketThread;
 import ru.fomin.network.SocketThreadListener;
@@ -11,7 +12,7 @@ import javax.swing.*;
 import java.io.IOException;
 import java.net.Socket;
 
-public class Handler implements SocketThreadListener {
+public class Handler implements SocketThreadListener, WorkingWithNetwork {
     private boolean isRegistration = false;
     private boolean isValidAuthentication = false;
     private SocketThread socketThread;
@@ -112,7 +113,7 @@ public class Handler implements SocketThreadListener {
             case LibraryOfPrefixes.AUTH_ACCEPT:
                 isValidAuthentication = true;
                 clientAuthenticationFrame.dispose();
-                preparingForGameFrame = new PreparingForGameFrame(socketThread, arr[1]);
+                preparingForGameFrame = new PreparingForGameFrame(socketThread, arr[1], this);
                 break;
             case LibraryOfPrefixes.AUTH_DENIED:
                 showAuthenticationError();
@@ -130,5 +131,10 @@ public class Handler implements SocketThreadListener {
                 socketThread.close();
                 break;
         }
+    }
+
+    @Override
+    public void sendMessageToServer(String message) {
+        socketThread.sendMessage(message);
     }
 }
