@@ -91,6 +91,12 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
 
     @Override
     public void onSocketStop(SocketThread thread) {
+        ClientThread client=(ClientThread) thread;
+        String a=client.getOtherNickname();
+        ClientThread otherClient=findClientByNickname(client.getOtherNickname());
+        CLIENTS.remove(thread);
+        if(otherClient!=null){
+       otherClient.sendMessage(LibraryOfPrefixes.DISCONNECT_OPPONENT);}
         putLog("Socket stopped");
     }
 
@@ -119,19 +125,22 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
         String msgType = arr[0];
         switch (msgType) {
             case LibraryOfPrefixes.SEARCH_OPPONENT:
-                for (SocketThread searchingClient : CLIENTS) {
-                    if (((ClientThread) searchingClient).getOtherNickname().equals("empty") && !(client.getNickname().equals(((ClientThread) searchingClient).getNickname()))&&((ClientThread) searchingClient).getNickname()!=null) {
-                        client.setOtherNickname(((ClientThread) searchingClient).getNickname());
-                        ((ClientThread) searchingClient).setOtherNickname(client.getNickname());
-                        client.sendMessage(LibraryOfPrefixes.getSearchOpponent(((ClientThread) searchingClient).getNickname()));
-                        searchingClient.sendMessage((LibraryOfPrefixes.getSearchOpponent(client.getNickname())));
-                        putLog(client.getNickname()+" connected with "+((ClientThread) searchingClient).getNickname());
-                    }
-                }
+                searchingOpponent(client);
                 break;
             default:
                 client.msgFormatError(msg);
+        }
+    }
 
+    private synchronized void searchingOpponent(ClientThread client) {
+        for (SocketThread searchingClient : CLIENTS) {
+            if (((ClientThread) searchingClient).getOtherNickname().equals("empty") && !(client.getNickname().equals(((ClientThread) searchingClient).getNickname())) && ((ClientThread) searchingClient).getNickname() != null) {
+                client.setOtherNickname(((ClientThread) searchingClient).getNickname());
+                ((ClientThread) searchingClient).setOtherNickname(client.getNickname());
+                client.sendMessage(LibraryOfPrefixes.getSearchOpponent(((ClientThread) searchingClient).getNickname()));
+                searchingClient.sendMessage((LibraryOfPrefixes.getSearchOpponent(client.getNickname())));
+                putLog(client.getNickname() + " connected with " + ((ClientThread) searchingClient).getNickname());
+            }
         }
     }
 

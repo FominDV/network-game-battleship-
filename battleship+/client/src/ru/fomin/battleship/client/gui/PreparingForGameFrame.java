@@ -13,15 +13,12 @@ public class PreparingForGameFrame extends JFrame {
     private final SocketThread SOCKET_THREAD;
     private final String NICK_NAME;
     private final WorkingWithNetwork listener;
-    private final Thread searchOpponent;
     private String opponentNickname="empty";
 
     public PreparingForGameFrame(SocketThread socketThread, String nickname, WorkingWithNetwork listener) {
         NICK_NAME = nickname;
         SOCKET_THREAD = socketThread;
         this.listener=listener;
-        searchOpponent=new Thread(()->searchOpponent());
-        searchOpponent.start();
         SwingUtilities.invokeLater(() -> initialization());
     }
 
@@ -37,8 +34,15 @@ public class PreparingForGameFrame extends JFrame {
         while(opponentNickname.equals("empty")){
             listener.sendMessageToServer(LibraryOfPrefixes.getSearchOpponent(NICK_NAME));
         }
+        setTitle(NICK_NAME+" VS "+opponentNickname);
     }
     public void setOpponentNickname(String opponentNickname){
         this.opponentNickname=opponentNickname;
+    }
+
+    public void reconnect() {
+        setTitle("");
+        opponentNickname="empty";
+        new Thread(()->searchOpponent()).start();
     }
 }

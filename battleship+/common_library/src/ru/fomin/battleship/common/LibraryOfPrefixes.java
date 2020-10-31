@@ -10,6 +10,7 @@ public class LibraryOfPrefixes {
     public static final String AUTH_REQUEST = "/auth_request";
     public static final String REGISTRATION = "/registration";
     public static final String SEARCH_OPPONENT = "/search_opponent";
+    public static final String DISCONNECT_OPPONENT = "/disconnect_opponent";
 
 
     public static String getAuthAccept(String nickname) {
