@@ -3,7 +3,6 @@ package ru.fomin.battleship.client.client_core;
 import ru.fomin.battleship.client.gui.ClientAuthenticationFrame;
 import ru.fomin.battleship.client.gui.PreparingForGameFrame;
 import ru.fomin.battleship.client.gui.RegistrationFrame;
-import ru.fomin.battleship.client.gui.WorkingWithNetwork;
 import ru.fomin.battleship.common.LibraryOfPrefixes;
 import ru.fomin.network.SocketThread;
 import ru.fomin.network.SocketThreadListener;

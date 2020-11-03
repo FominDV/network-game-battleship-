@@ -1,5 +1,6 @@
 package ru.fomin.battleship.client.gui;
 
+import ru.fomin.battleship.client.client_core.WorkingWithNetwork;
 import ru.fomin.battleship.common.LibraryOfPrefixes;
 import ru.fomin.network.SocketThread;
 
@@ -29,6 +30,7 @@ public class PreparingForGameFrame extends JFrame {
         setTitle(WINDOW_TITLE+ NICK_NAME);
         setResizable(false);
         setVisible(true);
+
     }
     private void searchOpponent(){
         while(opponentNickname.equals("empty")){
@@ -40,9 +42,9 @@ public class PreparingForGameFrame extends JFrame {
         this.opponentNickname=opponentNickname;
     }
 
+
     public void reconnect() {
-        setTitle("");
-        opponentNickname="empty";
-        new Thread(()->searchOpponent()).start();
+        this.opponentNickname="empty";
+        setTitle(WINDOW_TITLE+NICK_NAME);
     }
 }

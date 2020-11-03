@@ -92,7 +92,6 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
     @Override
     public void onSocketStop(SocketThread thread) {
         ClientThread client=(ClientThread) thread;
-        String a=client.getOtherNickname();
         ClientThread otherClient=findClientByNickname(client.getOtherNickname());
         CLIENTS.remove(thread);
         if(otherClient!=null){
