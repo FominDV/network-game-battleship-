@@ -94,6 +94,7 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
         ClientThread client=(ClientThread) thread;
         ClientThread otherClient=findClientByNickname(client.getOtherNickname());
         CLIENTS.remove(thread);
+        client.close();
         if(otherClient!=null){
        otherClient.sendMessage(LibraryOfPrefixes.DISCONNECT_OPPONENT);}
         putLog("Socket stopped");
@@ -175,11 +176,7 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
             client.authAccept(nickname);
             if (oldClient == null) {
                 putLog("Connect with " + nickname);
-            } else {
-                putLog("Reconnect " + nickname);
-                oldClient.reconnect();
-                CLIENTS.remove(oldClient);
-            }
+            } 
         }
         //Send information of athorization
     }

@@ -5,8 +5,11 @@ import ru.fomin.battleship.common.LibraryOfPrefixes;
 import ru.fomin.network.SocketThread;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class PreparingForGameFrame extends JFrame {
+    JButton btn = new JButton("Connect");
     private final int WIDTH = 600;
     private final int HEIGHT = 500;
     private final String WINDOW_TITLE = "Map-Maker by ";
@@ -14,12 +17,12 @@ public class PreparingForGameFrame extends JFrame {
     private final SocketThread SOCKET_THREAD;
     private final String NICK_NAME;
     private final WorkingWithNetwork listener;
-    private String opponentNickname="empty";
+    private String opponentNickname = "empty";
 
     public PreparingForGameFrame(SocketThread socketThread, String nickname, WorkingWithNetwork listener) {
         NICK_NAME = nickname;
         SOCKET_THREAD = socketThread;
-        this.listener=listener;
+        this.listener = listener;
         SwingUtilities.invokeLater(() -> initialization());
     }
 
@@ -27,24 +30,43 @@ public class PreparingForGameFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setSize(WIDTH, HEIGHT);
-        setTitle(WINDOW_TITLE+ NICK_NAME);
+        setTitle(WINDOW_TITLE + NICK_NAME);
         setResizable(false);
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                searchOpponent();
+            }
+        });
+        add(btn);
         setVisible(true);
 
     }
-    private void searchOpponent(){
-        while(opponentNickname.equals("empty")){
+
+    private void searchOpponent() {
+        long time = System.currentTimeMillis() / 1000;
+        while (opponentNickname.equals("empty")) {
             listener.sendMessageToServer(LibraryOfPrefixes.getSearchOpponent(NICK_NAME));
+            time = System.currentTimeMillis() / 1000 - time;
+            if (time >= 5 && opponentNickname.equals("empty")) {
+                timeOut();
+                break;
+            }
         }
-        setTitle(NICK_NAME+" VS "+opponentNickname);
+        setTitle(NICK_NAME + " VS " + opponentNickname);
     }
-    public void setOpponentNickname(String opponentNickname){
-        this.opponentNickname=opponentNickname;
+
+    public void setOpponentNickname(String opponentNickname) {
+        this.opponentNickname = opponentNickname;
     }
 
 
     public void reconnect() {
-        this.opponentNickname="empty";
-        setTitle(WINDOW_TITLE+NICK_NAME);
+        this.opponentNickname = "empty";
+        setTitle(WINDOW_TITLE + NICK_NAME);
+    }
+
+    public void timeOut() {
+        JOptionPane.showMessageDialog(null, "The opponent was not found", "Exception", JOptionPane.ERROR_MESSAGE);
     }
 }
