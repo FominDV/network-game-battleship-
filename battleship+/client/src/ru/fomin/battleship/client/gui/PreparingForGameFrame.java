@@ -47,8 +47,7 @@ public class PreparingForGameFrame extends JFrame {
         long time = System.currentTimeMillis() / 1000;
         while (opponentNickname.equals("empty")) {
             listener.sendMessageToServer(LibraryOfPrefixes.getSearchOpponent(NICK_NAME));
-            time = System.currentTimeMillis() / 1000 - time;
-            if (time >= 5 && opponentNickname.equals("empty")) {
+            if (System.currentTimeMillis() / 1000 - time >= 5 && opponentNickname.equals("empty")) {
                 timeOut();
                 break;
             }
