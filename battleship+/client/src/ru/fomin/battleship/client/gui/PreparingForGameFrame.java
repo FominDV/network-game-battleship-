@@ -13,7 +13,7 @@ public class PreparingForGameFrame extends JFrame {
     private final int WIDTH = 600;
     private final int HEIGHT = 500;
     private final String WINDOW_TITLE = "Map-Maker by ";
-
+    private final int TIME_OUT=5;
     private final SocketThread SOCKET_THREAD;
     private final String NICK_NAME;
     private final WorkingWithNetwork listener;
@@ -47,7 +47,7 @@ public class PreparingForGameFrame extends JFrame {
         long time = System.currentTimeMillis() / 1000;
         while (opponentNickname.equals("empty")) {
             listener.sendMessageToServer(LibraryOfPrefixes.getSearchOpponent(NICK_NAME));
-            if (System.currentTimeMillis() / 1000 - time >= 5 && opponentNickname.equals("empty")) {
+            if (System.currentTimeMillis() / 1000 - time >= TIME_OUT && opponentNickname.equals("empty")) {
                 timeOut();
                 break;
             }
