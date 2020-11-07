@@ -21,7 +21,7 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
 
     public Server(ServerListener listener) {
         this.listener = listener;
-        CLIENTS = new Vector<>(2);
+        CLIENTS = new Vector<>();
     }
 
     public void start(int port) {
