@@ -133,8 +133,9 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
     }
 
     private synchronized void searchingOpponent(ClientThread client) {
+        client.setSearchingOpponent();
         for (SocketThread searchingClient : CLIENTS) {
-            if (((ClientThread) searchingClient).getOtherNickname().equals("empty") && !(client.getNickname().equals(((ClientThread) searchingClient).getNickname())) && ((ClientThread) searchingClient).getNickname() != null) {
+            if (((ClientThread) searchingClient).getOtherNickname().equals("empty") && ((ClientThread) searchingClient).getSearchingOpponentStatus() &&!(client.getNickname().equals(((ClientThread) searchingClient).getNickname())) && ((ClientThread) searchingClient).getNickname() != null) {
                 client.setOtherNickname(((ClientThread) searchingClient).getNickname());
                 ((ClientThread) searchingClient).setOtherNickname(client.getNickname());
                 client.sendMessage(LibraryOfPrefixes.getSearchOpponent(((ClientThread) searchingClient).getNickname()));

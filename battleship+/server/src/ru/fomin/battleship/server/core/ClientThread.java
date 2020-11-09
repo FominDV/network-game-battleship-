@@ -9,12 +9,19 @@ import java.net.Socket;
 public class ClientThread extends SocketThread {
     private String nickname;
     private boolean isAuthorized;
+    private boolean isReconnecting;
+    private boolean isSearching=false;
     private String otherNickname = "empty";
 
     public ClientThread(SocketThreadListener listener, String name, Socket socket) {
         super(listener, name, socket);
     }
-
+   public void setSearchingOpponent(){
+        isSearching=true;
+   }
+    public boolean getSearchingOpponentStatus(){
+        return isSearching;
+    }
     public String getNickname() {
         return nickname;
     }
@@ -23,6 +30,14 @@ public class ClientThread extends SocketThread {
         return isAuthorized;
     }
 
+    public boolean isReconnecting() {
+        return isReconnecting;
+    }
+
+    void reconnect() {
+        isReconnecting = true;
+        close();
+    }
 
     public void setOtherNickname(String otherNickname) {
         this.otherNickname = otherNickname;
@@ -49,5 +64,6 @@ public class ClientThread extends SocketThread {
 
 
 }
+
 
 

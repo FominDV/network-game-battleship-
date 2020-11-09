@@ -1,5 +1,6 @@
 package ru.fomin.battleship.client.gui;
 
+import ru.fomin.battleship.client.client_core.SearchOpponentThread;
 import ru.fomin.battleship.client.client_core.WorkingWithNetwork;
 import ru.fomin.battleship.common.LibraryOfPrefixes;
 import ru.fomin.network.SocketThread;
@@ -13,11 +14,11 @@ public class PreparingForGameFrame extends JFrame {
     private final int WIDTH = 600;
     private final int HEIGHT = 500;
     private final String WINDOW_TITLE = "Map-Maker by ";
-    private final int TIME_OUT=5;
     private final SocketThread SOCKET_THREAD;
     private final String NICK_NAME;
     private final WorkingWithNetwork listener;
     private String opponentNickname = "empty";
+    private SearchOpponentThread searchOpponentThread=null;
 
     public PreparingForGameFrame(SocketThread socketThread, String nickname, WorkingWithNetwork listener) {
         NICK_NAME = nickname;
@@ -44,28 +45,30 @@ public class PreparingForGameFrame extends JFrame {
     }
 
     private void searchOpponent() {
-        long time = System.currentTimeMillis() / 1000;
-        while (opponentNickname.equals("empty")) {
-            listener.sendMessageToServer(LibraryOfPrefixes.getSearchOpponent(NICK_NAME));
-            if (System.currentTimeMillis() / 1000 - time >= TIME_OUT && opponentNickname.equals("empty")) {
-                timeOut();
-                break;
+        if(searchOpponentThread==null|| !(searchOpponentThread.isInterrupted()))
+        searchOpponentThread=new SearchOpponentThread( this);
             }
-        }
-        setTitle(NICK_NAME + " VS " + opponentNickname);
-    }
+
 
     public void setOpponentNickname(String opponentNickname) {
         this.opponentNickname = opponentNickname;
     }
 
-
+    public void setTitleAboutOpponent(){
+        if(!opponentNickname.equals("empty"))
+            setTitle(NICK_NAME+" VS "+ opponentNickname);
+    }
     public void reconnect() {
         this.opponentNickname = "empty";
         setTitle(WINDOW_TITLE + NICK_NAME);
     }
 
-    public void timeOut() {
-        JOptionPane.showMessageDialog(null, "The opponent was not found", "Exception", JOptionPane.ERROR_MESSAGE);
+
+    public boolean isOpponentNicknameEmpty() {
+        if (opponentNickname.equals("empty")) return true;
+        else return false;
+    }
+    public void sendMessageForSearching(){
+        listener.sendMessageToServer(LibraryOfPrefixes.getSearchOpponent(NICK_NAME));
     }
 }
