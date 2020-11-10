@@ -71,4 +71,7 @@ public class PreparingForGameFrame extends JFrame {
     public void sendMessageForSearching(){
         listener.sendMessageToServer(LibraryOfPrefixes.getSearchOpponent(NICK_NAME));
     }
+    private void stopSearching(){
+        listener.sendMessageToServer(LibraryOfPrefixes.STOP_SEARCHING);
+    }
 }

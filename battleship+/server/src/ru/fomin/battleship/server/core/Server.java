@@ -127,6 +127,9 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
             case LibraryOfPrefixes.SEARCH_OPPONENT:
                 searchingOpponent(client);
                 break;
+            case LibraryOfPrefixes.STOP_SEARCHING:
+                client.setStopSearchingOpponent();
+                break;
             default:
                 client.msgFormatError(msg);
         }

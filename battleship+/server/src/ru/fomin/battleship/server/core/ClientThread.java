@@ -19,6 +19,9 @@ public class ClientThread extends SocketThread {
    public void setSearchingOpponent(){
         isSearching=true;
    }
+    public void setStopSearchingOpponent(){
+        isSearching=false;
+    }
     public boolean getSearchingOpponentStatus(){
         return isSearching;
     }
