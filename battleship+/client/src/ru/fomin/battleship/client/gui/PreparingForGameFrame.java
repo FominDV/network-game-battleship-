@@ -45,8 +45,10 @@ public class PreparingForGameFrame extends JFrame {
     }
 
     private void searchOpponent() {
-        if(searchOpponentThread==null|| !(searchOpponentThread.isInterrupted()))
-        searchOpponentThread=new SearchOpponentThread( this);
+        if(searchOpponentThread==null|| !(searchOpponentThread.isInterrupted())) {
+            listener.sendMessageToServer(LibraryOfPrefixes.MESSAGE_ABOUT_START_SEARCHING);
+            searchOpponentThread = new SearchOpponentThread(this);
+        }
             }
 
 
@@ -61,6 +63,7 @@ public class PreparingForGameFrame extends JFrame {
     public void reconnect() {
         this.opponentNickname = "empty";
         setTitle(WINDOW_TITLE + NICK_NAME);
+        stopSearching();
     }
 
 

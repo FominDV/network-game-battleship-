@@ -12,6 +12,7 @@ public class LibraryOfPrefixes {
     public static final String SEARCH_OPPONENT = "/search_opponent";
     public static final String DISCONNECT_OPPONENT = "/disconnect_opponent";
     public static final String STOP_SEARCHING = "/stop_searching";
+    public static final String MESSAGE_ABOUT_START_SEARCHING = "/message_about_start_searching";
 
 
     public static String getAuthAccept(String nickname) {
@@ -40,4 +41,6 @@ public class LibraryOfPrefixes {
     public static String getSearchOpponent(String nickname) {
         return SEARCH_OPPONENT+DELIMITER+nickname;
     }
+
+
 }

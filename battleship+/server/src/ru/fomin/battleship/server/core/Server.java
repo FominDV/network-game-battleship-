@@ -96,7 +96,8 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
         CLIENTS.remove(thread);
         client.close();
         if(otherClient!=null){
-       otherClient.sendMessage(LibraryOfPrefixes.DISCONNECT_OPPONENT);}
+       otherClient.sendMessage(LibraryOfPrefixes.DISCONNECT_OPPONENT);
+        otherClient.setStopSearchingOpponent();}
         putLog("Socket stopped");
     }
 
@@ -124,11 +125,15 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
         String[] arr = msg.split(LibraryOfPrefixes.DELIMITER);
         String msgType = arr[0];
         switch (msgType) {
+            case LibraryOfPrefixes.MESSAGE_ABOUT_START_SEARCHING:
+                putLog(client.getNickname()+" started searching opponent");
+                break;
             case LibraryOfPrefixes.SEARCH_OPPONENT:
                 searchingOpponent(client);
                 break;
             case LibraryOfPrefixes.STOP_SEARCHING:
                 client.setStopSearchingOpponent();
+                putLog(client.getNickname()+" stopped searching opponent");
                 break;
             default:
                 client.msgFormatError(msg);
