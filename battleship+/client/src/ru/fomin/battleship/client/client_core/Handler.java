@@ -89,7 +89,8 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
 
     @Override
     public void onSocketException(SocketThread thread, Exception exception) {
-        showException(thread, exception);
+        showConnectError();
+        if(preparingForGameFrame!=null) preparingForGameFrame.stopSearching();
     }
 
     private void showException(Thread t, Throwable e) {
@@ -100,7 +101,6 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
         else {
             msg = String.format("Exception in \"%s\" %s: %s\n\tat %s",
                     t.getName(), e.getClass().getCanonicalName(), e.getMessage(), ste[0]);
-            JOptionPane.showMessageDialog(null, msg, "Exception", JOptionPane.ERROR_MESSAGE);
         }
         JOptionPane.showMessageDialog(null, msg, "Exception", JOptionPane.ERROR_MESSAGE);
     }
