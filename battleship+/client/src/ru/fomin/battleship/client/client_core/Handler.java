@@ -89,7 +89,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
 
     @Override
     public void onSocketException(SocketThread thread, Exception exception) {
-        showConnectError();
+        showException(thread, exception);
         if(preparingForGameFrame!=null) preparingForGameFrame.stopSearching();
     }
 

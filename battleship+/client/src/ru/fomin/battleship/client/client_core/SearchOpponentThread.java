@@ -7,7 +7,7 @@ import java.io.Closeable;
 import java.io.IOException;
 
 public class SearchOpponentThread extends Thread {
-    private final long TIME_OUT = 500L;
+    private final long TIME_OUT = 1000L;
     private PreparingForGameFrame preparingGameFrame;
 
     public SearchOpponentThread(PreparingForGameFrame preparingGameFrame) {

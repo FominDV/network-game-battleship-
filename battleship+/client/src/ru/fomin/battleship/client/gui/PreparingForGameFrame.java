@@ -20,6 +20,7 @@ public class PreparingForGameFrame extends JFrame {
     private String opponentNickname = "empty";
     private SearchOpponentThread searchOpponentThread=null;
 
+
     public PreparingForGameFrame(SocketThread socketThread, String nickname, WorkingWithNetwork listener) {
         NICK_NAME = nickname;
         SOCKET_THREAD = socketThread;
@@ -76,6 +77,8 @@ public class PreparingForGameFrame extends JFrame {
     }
     public void stopSearching(){
         searchOpponentThread.interrupt();
+        searchOpponentThread.stop();
         listener.sendMessageToServer(LibraryOfPrefixes.STOP_SEARCHING);
     }
+
 }
