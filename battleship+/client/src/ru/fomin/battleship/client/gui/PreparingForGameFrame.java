@@ -6,6 +6,7 @@ import ru.fomin.battleship.common.LibraryOfPrefixes;
 import ru.fomin.network.SocketThread;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,6 +19,8 @@ public class PreparingForGameFrame extends JFrame {
     private final WorkingWithNetwork listener;
     private String opponentNickname = "empty";
     private SearchOpponentThread searchOpponentThread=null;
+
+    private final JPanel PANEL_MAP=new JPanel(new GridLayout(10, 10));
 
 
     public PreparingForGameFrame(SocketThread socketThread, String nickname, WorkingWithNetwork listener) {
@@ -33,9 +36,13 @@ public class PreparingForGameFrame extends JFrame {
         setSize(WIDTH, HEIGHT);
         setTitle(WINDOW_TITLE + NICK_NAME);
         setResizable(false);
-
+        fillMap();
         setVisible(true);
 
+    }
+
+    private void fillMap() {
+        
     }
 
     private void searchOpponent() {
