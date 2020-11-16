@@ -42,7 +42,9 @@ public class PreparingForGameFrame extends JFrame {
     }
 
     private void fillMap() {
-        
+        for(int i=0; i<11;i++){
+            
+        }
     }
 
     private void searchOpponent() {
