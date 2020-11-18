@@ -48,6 +48,7 @@ public class PreparingForGameFrame extends JFrame {
         for(int i=0; i<map.length;i++){
             for(int j=0;j<map.length;j++){
                 map[i][j]=new Cell();
+                PANEL_MAP.add(map[i][j]);
             }
         }
     }
