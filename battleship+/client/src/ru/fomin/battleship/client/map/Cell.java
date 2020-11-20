@@ -2,6 +2,8 @@ package ru.fomin.battleship.client.map;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Cell extends JButton {
     /*Status:
@@ -13,11 +15,14 @@ public class Cell extends JButton {
     * 5-known cell free
     * 6-known cell with ship*/
     private int status;
-    private  JLabel img=new JLabel();
     public Cell(int status){
         setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+        setMargin(new Insets(0, 0, 0, 0));
         this.status=status;
         setImage(status);
+        addActionListener(e -> {
+            
+        });
     }
     public void setImage(int status){
         this.status=status;

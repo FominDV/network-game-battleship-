@@ -13,7 +13,7 @@ import java.awt.*;
 public class PreparingForGameFrame extends JFrame {
     private final int SIZE_OF_MAP=10;
     private final int WIDTH = 800;
-    private final int HEIGHT = 1200;
+    private final int HEIGHT = 500;
     private final String WINDOW_TITLE = "Map-Maker by ";
     private final SocketThread SOCKET_THREAD;
     private final String NICK_NAME;
@@ -23,6 +23,8 @@ public class PreparingForGameFrame extends JFrame {
     private MapBuilder mapBuilder;
 
     private final JPanel PANEL_MAP=new JPanel(new GridLayout(SIZE_OF_MAP, SIZE_OF_MAP));
+    private final JPanel WRAPPER_FOR_MAP=new JPanel(new GridBagLayout());
+    private final JPanel PANEL_BOTTOM=new JPanel(new GridLayout());
 
 
 
@@ -36,12 +38,14 @@ public class PreparingForGameFrame extends JFrame {
     private void initialization() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setSize(HEIGHT, WIDTH);
+        setSize(WIDTH, HEIGHT);
         setTitle(WINDOW_TITLE + NICK_NAME);
         setResizable(false);
+        WRAPPER_FOR_MAP.setSize(400,400);
         fillMap();
-        add(PANEL_MAP, BorderLayout.EAST);
-
+        WRAPPER_FOR_MAP.add(PANEL_MAP);
+        add(WRAPPER_FOR_MAP, BorderLayout.EAST);
+        add(PANEL_BOTTOM, BorderLayout.NORTH);
         setVisible(true);
     }
 
