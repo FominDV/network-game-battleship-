@@ -21,10 +21,11 @@ public class PreparingForGameFrame extends JFrame {
     private String opponentNickname = "empty";
     private SearchOpponentThread searchOpponentThread=null;
     private MapBuilder mapBuilder;
-
+    private final Color COLOR_OF_BACKGROUND=new Color(0,128,128);
+    
     private final JPanel PANEL_MAP=new JPanel(new GridLayout(SIZE_OF_MAP, SIZE_OF_MAP));
     private final JPanel WRAPPER_FOR_MAP=new JPanel(new GridBagLayout());
-    private final JPanel PANEL_BOTTOM=new JPanel(new GridLayout());
+    private final JPanel PANEL_BOTTOM=new JPanel(new GridLayout(2,3));
 
 
 
@@ -46,6 +47,7 @@ public class PreparingForGameFrame extends JFrame {
         WRAPPER_FOR_MAP.add(PANEL_MAP);
         add(WRAPPER_FOR_MAP, BorderLayout.EAST);
         add(PANEL_BOTTOM, BorderLayout.NORTH);
+
         setVisible(true);
     }
 
