@@ -27,6 +27,8 @@ public class PreparingForGameFrame extends JFrame {
     private final JPanel WRAPPER_FOR_MAP=new JPanel(new GridBagLayout());
     private final JPanel PANEL_BOTTOM=new JPanel(new GridLayout(2,3));
 
+    private final JButton BUTTON_POST=new JButton("POST");
+
 
 
     public PreparingForGameFrame(SocketThread socketThread, String nickname, WorkingWithNetwork listener) {
@@ -45,8 +47,9 @@ public class PreparingForGameFrame extends JFrame {
         WRAPPER_FOR_MAP.setSize(400,400);
         fillMap();
         WRAPPER_FOR_MAP.add(PANEL_MAP);
+        PANEL_BOTTOM.add(BUTTON_POST);
         add(WRAPPER_FOR_MAP, BorderLayout.EAST);
-        add(PANEL_BOTTOM, BorderLayout.NORTH);
+        add(PANEL_BOTTOM, BorderLayout.SOUTH);
 
         setVisible(true);
     }
