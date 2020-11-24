@@ -44,7 +44,8 @@ public class PreparingForGameFrame extends JFrame {
         setSize(WIDTH, HEIGHT);
         setTitle(WINDOW_TITLE + NICK_NAME);
         setResizable(false);
-        WRAPPER_FOR_MAP.setSize(400,400);
+        /*width and height of imager equal 40 and border of cell equal 1*/
+        WRAPPER_FOR_MAP.setSize(SIZE_OF_MAP*41,SIZE_OF_MAP*41);
         fillMap();
         WRAPPER_FOR_MAP.add(PANEL_MAP);
         PANEL_BOTTOM.add(BUTTON_POST);
