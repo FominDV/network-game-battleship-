@@ -12,8 +12,8 @@ import java.awt.*;
 
 public class PreparingForGameFrame extends JFrame {
     private final int SIZE_OF_MAP=10;
-    private final int WIDTH = 800;
-    private final int HEIGHT = 500;
+    private final int WIDTH = 700;
+    private final int HEIGHT = 600;
     private final String WINDOW_TITLE = "Map-Maker by ";
     private final SocketThread SOCKET_THREAD;
     private final String NICK_NAME;
@@ -21,13 +21,20 @@ public class PreparingForGameFrame extends JFrame {
     private String opponentNickname = "empty";
     private SearchOpponentThread searchOpponentThread=null;
     private MapBuilder mapBuilder;
-    private final Color COLOR_OF_BACKGROUND=new Color(0,128,128);
+    private final Color COLOR_OF_BACKGROUND=new Color(99, 234, 234);
+
+    private final Font FONT_FOR_BUTTONS=new Font(Font.SERIF, Font.BOLD, 16);
     
     private final JPanel PANEL_MAP=new JPanel(new GridLayout(SIZE_OF_MAP, SIZE_OF_MAP));
     private final JPanel WRAPPER_FOR_MAP=new JPanel(new GridBagLayout());
     private final JPanel PANEL_BOTTOM=new JPanel(new GridLayout(2,3));
 
     private final JButton BUTTON_POST=new JButton("POST");
+    private final JButton BUTTON_REMOVE=new JButton("REMOVE");
+    private final JButton BUTTON_CANCEL=new JButton("<html>CANCEL<br>ACTION</html>");
+    private final JButton BUTTON_LOAD=new JButton("<html><p align='center'>LOAD<br>THE MAP</p></html>");
+    private final JButton BUTTON_START=new JButton("START");
+    private final JButton BUTTON_EXIT=new JButton("EXIT");
 
 
 
@@ -48,7 +55,24 @@ public class PreparingForGameFrame extends JFrame {
         WRAPPER_FOR_MAP.setSize(SIZE_OF_MAP*41,SIZE_OF_MAP*41);
         fillMap();
         WRAPPER_FOR_MAP.add(PANEL_MAP);
+        BUTTON_POST.setFont(FONT_FOR_BUTTONS);
+        BUTTON_POST.setBackground(COLOR_OF_BACKGROUND);
+        BUTTON_REMOVE.setFont(FONT_FOR_BUTTONS);
+        BUTTON_REMOVE.setBackground(COLOR_OF_BACKGROUND);
+        BUTTON_CANCEL.setFont(FONT_FOR_BUTTONS);
+        BUTTON_CANCEL.setBackground(COLOR_OF_BACKGROUND);
+        BUTTON_LOAD.setFont(FONT_FOR_BUTTONS);
+        BUTTON_LOAD.setBackground(COLOR_OF_BACKGROUND);
+        BUTTON_START.setFont(FONT_FOR_BUTTONS);
+        BUTTON_START.setBackground(COLOR_OF_BACKGROUND);
+        BUTTON_EXIT.setFont(FONT_FOR_BUTTONS);
+        BUTTON_EXIT.setBackground(COLOR_OF_BACKGROUND);
         PANEL_BOTTOM.add(BUTTON_POST);
+        PANEL_BOTTOM.add(BUTTON_REMOVE);
+        PANEL_BOTTOM.add(BUTTON_CANCEL);
+        PANEL_BOTTOM.add(BUTTON_LOAD);
+        PANEL_BOTTOM.add(BUTTON_START);
+        PANEL_BOTTOM.add(BUTTON_EXIT);
         add(WRAPPER_FOR_MAP, BorderLayout.EAST);
         add(PANEL_BOTTOM, BorderLayout.SOUTH);
 
