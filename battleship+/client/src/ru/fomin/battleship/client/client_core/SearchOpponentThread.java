@@ -23,10 +23,10 @@ public class SearchOpponentThread extends Thread {
                 sleep(TIME_OUT);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                interrupt();
             }
         }
         preparingGameFrame.setTitleAboutOpponent();
-        interrupt();
     }
 
 }
