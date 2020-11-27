@@ -1,5 +1,6 @@
 package ru.fomin.battleship.client.gui;
 
+import ru.fomin.battleship.client.client_core.Cell;
 import ru.fomin.battleship.client.client_core.SearchOpponentThread;
 import ru.fomin.battleship.client.client_core.WorkingWithNetwork;
 import ru.fomin.battleship.common.LibraryOfPrefixes;
@@ -11,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class PreparingForGameFrame extends JFrame {
+    private final int SIZE_OF_MAP=10;
     private final int WIDTH = 600;
     private final int HEIGHT = 500;
     private final String WINDOW_TITLE = "Map-Maker by ";
@@ -20,7 +22,8 @@ public class PreparingForGameFrame extends JFrame {
     private String opponentNickname = "empty";
     private SearchOpponentThread searchOpponentThread=null;
 
-    private final JPanel PANEL_MAP=new JPanel(new GridLayout(10, 10));
+    private final JPanel PANEL_MAP=new JPanel(new GridLayout(SIZE_OF_MAP, SIZE_OF_MAP));
+    private Cell[][] map=new Cell[SIZE_OF_MAP][SIZE_OF_MAP];
 
 
     public PreparingForGameFrame(SocketThread socketThread, String nickname, WorkingWithNetwork listener) {
@@ -42,9 +45,9 @@ public class PreparingForGameFrame extends JFrame {
     }
 
     private void fillMap() {
-        for(int i=0; i<11;i++){
-            for(int j=0;j<11;j++){
-                int g=1;
+        for(int i=0; i<map.length;i++){
+            for(int j=0;j<map.length;j++){
+                map[i][j]=new Cell();
             }
         }
     }
