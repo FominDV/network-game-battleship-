@@ -2,6 +2,8 @@ package ru.fomin.battleship.client.map;
 
 import ru.fomin.battleship.client.gui.PreparingForGameFrame;
 
+import java.util.Vector;
+
 public class MapBuilder {
     private Cell[][] map;
     private PreparingForGameFrame preparingForGameFrame;
@@ -47,21 +49,25 @@ public class MapBuilder {
 
     private int nowLengthOfShip(int x, int y) {
         int direction = directionOfShip(x, y);
-        if(direction==0) return 0;
-        int countCellOfShip=0;
-        if(direction==-1){
-           for(int i=1; i<=4; i++){
-               if(x-i>=0&&map[x-i][y].getStatus()==4) countCellOfShip++; else break;
-           }
-            for(int i=1; i<=4; i++){
-                if(x+i<map.length&&map[x+i][y].getStatus()==4) countCellOfShip++; else break;
+        if (direction == 0) return 0;
+        int countCellOfShip = 0;
+        if (direction == -1) {
+            for (int i = 1; i <= 4; i++) {
+                if (x - i >= 0 && map[x - i][y].getStatus() == 4) countCellOfShip++;
+                else break;
             }
-        }else{
-            for(int i=1; i<=4; i++){
-                if(y-i>=0&&map[x][y-i].getStatus()==4) countCellOfShip++; else break;
+            for (int i = 1; i <= 4; i++) {
+                if (x + i < map.length && map[x + i][y].getStatus() == 4) countCellOfShip++;
+                else break;
             }
-            for(int i=1; i<=4; i++){
-                if(y+i<map.length&&map[x][y+i].getStatus()==4) countCellOfShip++; else break;
+        } else {
+            for (int i = 1; i <= 4; i++) {
+                if (y - i >= 0 && map[x][y - i].getStatus() == 4) countCellOfShip++;
+                else break;
+            }
+            for (int i = 1; i <= 4; i++) {
+                if (y + i < map.length && map[x][y + i].getStatus() == 4) countCellOfShip++;
+                else break;
             }
         }
         return countCellOfShip;
@@ -118,7 +124,7 @@ public class MapBuilder {
 
     /*1: horizontal
      * 0: no direction
-     * -1-vertical*/
+     * -1: vertical*/
     private int directionOfShip(int x, int y) {
         if (x - 1 >= 0) {
             if (x + 1 < map.length) {
@@ -145,14 +151,74 @@ public class MapBuilder {
         }
         return 0;
     }
-    public void cancelStatus4(){
-        for(int i=0; i<map.length;i++){
-            for(int j=0; j<map.length;j++){
-                if(map[i][j].getStatus()==4) map[i][j].setImage(5);
+
+    public void cancelStatus4() {
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map.length; j++) {
+                if (map[i][j].getStatus() == 4) map[i][j].setImage(5);
             }
         }
     }
-    public void post(){
-        
+
+    public void post() {
+        int x=-1 , y=-1 , direction = -10;
+        for (int i = 1; i < map.length; i++) {
+            for (int j = 1; j < map.length; j++) {
+                if (map[i][j].getStatus() == 4) {
+                    x = i;
+                    y = j;
+                    break;
+                }
+            }
+        }
+        if(x==-1) return;
+        direction = directionOfShip(x, y);
+        Vector<Cell> cellsForBuildingShip = new Vector<>();
+        if (direction == 0) cellsForBuildingShip.add(map[x][y]);
+        if (direction == -1) {
+            for (int i = 1; i <= map.length; i++) {
+                if (x + i < map.length && map[x + i][y].getStatus() == 4) cellsForBuildingShip.add(map[x + i][y]);
+            }
+            cellsForBuildingShip.add(map[x][y]);
+            for (int i = 1; i <= map.length; i++) {
+                if (x - i >= 0 && map[x - i][y].getStatus() == 4) cellsForBuildingShip.add(map[x - i][y]);
+            }
+        }
+        if (direction == 1) {
+            for (int i = 1; i <= map.length; i++) {
+                if (y - i >= 0 && map[x][y - i].getStatus() == 4) cellsForBuildingShip.add(map[x][y - i]);
+            }
+            cellsForBuildingShip.add(map[x][y]);
+            for (int i = 1; i <= map.length; i++) {
+                if (y + i < map.length && map[x][y + i].getStatus() == 4) cellsForBuildingShip.add(map[x][y + i]);
+            }
+        }
+        int lengthOfShip = cellsForBuildingShip.size();
+        postTheShip(lengthOfShip, cellsForBuildingShip, direction);
+    }
+
+    public void postTheShip(int lengthOfShip, Vector<Cell> cellsOfShip, int direction) {
+        setNewCountOfShips(lengthOfShip);
+        for (Cell cell : cellsOfShip) {
+            cell.setImage(6);
+        }
+    }
+
+    private void setNewCountOfShips(int lengthOfShip) {
+        switch (lengthOfShip) {
+            case 4:
+                count4Ship++;
+                break;
+            case 3:
+                count3Ship++;
+                break;
+            case 2:
+                count2Ship++;
+                break;
+            case 1:
+                count1Ship++;
+                break;
+        }
+        setCountOfShips();
     }
 }

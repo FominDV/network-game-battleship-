@@ -61,6 +61,8 @@ public class Cell extends JButton {
                 setIcon(new ImageIcon(getClass().getResource("../img/sea.png")));
                 break;
             case 6:
+                this.status=6;
+                setBackground(Color.BLACK);
                 break;
         }
     }
