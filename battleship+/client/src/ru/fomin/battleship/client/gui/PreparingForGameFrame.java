@@ -26,7 +26,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final String REMOVE_MODE = "REMOVE MODE";
     private final String POST_MODE = "POST MODE";
     private final int SIZE_OF_MAP = 10;
-    private final int WIDTH = 750;
+    private final int WIDTH = 800;
     private final int HEIGHT = 650;
     private final String WINDOW_TITLE = "Map-Maker by ";
     private final SocketThread SOCKET_THREAD;
@@ -241,6 +241,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             return;
         }
         if (source.equals(BUTTON_EXIT)) {
+            if(JOptionPane.showConfirmDialog(null,"Are you sure you want to exit?")==JOptionPane.YES_NO_OPTION)
             SOCKET_THREAD.close();
             return;
         }
