@@ -46,27 +46,25 @@ public class MapBuilder {
     }
 
     private int nowLengthOfShip(int x, int y) {
-        if (x - 1 >= 0 && map[x - 1][y].getStatus() == 4) {
-            for (int i = 2; i < 5; i++) {
-                if (x - i < 0 || map[x - i][y].getStatus() != 4) return i - 1;
+        int direction = directionOfShip(x, y);
+        if(direction==0) return 0;
+        int countCellOfShip=0;
+        if(direction==-1){
+           for(int i=1; i<=4; i++){
+               if(x-i>=0&&map[x-i][y].getStatus()==4) countCellOfShip++; else break;
+           }
+            for(int i=1; i<=4; i++){
+                if(x+i<map.length&&map[x+i][y].getStatus()==4) countCellOfShip++; else break;
+            }
+        }else{
+            for(int i=1; i<=4; i++){
+                if(y-i>=0&&map[x][y-i].getStatus()==4) countCellOfShip++; else break;
+            }
+            for(int i=1; i<=4; i++){
+                if(y+i<map.length&&map[x][y+i].getStatus()==4) countCellOfShip++; else break;
             }
         }
-        if (x + 1 < map.length && map[x + 1][y].getStatus() == 4) {
-            for (int i = 2; i < 5; i++) {
-                if (x + i >= map.length || map[x + i][y].getStatus() != 4) return i - 1;
-            }
-        }
-        if (y - 1 >= 0 && map[x][y - 1].getStatus() == 4) {
-            for (int i = 2; i < 5; i++) {
-                if (y - i < 0 || map[x][y - i].getStatus() != 4) return i - 1;
-            }
-        }
-        if (y + 1 < map.length && map[x][y + 1].getStatus() == 4) {
-            for (int i = 2; i < 5; i++) {
-                if (y + i >= map.length || map[x][y + i].getStatus() != 4) return i - 1;
-            }
-        }
-        return 0;
+        return countCellOfShip;
     }
 
     private int maxLengthOfShip() {
@@ -118,9 +116,9 @@ public class MapBuilder {
     }
 
 
-    /*-1: horizontal
+    /*1: horizontal
      * 0: no direction
-     * 1-vertical*/
+     * -1-vertical*/
     private int directionOfShip(int x, int y) {
         if (x - 1 >= 0) {
             if (x + 1 < map.length) {
