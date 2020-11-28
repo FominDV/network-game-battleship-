@@ -182,8 +182,8 @@ public class MapBuilder {
         if (!isSetNewCountOfShips(lengthOfShip)) return;
         for (Cell cell : cellsOfShip) {
             cell.setImage(6);
-            setImageOfShip(cellsOfShip);
         }
+        setImageOfShip(cellsOfShip);
     }
 
     private void setImageOfShip(Vector<Cell> cellsOfShip) {
