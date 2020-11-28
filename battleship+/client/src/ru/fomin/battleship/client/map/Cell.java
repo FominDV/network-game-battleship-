@@ -17,13 +17,17 @@ public class Cell extends JButton {
      * 5-known cell free
      * 6-known cell with ship*/
     private int status;
+    private final int X;
+    private final int Y;
     private PreparingForGameFrame preparingForGameFrame;
 
-    public Cell(int status, PreparingForGameFrame preparingForGameFrame) {
+    public Cell(int status, PreparingForGameFrame preparingForGameFrame, int x, int y) {
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         setMargin(new Insets(0, 0, 0, 0));
         this.status = status;
         this.preparingForGameFrame = preparingForGameFrame;
+        X=x;
+        Y=y;
         setImage(status);
         addActionListener(e -> {
             actionClick();
@@ -31,7 +35,7 @@ public class Cell extends JButton {
     }
 
     private void actionClick() {
-        if (preparingForGameFrame.getPostModeStatus() && status == 5) {
+        if (preparingForGameFrame.validCellForPreparingPost(X,Y)) {
             setImage(4);
         } else {
 
@@ -61,4 +65,7 @@ public class Cell extends JButton {
         }
     }
 
+    public int getStatus() {
+        return status;
+    }
 }

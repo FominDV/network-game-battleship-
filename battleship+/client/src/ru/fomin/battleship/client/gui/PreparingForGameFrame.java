@@ -177,7 +177,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         for (int i = 0; i < map.length; i++) {
             PANEL_MAP.add(new JLabel(String.valueOf(i+1)));
             for (int j = 0; j < map.length; j++) {
-                map[i][j] = new Cell(5, this);
+                map[i][j] = new Cell(5, this, i, j);
                 PANEL_MAP.add(map[i][j]);
             }
         }
@@ -256,7 +256,8 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         labelCount3Ship.setText("- " + ship3 + "/2");
         labelCount4Ship.setText("- " + ship4 + "/1");
     }
-    public boolean getPostModeStatus(){
-        return isPost;
+
+    public boolean validCellForPreparingPost(int x, int y) {
+        return mapBuilder.validCellForPreparingPost(isPost, x, y);
     }
 }
