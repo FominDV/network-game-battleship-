@@ -25,12 +25,13 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final String REMOVE_MODE = "REMOVE MODE";
     private final String POST_MODE = "POST MODE";
     private final int SIZE_OF_MAP = 10;
-    private final int WIDTH = 700;
-    private final int HEIGHT = 600;
+    private final int WIDTH = 750;
+    private final int HEIGHT = 650;
     private final String WINDOW_TITLE = "Map-Maker by ";
     private final SocketThread SOCKET_THREAD;
     private final String NICK_NAME;
     private final WorkingWithNetwork listener;
+    private boolean isPost=true;
     private String opponentNickname = "empty";
     private SearchOpponentThread searchOpponentThread = null;
     private MapBuilder mapBuilder;
@@ -167,11 +168,16 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     }
 
     private void fillMap() {
+        PANEL_MAP.add(new JLabel());
+        for(int i=1; i<=SIZE_OF_MAP;i++){
+            JLabel number=new JLabel((String.valueOf(i)));
+            number.setHorizontalAlignment(SwingConstants.CENTER);
+            PANEL_MAP.add(number);}
         Cell[][] map = new Cell[SIZE_OF_MAP][SIZE_OF_MAP];
-        for (int i = 0; i <= map.length; i++) {
-            
-            for (int j = 0; j <= map.length; j++) {
-                map[i][j] = new Cell(5);
+        for (int i = 0; i < map.length; i++) {
+            PANEL_MAP.add(new JLabel(String.valueOf(i+1)));
+            for (int j = 0; j < map.length; j++) {
+                map[i][j] = new Cell(5, this);
                 PANEL_MAP.add(map[i][j]);
             }
         }
@@ -249,5 +255,8 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         labelCount2Ship.setText("- " + ship2 + "/3");
         labelCount3Ship.setText("- " + ship3 + "/2");
         labelCount4Ship.setText("- " + ship4 + "/1");
+    }
+    public boolean getPostModeStatus(){
+        return isPost;
     }
 }
