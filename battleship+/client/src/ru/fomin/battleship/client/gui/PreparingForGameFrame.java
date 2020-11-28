@@ -22,8 +22,8 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final String INFO_ABOUT_DEVELOPER = "<html>Developer: Dmitriy Fomin<br>GitHub: https://github.com/FominDV <br> Email: 79067773397@yandex.ru</html>";
     private final String START = "START";
     private final String STOP = "<html>STOP SEARCHING<br>OPPONENT</html>";
-    private final String REMOVE_MODE = "  REMOVE MODE";
-    private final String POST_MODE = "     POST MODE";
+    private final String REMOVE_MODE = "REMOVE MODE";
+    private final String POST_MODE = "POST MODE";
     private final int SIZE_OF_MAP = 10;
     private final int WIDTH = 700;
     private final int HEIGHT = 600;
@@ -35,19 +35,21 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private SearchOpponentThread searchOpponentThread = null;
     private MapBuilder mapBuilder;
     private final Color COLOR_OF_BACKGROUND = new Color(99, 234, 234);
-    private Color COLOR_OF_START = new Color(215, 99, 99);
+    private final Color COLOR_OF_START = new Color(215, 99, 99);
+    private final Color COLOR_OF_POST_MODE = new Color(59, 118, 17);
+    private final Color COLOR_OF_REMOVE_MODE = new Color(68, 4, 4);
 
     private final Font FONT_FOR_BUTTONS = new Font(Font.SERIF, Font.BOLD, 16);
     private final Font FONT_FOR_LABEL_SHIPS = new Font(Font.SERIF, Font.BOLD, 24);
     private final Font FONT_FOR_MODE = new Font(Font.SERIF, Font.BOLD, 30);
 
-    private final JPanel PANEL_MAP = new JPanel(new GridLayout(SIZE_OF_MAP, SIZE_OF_MAP));
+    private final JPanel PANEL_MAP = new JPanel(new GridLayout(SIZE_OF_MAP+1, SIZE_OF_MAP+1));
     private final JPanel WRAPPER_FOR_MAP = new JPanel(new GridBagLayout());
     private final JPanel PANEL_BOTTOM = new JPanel(new GridLayout(2, 3));
     private final JPanel PANEL_TOP = new JPanel(new GridLayout(1, 2));
     private final JPanel PANEL_LEFT_MAIN = new JPanel(new GridLayout(5, 1));
     private final JPanel PANEL_LEFT_TOP = new JPanel(new GridLayout(1, 1));
-    private final JPanel PANEL_LEFT_BOTTOM = new JPanel(new GridLayout(4, 2));
+    private final JPanel[] PANEL_LEFT_BOTTOM = new JPanel[4];
 
     private final JButton BUTTON_POST = new JButton("POST");
     private final JButton BUTTON_REMOVE = new JButton("REMOVE");
@@ -88,12 +90,24 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         fillMap();
         WRAPPER_FOR_MAP.add(PANEL_MAP);
 
+        for (int i = 0; i < PANEL_LEFT_BOTTOM.length; i++) PANEL_LEFT_BOTTOM[i] = new JPanel(new GridLayout(1, 2));
+
         labelCount1Ship.setFont(FONT_FOR_LABEL_SHIPS);
         labelCount2Ship.setFont(FONT_FOR_LABEL_SHIPS);
         labelCount3Ship.setFont(FONT_FOR_LABEL_SHIPS);
         labelCount4Ship.setFont(FONT_FOR_LABEL_SHIPS);
         labelMode.setFont(FONT_FOR_MODE);
+        labelMode.setForeground(COLOR_OF_POST_MODE);
+        labelMode.setHorizontalAlignment(SwingConstants.CENTER);
         mapBuilder.setCountOfShips();
+        LABEL_SHIP_4_IMAGE.setIcon(new ImageIcon(getClass().getResource("../img/ship4.png")));
+        LABEL_SHIP_4_IMAGE.setHorizontalAlignment(SwingConstants.CENTER);
+        LABEL_SHIP_3_IMAGE.setIcon(new ImageIcon(getClass().getResource("../img/ship3.png")));
+        LABEL_SHIP_3_IMAGE.setHorizontalAlignment(SwingConstants.CENTER);
+        LABEL_SHIP_2_IMAGE.setIcon(new ImageIcon(getClass().getResource("../img/ship2.png")));
+        LABEL_SHIP_2_IMAGE.setHorizontalAlignment(SwingConstants.CENTER);
+        LABEL_SHIP_1_IMAGE.setIcon(new ImageIcon(getClass().getResource("../img/ship1.png")));
+        LABEL_SHIP_1_IMAGE.setHorizontalAlignment(SwingConstants.CENTER);
 
 
         BUTTON_POST.setFont(FONT_FOR_BUTTONS);
@@ -121,17 +135,20 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         BUTTON_EXIT.addActionListener(this);
 
         PANEL_LEFT_TOP.add(labelMode);
-        PANEL_LEFT_BOTTOM.add(LABEL_SHIP_4_IMAGE);
-        PANEL_LEFT_BOTTOM.add(labelCount4Ship);
-        PANEL_LEFT_BOTTOM.add(LABEL_SHIP_3_IMAGE);
-        PANEL_LEFT_BOTTOM.add(labelCount3Ship);
-        PANEL_LEFT_BOTTOM.add(LABEL_SHIP_2_IMAGE);
-        PANEL_LEFT_BOTTOM.add(labelCount2Ship);
-        PANEL_LEFT_BOTTOM.add(LABEL_SHIP_1_IMAGE);
-        PANEL_LEFT_BOTTOM.add(labelCount1Ship);
+        PANEL_LEFT_BOTTOM[0].add(LABEL_SHIP_4_IMAGE);
+        PANEL_LEFT_BOTTOM[0].add(labelCount4Ship);
+        PANEL_LEFT_BOTTOM[1].add(LABEL_SHIP_3_IMAGE);
+        PANEL_LEFT_BOTTOM[1].add(labelCount3Ship);
+        PANEL_LEFT_BOTTOM[2].add(LABEL_SHIP_2_IMAGE);
+        PANEL_LEFT_BOTTOM[2].add(labelCount2Ship);
+        PANEL_LEFT_BOTTOM[3].add(LABEL_SHIP_1_IMAGE);
+        PANEL_LEFT_BOTTOM[3].add(labelCount1Ship);
 
         PANEL_LEFT_MAIN.add(PANEL_LEFT_TOP);
-        PANEL_LEFT_MAIN.add(PANEL_LEFT_BOTTOM);
+        PANEL_LEFT_MAIN.add(PANEL_LEFT_BOTTOM[0]);
+        PANEL_LEFT_MAIN.add(PANEL_LEFT_BOTTOM[1]);
+        PANEL_LEFT_MAIN.add(PANEL_LEFT_BOTTOM[2]);
+        PANEL_LEFT_MAIN.add(PANEL_LEFT_BOTTOM[3]);
 
         PANEL_TOP.add(BUTTON_INFO);
         PANEL_TOP.add(BUTTON_DEVELOPER_INFO);
@@ -151,8 +168,9 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
 
     private void fillMap() {
         Cell[][] map = new Cell[SIZE_OF_MAP][SIZE_OF_MAP];
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map.length; j++) {
+        for (int i = 0; i <= map.length; i++) {
+            
+            for (int j = 0; j <= map.length; j++) {
                 map[i][j] = new Cell(5);
                 PANEL_MAP.add(map[i][j]);
             }
@@ -225,10 +243,11 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private void showDeveloperInfo() {
         JOptionPane.showMessageDialog(null, INFO_ABOUT_DEVELOPER, "INFORMATION ABOUT DEVELOPER", JOptionPane.INFORMATION_MESSAGE);
     }
-    public void setCountOfShips(int ship1,int ship2,int ship3,int ship4){
-        labelCount1Ship.setText("- "+ship1+"/4");
-        labelCount2Ship.setText("- "+ship2+"/4");
-        labelCount3Ship.setText("- "+ship3+"/4");
-        labelCount4Ship.setText("- "+ship4+"/4");
+
+    public void setCountOfShips(int ship1, int ship2, int ship3, int ship4) {
+        labelCount1Ship.setText("- " + ship1 + "/4");
+        labelCount2Ship.setText("- " + ship2 + "/3");
+        labelCount3Ship.setText("- " + ship3 + "/2");
+        labelCount4Ship.setText("- " + ship4 + "/1");
     }
 }
