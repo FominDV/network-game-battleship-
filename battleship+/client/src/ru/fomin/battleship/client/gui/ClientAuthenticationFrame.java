@@ -44,8 +44,8 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
 
     public ClientAuthenticationFrame() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setSize(WIDTH, HEIGHT);
+        setLocationRelativeTo(null);
         setTitle(WINDOW_TITLE);
         setResizable(false);
         LABEL_IP.setText(LABEL_IP_TEXT + ip);

@@ -50,8 +50,8 @@ public class RegistrationFrame extends JFrame implements ActionListener {
 
     private void initialization() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setSize(WIDTH, HEIGHT);
+        setLocationRelativeTo(null);
         setTitle(TITLE);
         setResizable(false);
         for (int i = 0; i < SUB_PANEL.length; i++) SUB_PANEL[i] = new JPanel(new GridLayout(1, 2));

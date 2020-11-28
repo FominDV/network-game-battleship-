@@ -31,7 +31,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final SocketThread SOCKET_THREAD;
     private final String NICK_NAME;
     private final WorkingWithNetwork listener;
-    private boolean isPost=true;
+    private boolean isPost = true;
     private String opponentNickname = "empty";
     private SearchOpponentThread searchOpponentThread = null;
     private MapBuilder mapBuilder;
@@ -44,7 +44,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final Font FONT_FOR_LABEL_SHIPS = new Font(Font.SERIF, Font.BOLD, 24);
     private final Font FONT_FOR_MODE = new Font(Font.SERIF, Font.BOLD, 30);
 
-    private final JPanel PANEL_MAP = new JPanel(new GridLayout(SIZE_OF_MAP+1, SIZE_OF_MAP+1));
+    private final JPanel PANEL_MAP = new JPanel(new GridLayout(SIZE_OF_MAP + 1, SIZE_OF_MAP + 1));
     private final JPanel WRAPPER_FOR_MAP = new JPanel(new GridBagLayout());
     private final JPanel PANEL_BOTTOM = new JPanel(new GridLayout(2, 3));
     private final JPanel PANEL_TOP = new JPanel(new GridLayout(1, 2));
@@ -82,8 +82,8 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
 
     private void initialization() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setSize(WIDTH, HEIGHT);
+        setLocationRelativeTo(null);
         setTitle(WINDOW_TITLE + NICK_NAME);
         setResizable(false);
         /*width and height of imager equal 40 and border of cell equal 1*/
@@ -169,13 +169,14 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
 
     private void fillMap() {
         PANEL_MAP.add(new JLabel());
-        for(int i=1; i<=SIZE_OF_MAP;i++){
-            JLabel number=new JLabel((String.valueOf(i)));
+        for (int i = 1; i <= SIZE_OF_MAP; i++) {
+            JLabel number = new JLabel((String.valueOf(i)));
             number.setHorizontalAlignment(SwingConstants.CENTER);
-            PANEL_MAP.add(number);}
+            PANEL_MAP.add(number);
+        }
         Cell[][] map = new Cell[SIZE_OF_MAP][SIZE_OF_MAP];
         for (int i = 0; i < map.length; i++) {
-            PANEL_MAP.add(new JLabel(String.valueOf(i+1)));
+            PANEL_MAP.add(new JLabel(String.valueOf(i + 1)));
             for (int j = 0; j < map.length; j++) {
                 map[i][j] = new Cell(5, this, i, j);
                 PANEL_MAP.add(map[i][j]);
@@ -240,9 +241,23 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             SOCKET_THREAD.close();
             return;
         }
-            if (source.equals(BUTTON_CANCEL)) {
-                mapBuilder.cancelStatus4();
-                return;
+        if (source.equals(BUTTON_CANCEL)) {
+            mapBuilder.cancelStatus4();
+            return;
+        }
+        if (source.equals(BUTTON_POST)) {
+            isPost=true;
+            labelMode.setText(POST_MODE);
+            labelMode.setForeground(COLOR_OF_POST_MODE);
+            mapBuilder.post();
+            return;
+        }
+        if (source.equals(BUTTON_REMOVE)) {
+            isPost=false;
+            labelMode.setText(REMOVE_MODE);
+            labelMode.setForeground(COLOR_OF_REMOVE_MODE);
+            mapBuilder.cancelStatus4();
+            return;
         }
     }
 
