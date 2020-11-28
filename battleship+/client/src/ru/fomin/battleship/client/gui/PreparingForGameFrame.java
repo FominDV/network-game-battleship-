@@ -241,7 +241,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             return;
         }
         if (source.equals(BUTTON_EXIT)) {
-            if(JOptionPane.showConfirmDialog(null,"Are you sure you want to exit?")==JOptionPane.YES_NO_OPTION)
+            if(JOptionPane.showConfirmDialog(null,"Are you sure you want to exit?","WARNING",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_NO_OPTION)
             SOCKET_THREAD.close();
             return;
         }
