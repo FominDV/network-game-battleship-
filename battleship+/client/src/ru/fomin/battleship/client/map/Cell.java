@@ -95,6 +95,31 @@ public class Cell extends JButton {
             case 323:
                 setIcon(new ImageIcon(getClass().getResource("../img/ship323.png")));
                 break;
+            case 411:
+                setIcon(new ImageIcon(getClass().getResource("../img/ship411.png")));
+                break;
+            case 412:
+                setIcon(new ImageIcon(getClass().getResource("../img/ship412.png")));
+                break;
+            case 413:
+                setIcon(new ImageIcon(getClass().getResource("../img/ship413.png")));
+                break;
+            case 414:
+                setIcon(new ImageIcon(getClass().getResource("../img/ship414.png")));
+                break;
+            case 421:
+                setIcon(new ImageIcon(getClass().getResource("../img/ship421.png")));
+                break;
+            case 422:
+                setIcon(new ImageIcon(getClass().getResource("../img/ship422.png")));
+                break;
+            case 423:
+                setIcon(new ImageIcon(getClass().getResource("../img/ship423.png")));
+                break;
+            case 424:
+                setIcon(new ImageIcon(getClass().getResource("../img/ship424.png")));
+                break;
+
         }
     }
 

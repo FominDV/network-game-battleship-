@@ -189,7 +189,7 @@ public class MapBuilder {
     private void setImageOfShip(Vector<Cell> cellsOfShip, int direction) {
         switch (cellsOfShip.size()) {
             case 4:
-
+                setImageForShip4(cellsOfShip, direction);
                 break;
             case 3:
                 setImageForShip3(cellsOfShip, direction);
@@ -200,6 +200,20 @@ public class MapBuilder {
             case 1:
                 cellsOfShip.get(0).setImage(11);
                 break;
+        }
+    }
+
+    private void setImageForShip4(Vector<Cell> cellsOfShip, int direction) {
+        if (direction == 1) {
+            cellsOfShip.get(0).setImage(411);
+            cellsOfShip.get(1).setImage(412);
+            cellsOfShip.get(2).setImage(413);
+            cellsOfShip.get(3).setImage(414);
+        } else {
+            cellsOfShip.get(0).setImage(421);
+            cellsOfShip.get(1).setImage(422);
+            cellsOfShip.get(2).setImage(423);
+            cellsOfShip.get(3).setImage(424);
         }
     }
 
