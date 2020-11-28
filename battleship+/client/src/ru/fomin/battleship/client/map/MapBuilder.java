@@ -145,4 +145,11 @@ public class MapBuilder {
         }
         return 0;
     }
+    public void cancelStatus4(){
+        for(int i=0; i<map.length;i++){
+            for(int j=0; j<map.length;j++){
+                if(map[i][j].getStatus()==4) map[i][j].setImage(5);
+            }
+        }
+    }
 }

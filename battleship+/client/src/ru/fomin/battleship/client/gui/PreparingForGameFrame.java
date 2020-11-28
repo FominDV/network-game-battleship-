@@ -240,6 +240,10 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             SOCKET_THREAD.close();
             return;
         }
+            if (source.equals(BUTTON_CANCEL)) {
+                mapBuilder.cancelStatus4();
+                return;
+        }
     }
 
     private void showInstruction() {
