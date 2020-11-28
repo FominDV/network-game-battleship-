@@ -183,10 +183,10 @@ public class MapBuilder {
         for (Cell cell : cellsOfShip) {
             cell.setImage(6);
         }
-        setImageOfShip(cellsOfShip);
+        setImageOfShip(cellsOfShip, direction);
     }
 
-    private void setImageOfShip(Vector<Cell> cellsOfShip) {
+    private void setImageOfShip(Vector<Cell> cellsOfShip, int direction) {
         switch (cellsOfShip.size()) {
             case 4:
 
@@ -195,7 +195,7 @@ public class MapBuilder {
 
                 break;
             case 2:
-               setImageForShip2(cellsOfShip);
+               setImageForShip2(cellsOfShip, direction);
                 break;
             case 1:
                 cellsOfShip.get(0).setImage(11);
@@ -203,8 +203,14 @@ public class MapBuilder {
         }
     }
 
-    private void setImageForShip2(Vector<Cell> cellsOfShip) {
-
+    private void setImageForShip2(Vector<Cell> cellsOfShip, int direction) {
+        if(direction==1){
+            cellsOfShip.get(0).setImage(211);
+            cellsOfShip.get(1).setImage(212);
+        }else{
+            cellsOfShip.get(0).setImage(221);
+            cellsOfShip.get(1).setImage(222);
+        }
     }
 
     private boolean isSetNewCountOfShips(int lengthOfShip) {
@@ -233,24 +239,33 @@ public class MapBuilder {
     private Vector<Cell> getCellsOfShip(int x, int y, int status) {
         int direction = directionOfShip(x, y, status);
         Vector<Cell> cellsOfShip = new Vector<>();
+        int bufferNumberOfCells;
         if (direction == 0) cellsOfShip.add(map[x][y]);
         if (direction == -1) {
+            bufferNumberOfCells=0;
             for (int i = 1; i <= map.length; i++) {
-                if (x + i < map.length && map[x + i][y].getStatus() == status) cellsOfShip.add(map[x + i][y]);
+                if (x + i < map.length && map[x + i][y].getStatus() == status) bufferNumberOfCells++;
             }
+            for(int i=bufferNumberOfCells; i>0;i--) cellsOfShip.add(map[x+i][y]);
             cellsOfShip.add(map[x][y]);
+            bufferNumberOfCells=0;
             for (int i = 1; i <= map.length; i++) {
-                if (x - i >= 0 && map[x - i][y].getStatus() == status) cellsOfShip.add(map[x - i][y]);
+                if (x - i >= 0 && map[x - i][y].getStatus() == status) bufferNumberOfCells++;
             }
+            for(int i=bufferNumberOfCells; i>0;i--) cellsOfShip.add(map[x-i][y]);
         }
         if (direction == 1) {
+            bufferNumberOfCells=0;
             for (int i = 1; i <= map.length; i++) {
-                if (y - i >= 0 && map[x][y - i].getStatus() == status) cellsOfShip.add(map[x][y - i]);
+                if (y - i >= 0 && map[x][y - i].getStatus() == status) bufferNumberOfCells++;
             }
+            for(int i=bufferNumberOfCells; i>0;i--) cellsOfShip.add(map[x][y-i]);
             cellsOfShip.add(map[x][y]);
+            bufferNumberOfCells=0;
             for (int i = 1; i <= map.length; i++) {
-                if (y + i < map.length && map[x][y + i].getStatus() == status) cellsOfShip.add(map[x][y + i]);
+                if (y + i < map.length && map[x][y + i].getStatus() == status) bufferNumberOfCells++;
             }
+            for(int i=bufferNumberOfCells; i>0;i--) cellsOfShip.add(map[x][y+i]);
         }
         return cellsOfShip;
     }
