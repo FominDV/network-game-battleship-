@@ -162,8 +162,8 @@ public class MapBuilder {
 
     public void post() {
         int x=-1 , y=-1 , direction = -10;
-        for (int i = 1; i < map.length; i++) {
-            for (int j = 1; j < map.length; j++) {
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map.length; j++) {
                 if (map[i][j].getStatus() == 4) {
                     x = i;
                     y = j;
@@ -198,27 +198,32 @@ public class MapBuilder {
     }
 
     public void postTheShip(int lengthOfShip, Vector<Cell> cellsOfShip, int direction) {
-        setNewCountOfShips(lengthOfShip);
+        if(!isSetNewCountOfShips(lengthOfShip)) return;
         for (Cell cell : cellsOfShip) {
             cell.setImage(6);
         }
     }
 
-    private void setNewCountOfShips(int lengthOfShip) {
+    private boolean isSetNewCountOfShips(int lengthOfShip) {
         switch (lengthOfShip) {
             case 4:
+                if(count4Ship==MAX_OF_SHIP4) return false;
                 count4Ship++;
                 break;
             case 3:
+                if(count3Ship==MAX_OF_SHIP3) return false;
                 count3Ship++;
                 break;
             case 2:
+                if(count2Ship==MAX_OF_SHIP2) return false;
                 count2Ship++;
                 break;
             case 1:
+                if(count1Ship==MAX_OF_SHIP1) return false;
                 count1Ship++;
                 break;
         }
         setCountOfShips();
+        return true;
     }
 }
