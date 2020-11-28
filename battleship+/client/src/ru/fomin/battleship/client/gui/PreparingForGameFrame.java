@@ -18,7 +18,8 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             "<br>3)Click on the ship for removing in the \"REMOVE\" mode" +
             "<br>4)If you want to cancel the selected cells, click to \"CANCEL ACTION\"<br>5)For exit to registration menu click to \"EXIT\"" +
             "<br>6)If you have saved maps, you can download the map by clicking \"LOAD THE MAP\"<br>7)You can only start the game by placing all the ships. To start the game, click \"START\"" +
-            "<br>8)There should be an empty space around each ship<br>9)The game has 4 single-deck, 3 double-deck, 2 three-deck and 1 four-deck ships</html>";
+            "<br>8)There should be an empty space around each ship<br>9)The game has 4 single-deck, 3 double-deck, 2 three-deck and 1 four-deck ships" +
+            "<br>10)When all the ships are placed, the button will change color and become active</html>";
     private final String INFO_ABOUT_DEVELOPER = "<html>Developer: Dmitriy Fomin<br>GitHub: https://github.com/FominDV <br> Email: 79067773397@yandex.ru</html>";
     private final String START = "START";
     private final String STOP = "<html>STOP SEARCHING<br>OPPONENT</html>";
@@ -32,6 +33,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final String NICK_NAME;
     private final WorkingWithNetwork listener;
     private boolean isPost = true;
+    private boolean isReady = false;
     private String opponentNickname = "empty";
     private SearchOpponentThread searchOpponentThread = null;
     private MapBuilder mapBuilder;
@@ -39,6 +41,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final Color COLOR_OF_START = new Color(215, 99, 99);
     private final Color COLOR_OF_POST_MODE = new Color(59, 118, 17);
     private final Color COLOR_OF_REMOVE_MODE = new Color(68, 4, 4);
+    private final Color COLOR_OF_READY = new Color(46, 220, 5);
 
     private final Font FONT_FOR_BUTTONS = new Font(Font.SERIF, Font.BOLD, 16);
     private final Font FONT_FOR_LABEL_SHIPS = new Font(Font.SERIF, Font.BOLD, 24);
@@ -246,14 +249,14 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             return;
         }
         if (source.equals(BUTTON_POST)) {
-            isPost=true;
+            isPost = true;
             labelMode.setText(POST_MODE);
             labelMode.setForeground(COLOR_OF_POST_MODE);
             mapBuilder.post();
             return;
         }
         if (source.equals(BUTTON_REMOVE)) {
-            isPost=false;
+            isPost = false;
             labelMode.setText(REMOVE_MODE);
             labelMode.setForeground(COLOR_OF_REMOVE_MODE);
             mapBuilder.cancelStatus4();
@@ -274,6 +277,13 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         labelCount2Ship.setText("- " + ship2 + "/3");
         labelCount3Ship.setText("- " + ship3 + "/2");
         labelCount4Ship.setText("- " + ship4 + "/1");
+        if (ship1 == 4 && ship2 == 3 && ship3 == 2 && ship4 == 1) {
+            isReady = true;
+            BUTTON_START.setBackground(COLOR_OF_READY);
+        } else {
+            isReady = false;
+            BUTTON_START.setBackground(COLOR_OF_START);
+        }
     }
 
     public boolean validCellForPreparingPost(int x, int y) {

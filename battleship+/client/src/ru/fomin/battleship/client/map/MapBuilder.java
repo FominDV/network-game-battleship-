@@ -84,35 +84,35 @@ public class MapBuilder {
     private boolean validSpaces(int x, int y) {
         int direction = directionOfShip(x, y);
         if (y - 1 >= 0 && x - 1 >= 0) {
-            if (direction == -1 && (y + 1 >= map.length || (map[x][y + 1].getStatus() != 5 && map[x - 1][y + 1].getStatus() != 5)) && map[x][y - 1].getStatus() != 5 && ((x + 1 >= map.length || map[x + 1][y].getStatus() != 5) || map[x - 1][y].getStatus() != 5) && map[x - 1][y - 1].getStatus() != 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() != 5) && (x + 1 >= map.length || map[x + 1][y - 1].getStatus() != 5))
+            if (direction == -1 && !((y + 1 >= map.length || (map[x][y + 1].getStatus() == 5 && map[x - 1][y + 1].getStatus() == 5)) && map[x][y - 1].getStatus() == 5 && ((x + 1 >= map.length || map[x + 1][y].getStatus() == 5) || map[x - 1][y].getStatus() == 5) && map[x - 1][y - 1].getStatus() == 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5) && (x + 1 >= map.length || map[x + 1][y - 1].getStatus() == 5)))
                 return false;
-            if (direction == 1 && (x + 1 >= map.length || (map[x + 1][y].getStatus() != 5 && map[x + 1][y - 1].getStatus() != 5)) && map[x - 1][y].getStatus() != 5 && ((y + 1 >= map.length || (map[x][y + 1].getStatus() != 5 && map[x - 1][y + 1].getStatus() != 5)) || map[x][y - 1].getStatus() != 5) && map[x - 1][y - 1].getStatus() != 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() != 5))
+            if (direction == 1 && !((x + 1 >= map.length || (map[x + 1][y].getStatus() == 5 && map[x + 1][y - 1].getStatus() == 5)) && map[x - 1][y].getStatus() == 5 && ((y + 1 >= map.length || (map[x][y + 1].getStatus() == 5 && map[x - 1][y + 1].getStatus() == 5)) || map[x][y - 1].getStatus() == 5) && map[x - 1][y - 1].getStatus() == 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5)))
                 return false;
-            if (direction == 0 && (y + 1 >= map.length || (map[x][y + 1].getStatus() != 5 && map[x - 1][y + 1].getStatus() != 5)) && map[x][y - 1].getStatus() != 5 && (x + 1 >= map.length || (map[x + 1][y].getStatus() != 5 && map[x + 1][y - 1].getStatus() != 5)) && map[x - 1][y].getStatus() != 5 && map[x - 1][y - 1].getStatus() != 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() != 5))
+            if (direction == 0 && !((y + 1 >= map.length || (map[x][y + 1].getStatus() == 5 && map[x - 1][y + 1].getStatus() == 5)) && map[x][y - 1].getStatus() == 5 && (x + 1 >= map.length || (map[x + 1][y].getStatus() == 5 && map[x + 1][y - 1].getStatus() == 5)) && map[x - 1][y].getStatus() == 5 && map[x - 1][y - 1].getStatus() == 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5)))
                 return false;
         } else {
             if (y - 1 >= 0 && x - 1 < 0) {
-                if (direction == -1 && (y + 1 >= map.length || map[x][y + 1].getStatus() != 5) && map[x][y - 1].getStatus() != 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() != 5) && (x + 1 >= map.length || (map[x + 1][y - 1].getStatus() != 5 && map[x + 1][y].getStatus() != 5)))
+                if (direction == -1 && !((y + 1 >= map.length || map[x][y + 1].getStatus() == 5) && map[x][y - 1].getStatus() == 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5) && (x + 1 >= map.length || (map[x + 1][y - 1].getStatus() == 5 && map[x + 1][y].getStatus() == 5))))
                     return false;
-                if (direction == 1 && ((y + 1 >= map.length || map[x][y + 1].getStatus() != 5) || map[x][y - 1].getStatus() != 5) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() != 5) && (x + 1 >= map.length || (map[x + 1][y - 1].getStatus() != 5 && map[x + 1][y].getStatus() != 5)))
+                if (direction == 1 && !(((y + 1 >= map.length || map[x][y + 1].getStatus() == 5) || map[x][y - 1].getStatus() == 5) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5) && (x + 1 >= map.length || (map[x + 1][y - 1].getStatus() == 5 && map[x + 1][y].getStatus() == 5))))
                     return false;
-                if (direction == 0 && (y + 1 >= map.length || map[x][y + 1].getStatus() != 5) && map[x][y - 1].getStatus() != 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() != 5) && (x + 1 >= map.length || (map[x + 1][y - 1].getStatus() != 5 && map[x + 1][y].getStatus() != 5)))
+                if (direction == 0 && !((y + 1 >= map.length || map[x][y + 1].getStatus() == 5) && map[x][y - 1].getStatus() == 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5) && (x + 1 >= map.length || (map[x + 1][y - 1].getStatus() == 5 && map[x + 1][y].getStatus() == 5))))
                     return false;
             } else {
                 if (y - 1 < 0 && x - 1 < 0) {
-                    if (direction == -1 && (y + 1 >= map.length || map[x][y + 1].getStatus() != 5) && (x + 1 >= map.length || map[x + 1][y].getStatus() != 5) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() != 5))
+                    if (direction == -1 && !((y + 1 >= map.length || map[x][y + 1].getStatus() == 5) && (x + 1 >= map.length || map[x + 1][y].getStatus() == 5) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5)))
                         return false;
-                    if (direction == 1 && (x + 1 >= map.length || map[x + 1][y].getStatus() != 5) && (y + 1 >= map.length || map[x][y + 1].getStatus() != 5) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() != 5))
+                    if (direction == 1 && !((x + 1 >= map.length || map[x + 1][y].getStatus() == 5) && (y + 1 >= map.length || map[x][y + 1].getStatus() == 5) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5)))
                         return false;
-                    if (direction == 0 && (y + 1 >= map.length || map[x][y + 1].getStatus() != 5) && (x + 1 >= map.length || map[x + 1][y].getStatus() != 5) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() != 5))
+                    if (direction == 0 && !((y + 1 >= map.length || map[x][y + 1].getStatus() == 5) && (x + 1 >= map.length || map[x + 1][y].getStatus() == 5) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5)))
                         return false;
                 } else {
                     if (y - 1 < 0 && x - 1 >= 0) {
-                        if (direction == -1 && (y + 1 >= map.length || (map[x][y + 1].getStatus() != 5 && map[x - 1][y + 1].getStatus() != 5)) && ((x + 1 >= map.length || map[x + 1][y].getStatus() != 5) || map[x - 1][y].getStatus() != 5) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() != 5))
+                        if (direction == -1 && !((y + 1 >= map.length || (map[x][y + 1].getStatus() == 5 && map[x - 1][y + 1].getStatus() == 5)) && ((x + 1 >= map.length || map[x + 1][y].getStatus() == 5) || map[x - 1][y].getStatus() == 5) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5)))
                             return false;
-                        if (direction == 1 && (x + 1 >= map.length || map[x + 1][y].getStatus() != 5) && map[x - 1][y].getStatus() != 5 && (y + 1 >= map.length || (map[x][y + 1].getStatus() != 5 && map[x - 1][y + 1].getStatus() != 5)) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() != 5))
+                        if (direction == 1 && !((x + 1 >= map.length || map[x + 1][y].getStatus() == 5) && map[x - 1][y].getStatus() == 5 && (y + 1 >= map.length || (map[x][y + 1].getStatus() == 5 && map[x - 1][y + 1].getStatus() == 5)) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5)))
                             return false;
-                        if (direction == 0 && (y + 1 >= map.length || (map[x][y + 1].getStatus() != 5 && map[x - 1][y + 1].getStatus() != 5)) && (x + 1 >= map.length || map[x + 1][y].getStatus() != 5) && map[x - 1][y].getStatus() != 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() != 5))
+                        if (direction == 0 && !((y + 1 >= map.length || (map[x][y + 1].getStatus() == 5 && map[x - 1][y + 1].getStatus() == 5)) && (x + 1 >= map.length || map[x + 1][y].getStatus() == 5) && map[x - 1][y].getStatus() == 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5)))
                             return false;
                     }
                 }
