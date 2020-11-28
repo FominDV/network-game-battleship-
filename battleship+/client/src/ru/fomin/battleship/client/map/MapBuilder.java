@@ -182,7 +182,29 @@ public class MapBuilder {
         if (!isSetNewCountOfShips(lengthOfShip)) return;
         for (Cell cell : cellsOfShip) {
             cell.setImage(6);
+            setImageOfShip(cellsOfShip);
         }
+    }
+
+    private void setImageOfShip(Vector<Cell> cellsOfShip) {
+        switch (cellsOfShip.size()) {
+            case 4:
+
+                break;
+            case 3:
+
+                break;
+            case 2:
+               setImageForShip2(cellsOfShip);
+                break;
+            case 1:
+                cellsOfShip.get(0).setImage(11);
+                break;
+        }
+    }
+
+    private void setImageForShip2(Vector<Cell> cellsOfShip) {
+
     }
 
     private boolean isSetNewCountOfShips(int lengthOfShip) {
@@ -234,7 +256,7 @@ public class MapBuilder {
     }
 
     public void remove(int x, int y) {
-        if(map[x][y].getStatus()!=6) return;
+        if (map[x][y].getStatus() != 6) return;
         Vector<Cell> cellsOfShip = getCellsOfShip(x, y, 6);
         for (Cell cell : cellsOfShip) {
             cell.setImage(5);

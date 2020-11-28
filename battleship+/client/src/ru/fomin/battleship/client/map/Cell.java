@@ -58,11 +58,14 @@ public class Cell extends JButton {
                 break;
             case 5:
                 this.status = 5;
+                setIcon(null);
                 setIcon(new ImageIcon(getClass().getResource("../img/sea.png")));
                 break;
             case 6:
                 this.status=6;
-                setBackground(Color.RED);
+                break;
+            case 11:
+                setIcon(new ImageIcon(getClass().getResource("../img/ship1.png")));
                 break;
         }
     }
