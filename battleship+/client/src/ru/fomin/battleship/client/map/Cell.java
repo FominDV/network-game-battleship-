@@ -37,9 +37,9 @@ public class Cell extends JButton {
     private void actionClick() {
         if (preparingForGameFrame.validCellForPreparingPost(X,Y)) {
             setImage(4);
-        } else {
-
         }
+           if(!preparingForGameFrame.getMode()) preparingForGameFrame.remove(X,Y);
+
     }
 
     public void setImage(int status) {

@@ -290,4 +290,12 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     public boolean validCellForPreparingPost(int x, int y) {
         return mapBuilder.validCellForPreparingPost(isPost, x, y);
     }
+
+    public void remove(int x, int y) {
+        mapBuilder.remove(x,y);
+    }
+
+    public boolean getMode() {
+        return isPost;
+    }
 }
