@@ -62,7 +62,7 @@ public class Cell extends JButton {
                 break;
             case 6:
                 this.status=6;
-                setBackground(Color.BLACK);
+                setBackground(Color.RED);
                 break;
         }
     }
