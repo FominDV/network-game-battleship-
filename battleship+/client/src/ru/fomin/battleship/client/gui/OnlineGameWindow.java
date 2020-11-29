@@ -5,6 +5,8 @@ import javax.swing.*;
 public class OnlineGameWindow extends JFrame {
     private final String opponentNickname;
     private final String NICK_NAME;
+    private final int WIDTH=800;
+    private final int HEIGHT=400;
 
     public OnlineGameWindow(String opponentNickname, String nick_name) {
         this.opponentNickname = opponentNickname;
@@ -13,7 +15,13 @@ public class OnlineGameWindow extends JFrame {
     }
 
     private void initialization() {
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setSize(WIDTH, HEIGHT);
+        setLocationRelativeTo(null);
         setTitle(NICK_NAME + " VS " + opponentNickname);
+        setResizable(false);
+
+        setVisible(true);
     }
 
 
