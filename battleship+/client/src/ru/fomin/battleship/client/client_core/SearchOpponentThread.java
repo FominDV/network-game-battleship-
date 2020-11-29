@@ -22,6 +22,7 @@ public class SearchOpponentThread extends Thread {
         int allDots=0;
         while (!isInterrupted() && preparingGameFrame.isOpponentNicknameEmpty()) {
             preparingGameFrame.sendMessageForSearching();
+            if(allDots>16983) allDots=0;
             allDots++;
             searchingOpponent.showProcess(allDots);
             try {
