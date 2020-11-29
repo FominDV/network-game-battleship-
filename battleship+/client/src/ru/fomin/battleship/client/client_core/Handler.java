@@ -23,12 +23,17 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
     private SearchingOpponent searchingOpponent;
     private String login;
     private Vector<String[]> dataMapVector = new Vector<>();
+    private String ip;
+    private int port;
+
 
     public void login(String ip, int port, ClientAuthenticationFrame authenticationFrame, String login) throws IOException {
         this.clientAuthenticationFrame = authenticationFrame;
         Socket socket = new Socket(ip, port);
         socketThread = new SocketThread(this, login, socket);
         this.login = login;
+        this.ip = ip;
+        this.port = port;
     }
 
     public void login(String ip, int port, RegistrationFrame registrationFrame, Boolean isRegistration) throws IOException {
@@ -133,7 +138,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             case LibraryOfPrefixes.AUTH_ACCEPT:
                 isValidAuthentication = true;
                 clientAuthenticationFrame.dispose();
-                nickName=arr[1];
+                nickName = arr[1];
                 preparingForGameFrame = new PreparingForGameFrame(socketThread, arr[1], this, login);
                 break;
             case LibraryOfPrefixes.AUTH_DENIED:
@@ -155,9 +160,15 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                 preparingForGameFrame.setOpponentNickname(arr[1]);
                 break;
             case LibraryOfPrefixes.DISCONNECT_OPPONENT:
-                JOptionPane.showMessageDialog(null,"Connect with your opponent was lost","ERROR",JOptionPane.ERROR_MESSAGE);
-                preparingForGameFrame= new PreparingForGameFrame(socketThread, nickName, this, login);
+                JOptionPane.showMessageDialog(null, "Connect with your opponent was lost", "ERROR", JOptionPane.ERROR_MESSAGE);
+                socketThread.close();
                 onlineGameWindow.dispose();
+                isValidAuthentication = false;
+                try {
+                    login(ip, port, clientAuthenticationFrame, login);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             case LibraryOfPrefixes.LIST_OF_DATA_MAP:
                 writeDataIntoTheList(arr);

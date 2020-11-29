@@ -8,9 +8,9 @@ public class OnlineGameWindow extends JFrame {
     private final int WIDTH=800;
     private final int HEIGHT=400;
 
-    public OnlineGameWindow(String opponentNickname, String nick_name) {
+    public OnlineGameWindow(String opponentNickname, String nickName) {
         this.opponentNickname = opponentNickname;
-        NICK_NAME = nick_name;
+        NICK_NAME = nickName;
         SwingUtilities.invokeLater(() -> initialization());
     }
 

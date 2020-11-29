@@ -354,4 +354,12 @@ public class MapBuilder {
         for(int i=0; i<10;i++) post();
         setCountOfShips();
     }
+
+    public void clearTheMap() {
+        for(int i=0;i<map.length;i++){
+            for(int j=0;j<map.length;j++){
+                map[i][j].setImage(5);
+            }
+        }
+    }
 }

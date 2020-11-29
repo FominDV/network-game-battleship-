@@ -43,6 +43,10 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
     }
 
     public ClientAuthenticationFrame() {
+        SwingUtilities.invokeLater(() -> initialization());
+    }
+
+    private void initialization() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null);
@@ -77,7 +81,6 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
         LABEL_HEADER.setHorizontalAlignment(SwingConstants.CENTER);
         add(MAIN_PANEL);
         setVisible(true);
-
     }
 
     @Override

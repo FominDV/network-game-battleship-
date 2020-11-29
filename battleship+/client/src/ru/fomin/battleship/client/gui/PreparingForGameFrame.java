@@ -23,7 +23,6 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             "<br>10)When all the ships are placed, the button will change color and become active</html>";
     private final String INFO_ABOUT_DEVELOPER = "<html>Developer: Dmitriy Fomin<br>GitHub: https://github.com/FominDV <br> Email: 79067773397@yandex.ru</html>";
     private final String START = "START";
-    private final String STOP = "<html>STOP SEARCHING<br>OPPONENT</html>";
     private final String REMOVE_MODE = "REMOVE MODE";
     private final String POST_MODE = "POST MODE";
     private final int SIZE_OF_MAP = 10;
@@ -46,6 +45,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final Color COLOR_OF_REMOVE_MODE = new Color(68, 4, 4);
     private final Color COLOR_OF_READY = new Color(46, 220, 5);
     private Vector<String[]> dataMapVector = new Vector<>();
+    private SearchingOpponent searchingOpponent;
 
     private final Font FONT_FOR_BUTTONS = new Font(Font.SERIF, Font.BOLD, 16);
     private final Font FONT_FOR_LABEL_SHIPS = new Font(Font.SERIF, Font.BOLD, 24);
@@ -195,14 +195,17 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private void searchOpponent() {
         if (searchOpponentThread == null || !(searchOpponentThread.isAlive())) {
             listener.sendMessageToServer(LibraryOfPrefixes.MESSAGE_ABOUT_START_SEARCHING);
-            searchOpponentThread = new SearchOpponentThread(this);
-            BUTTON_START.setText(STOP);
+            searchingOpponent = new SearchingOpponent(this);
+            searchOpponentThread = new SearchOpponentThread(this, searchingOpponent);
+            setVisible(false);
         }
     }
 
 
     public void setOpponentNickname(String opponentNickname) {
         this.opponentNickname = opponentNickname;
+        searchingOpponent.dispose();
+        startOnlineGame();
     }
 
     public boolean isOpponentNicknameEmpty() {
@@ -214,11 +217,12 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         listener.sendMessageToServer(LibraryOfPrefixes.getSearchOpponent(NICK_NAME));
     }
 
+
     public void stopSearching() {
         searchOpponentThread.interrupt();
         searchOpponentThread.stop();
         listener.sendMessageToServer(LibraryOfPrefixes.STOP_SEARCHING);
-        BUTTON_START.setText(START);
+
     }
 
     @Override
@@ -261,12 +265,14 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
                 return;
             }
             savingDialog();
-
+            searchOpponent();
             return;
         }
         if (source.equals(BUTTON_LOAD)) {
-            if(dataMapVector.size()!=0)
-            goToSavingMapWindow(); else JOptionPane.showMessageDialog(null, "<html>You have not any saved maps now!<br>You should fill the map and save it after click on button \"START\"</html>","EMPTY LIST OF SAVINGS", JOptionPane.ERROR_MESSAGE);
+            if (dataMapVector.size() != 0)
+                goToSavingMapWindow();
+            else
+                JOptionPane.showMessageDialog(null, "<html>You have not any saved maps now!<br>You should fill the map and save it after click on button \"START\"</html>", "EMPTY LIST OF SAVINGS", JOptionPane.ERROR_MESSAGE);
             return;
         }
         throw new RuntimeException("Unknown source: " + source);
@@ -341,7 +347,8 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     }
 
     public void startOnlineGame() {
-
+        listener.setOnlineGameWindow(new OnlineGameWindow(opponentNickname, NICK_NAME));
+        dispose();
     }
 
     public void failSave() {
@@ -368,10 +375,15 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     }
 
     public void loadMap(String selectedName) {
-        String dataMap="";
+        String dataMap = "";
         for (String[] data : dataMapVector) {
             if (data[0].equals(selectedName)) dataMap = data[1];
         }
         mapBuilder.loadMap(dataMap);
+        isSavedMap = true;
+    }
+
+    public void clearTheMap() {
+        mapBuilder.clearTheMap();
     }
 }
