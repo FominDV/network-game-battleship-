@@ -1,8 +1,6 @@
 package ru.fomin.battleship.client.client_core;
 
-import ru.fomin.battleship.client.gui.ClientAuthenticationFrame;
-import ru.fomin.battleship.client.gui.PreparingForGameFrame;
-import ru.fomin.battleship.client.gui.RegistrationFrame;
+import ru.fomin.battleship.client.gui.*;
 import ru.fomin.battleship.common.LibraryOfPrefixes;
 import ru.fomin.network.SocketThread;
 import ru.fomin.network.SocketThreadListener;
@@ -19,14 +17,17 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
     private ClientAuthenticationFrame clientAuthenticationFrame;
     private PreparingForGameFrame preparingForGameFrame;
     private RegistrationFrame registrationFrame;
+    private OnlineGameWindow onlineGameWindow;
+    private SavingMapWindow savingMapWindow;
+    private SearchingOpponent searchingOpponent;
     private String login;
-    private Vector<String[]> dataMapVector=new Vector<>();
+    private Vector<String[]> dataMapVector = new Vector<>();
 
     public void login(String ip, int port, ClientAuthenticationFrame authenticationFrame, String login) throws IOException {
         this.clientAuthenticationFrame = authenticationFrame;
         Socket socket = new Socket(ip, port);
         socketThread = new SocketThread(this, login, socket);
-        this.login=login;
+        this.login = login;
     }
 
     public void login(String ip, int port, RegistrationFrame registrationFrame, Boolean isRegistration) throws IOException {
@@ -52,6 +53,21 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             }
             try {
                 preparingForGameFrame.dispose();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            try {
+                onlineGameWindow.dispose();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            try {
+                savingMapWindow.dispose();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            try {
+                searchingOpponent.dispose();
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
@@ -94,7 +110,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
     @Override
     public void onSocketException(SocketThread thread, Exception exception) {
         showException(thread, exception);
-        if(preparingForGameFrame!=null) preparingForGameFrame.stopSearching();
+        if (preparingForGameFrame != null) preparingForGameFrame.stopSearching();
     }
 
     private void showException(Thread t, Throwable e) {
@@ -126,9 +142,9 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                 socketThread.close();
                 break;
             case LibraryOfPrefixes.REGISTRATION:
-                if(arr[1].equals("true")){
+                if (arr[1].equals("true")) {
                     registrationFrame.registrationSuccessful();
-                }else{
+                } else {
                     registrationFrame.registrationNotSuccessful();
                 }
                 socketThread.close();
@@ -144,15 +160,21 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                 writeDataIntoTheList(arr);
                 preparingForGameFrame.updateDataMap();
                 break;
+            case LibraryOfPrefixes.SUCCESSFUL_SAVE:
+                preparingForGameFrame.successfulSave();
+                break;
+            case LibraryOfPrefixes.FAIL_SAVE:
+                preparingForGameFrame.failSave();
+                break;
         }
     }
 
     private void writeDataIntoTheList(String[] dataMapArray) {
         dataMapVector.clear();
-        for(int i=1;i<dataMapArray.length;i+=2){
-            String[] dataRow=new String[2];
-            dataRow[0]=dataMapArray[i];
-            dataRow[1]=dataMapArray[i+1];
+        for (int i = 1; i < dataMapArray.length; i += 2) {
+            String[] dataRow = new String[2];
+            dataRow[0] = dataMapArray[i];
+            dataRow[1] = dataMapArray[i + 1];
             dataMapVector.add(dataRow);
         }
     }
@@ -161,8 +183,24 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
     public void sendMessageToServer(String message) {
         socketThread.sendMessage(message);
     }
+
     @Override
-    public Vector<String[]> getDataMap(){
+    public Vector<String[]> getDataMap() {
         return dataMapVector;
+    }
+
+    @Override
+    public void setSavingMapWindow(SavingMapWindow savingMapWindow) {
+        this.savingMapWindow = savingMapWindow;
+    }
+
+    @Override
+    public void setSearchingOpponent(SearchingOpponent searchingOpponent) {
+        this.searchingOpponent = searchingOpponent;
+    }
+
+    @Override
+    public void setOnlineGameWindow(OnlineGameWindow onlineGameWindow) {
+        this.onlineGameWindow = onlineGameWindow;
     }
 }

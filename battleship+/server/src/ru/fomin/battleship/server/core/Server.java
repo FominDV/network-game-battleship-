@@ -91,13 +91,14 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
 
     @Override
     public void onSocketStop(SocketThread thread) {
-        ClientThread client=(ClientThread) thread;
-        ClientThread otherClient=findClientByNickname(client.getOtherNickname());
+        ClientThread client = (ClientThread) thread;
+        ClientThread otherClient = findClientByNickname(client.getOtherNickname());
         CLIENTS.remove(thread);
         client.close();
-        if(otherClient!=null){
-       otherClient.sendMessage(LibraryOfPrefixes.DISCONNECT_OPPONENT);
-        otherClient.setStopSearchingOpponent();}
+        if (otherClient != null) {
+            otherClient.sendMessage(LibraryOfPrefixes.DISCONNECT_OPPONENT);
+            otherClient.setStopSearchingOpponent();
+        }
         putLog("Socket stopped");
     }
 
@@ -126,18 +127,23 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
         String msgType = arr[0];
         switch (msgType) {
             case LibraryOfPrefixes.MESSAGE_ABOUT_START_SEARCHING:
-                putLog(client.getNickname()+" started searching opponent");
+                putLog(client.getNickname() + " started searching opponent");
                 break;
             case LibraryOfPrefixes.SEARCH_OPPONENT:
                 searchingOpponent(client);
                 break;
             case LibraryOfPrefixes.STOP_SEARCHING:
                 client.setStopSearchingOpponent();
-                putLog(client.getNickname()+" stopped searching opponent");
+                putLog(client.getNickname() + " stopped searching opponent");
                 break;
             case LibraryOfPrefixes.DATA_SAVING:
-                if(SQLClient.setNewDataMap(arr))
-                putLog(client.getNickname()+" saved the map"); else putLog(client.getNickname()+"saving the map failed");
+                if (SQLClient.setNewDataMap(arr)) {
+                    putLog(client.getNickname() + " saved the map");
+                    client.sendMessage(LibraryOfPrefixes.SUCCESSFUL_SAVE);
+                } else {
+                    putLog(client.getNickname() + "saving the map failed");
+                    client.sendMessage(LibraryOfPrefixes.FAIL_SAVE);
+                }
                 client.updateDataMap(SQLClient.getDataMap(client.getLogin()));
                 break;
             default:
@@ -148,7 +154,7 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
     private synchronized void searchingOpponent(ClientThread client) {
         client.setSearchingOpponent();
         for (SocketThread searchingClient : CLIENTS) {
-            if (((ClientThread) searchingClient).getOtherNickname().equals("empty") && ((ClientThread) searchingClient).getSearchingOpponentStatus() &&!(client.getNickname().equals(((ClientThread) searchingClient).getNickname())) && ((ClientThread) searchingClient).getNickname() != null) {
+            if (((ClientThread) searchingClient).getOtherNickname().equals("empty") && ((ClientThread) searchingClient).getSearchingOpponentStatus() && !(client.getNickname().equals(((ClientThread) searchingClient).getNickname())) && ((ClientThread) searchingClient).getNickname() != null) {
                 client.setOtherNickname(((ClientThread) searchingClient).getNickname());
                 ((ClientThread) searchingClient).setOtherNickname(client.getNickname());
                 client.sendMessage(LibraryOfPrefixes.getSearchOpponent(((ClientThread) searchingClient).getNickname()));
@@ -200,7 +206,6 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
         }
         //Send information of athorization
     }
-
 
 
     private synchronized ClientThread findClientByNickname(String nickname) {

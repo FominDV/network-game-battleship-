@@ -315,4 +315,12 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     public void startOnlineGame() {
 
     }
+
+    public void failSave() {
+        JOptionPane.showMessageDialog(null, "Saving map is failed","ERROR",JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void successfulSave() {
+        JOptionPane.showMessageDialog(null, "Saving map is successful");
+    }
 }

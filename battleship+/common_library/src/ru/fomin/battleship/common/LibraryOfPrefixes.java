@@ -16,7 +16,8 @@ public class LibraryOfPrefixes {
     public static final String MESSAGE_ABOUT_START_SEARCHING = "/message_about_start_searching";
     public static final String LIST_OF_DATA_MAP = "/list_of_data_map";
     public static final String DATA_SAVING = "/data_saving";
-
+    public static final String SUCCESSFUL_SAVE ="/successful_save";
+    public static final String FAIL_SAVE ="/fail_save";
 
     public static String getAuthAccept(String nickname) {
         return AUTH_ACCEPT + DELIMITER + nickname;
