@@ -182,7 +182,7 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
             return;
         } else {
             ClientThread oldClient = findClientByNickname(nickname);
-            client.authAccept(nickname);
+            client.authAccept(nickname, SQLClient.getDataMap(arr[1]));
             if (oldClient == null) {
                 putLog("Connect with " + nickname);
             } else {
@@ -193,6 +193,8 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
         }
         //Send information of athorization
     }
+
+
 
     private synchronized ClientThread findClientByNickname(String nickname) {
         for (int i = 0; i < CLIENTS.size(); i++) {

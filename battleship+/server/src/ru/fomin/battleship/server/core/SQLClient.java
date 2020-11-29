@@ -1,6 +1,7 @@
 package ru.fomin.battleship.server.core;
 
 import java.sql.*;
+import java.util.Vector;
 
 public class SQLClient {
     private static Connection connection;
@@ -40,7 +41,7 @@ public class SQLClient {
         }
     }
 
-    public static boolean setClientData(String login, String password, String nickName) throws SQLException {
+    public synchronized static boolean setClientData(String login, String password, String nickName) throws SQLException {
         String query = String.format("select login from clients where login = '%s'",
                 login);
         ResultSet set = statement.executeQuery(query);
@@ -52,6 +53,17 @@ public class SQLClient {
             insertClientData.setString(3,nickName);
             insertClientData.executeUpdate();
             return true;
+        }
+    }
+
+    public static Vector<String> getDataMap(String login) {
+        Vector<String> dataMap=new Vector<>();
+        String query = String.format("select data from data_map where login = '%s'",login);
+        try (ResultSet set = statement.executeQuery(query)) {
+            while (set.next()) dataMap.add(set.getString(1));
+            return dataMap;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

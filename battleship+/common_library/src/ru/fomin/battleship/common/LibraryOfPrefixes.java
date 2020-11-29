@@ -1,6 +1,7 @@
 package ru.fomin.battleship.common;
 
 import java.util.SplittableRandom;
+import java.util.Vector;
 
 public class LibraryOfPrefixes {
     public static final String DELIMITER = "±";
@@ -13,6 +14,7 @@ public class LibraryOfPrefixes {
     public static final String DISCONNECT_OPPONENT = "/disconnect_opponent";
     public static final String STOP_SEARCHING = "/stop_searching";
     public static final String MESSAGE_ABOUT_START_SEARCHING = "/message_about_start_searching";
+    public static final String LIST_OF_DATA_MAP = "/list_of_data_map";
 
 
     public static String getAuthAccept(String nickname) {
@@ -43,4 +45,11 @@ public class LibraryOfPrefixes {
     }
 
 
+    public static String getDataOfMapList(Vector<String> dataMap) {
+        String dataOfMapList=LIST_OF_DATA_MAP;
+        for(String data: dataMap){
+            dataOfMapList+=DELIMITER+data;
+        }
+        return dataOfMapList;
+    }
 }

@@ -5,6 +5,7 @@ import ru.fomin.network.SocketThread;
 import ru.fomin.network.SocketThreadListener;
 
 import java.net.Socket;
+import java.util.Vector;
 
 public class ClientThread extends SocketThread {
     private String nickname;
@@ -49,10 +50,11 @@ public class ClientThread extends SocketThread {
         return otherNickname;
     }
 
-    void authAccept(String nickname) {
+    void authAccept(String nickname, Vector<String> dataMap) {
         isAuthorized = true;
         this.nickname = nickname;
         sendMessage(LibraryOfPrefixes.getAuthAccept(nickname));
+        sendMessage(LibraryOfPrefixes.getDataOfMapList(dataMap));
     }
 
     void authFail() {
