@@ -135,6 +135,11 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
                 client.setStopSearchingOpponent();
                 putLog(client.getNickname()+" stopped searching opponent");
                 break;
+            case LibraryOfPrefixes.DATA_SAVING:
+                if(SQLClient.setNewDataMap(arr))
+                putLog(client.getNickname()+" saved the map"); else putLog(client.getNickname()+"saving the map failed");
+                client.updateDataMap(SQLClient.getDataMap(client.getLogin()));
+                break;
             default:
                 client.msgFormatError(msg);
         }
@@ -182,7 +187,9 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
             return;
         } else {
             ClientThread oldClient = findClientByNickname(nickname);
-            client.authAccept(nickname, SQLClient.getDataMap(arr[1]));
+            client.authAccept(nickname);
+            client.updateDataMap(SQLClient.getDataMap(arr[1]));
+            client.setLogin(arr[1]);
             if (oldClient == null) {
                 putLog("Connect with " + nickname);
             } else {

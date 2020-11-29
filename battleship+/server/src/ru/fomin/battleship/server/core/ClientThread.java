@@ -9,6 +9,7 @@ import java.util.Vector;
 
 public class ClientThread extends SocketThread {
     private String nickname;
+    private String login;
     private boolean isAuthorized;
     private boolean isReconnecting;
     private boolean isSearching=false;
@@ -50,11 +51,10 @@ public class ClientThread extends SocketThread {
         return otherNickname;
     }
 
-    void authAccept(String nickname, Vector<String> dataMap) {
+    void authAccept(String nickname) {
         isAuthorized = true;
         this.nickname = nickname;
         sendMessage(LibraryOfPrefixes.getAuthAccept(nickname));
-        sendMessage(LibraryOfPrefixes.getDataOfMapList(dataMap));
     }
 
     void authFail() {
@@ -66,8 +66,16 @@ public class ClientThread extends SocketThread {
         sendMessage(LibraryOfPrefixes.getMsgFormatError(msg));
         close();
     }
+public void setLogin(String login){
+        this.login=login;
+}
+    public String getLogin(){
+        return login;
+    }
 
-
+    public void updateDataMap(Vector<String> dataMap) {
+        sendMessage(LibraryOfPrefixes.getDataOfMapList(dataMap));
+    }
 }
 
 

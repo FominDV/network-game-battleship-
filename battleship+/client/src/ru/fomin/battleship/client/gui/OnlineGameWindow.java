@@ -9,13 +9,12 @@ public class OnlineGameWindow extends JFrame {
     public OnlineGameWindow(String opponentNickname, String nick_name) {
         this.opponentNickname = opponentNickname;
         NICK_NAME = nick_name;
+        SwingUtilities.invokeLater(() -> initialization());
     }
 
-    public void setTitleAboutOpponent() {
-            setTitle(NICK_NAME + " VS " + opponentNickname);
+    private void initialization() {
+        setTitle(NICK_NAME + " VS " + opponentNickname);
     }
 
-    public void reconnect() {
 
-    }
 }

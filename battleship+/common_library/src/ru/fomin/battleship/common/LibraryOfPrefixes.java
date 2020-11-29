@@ -15,6 +15,7 @@ public class LibraryOfPrefixes {
     public static final String STOP_SEARCHING = "/stop_searching";
     public static final String MESSAGE_ABOUT_START_SEARCHING = "/message_about_start_searching";
     public static final String LIST_OF_DATA_MAP = "/list_of_data_map";
+    public static final String DATA_SAVING = "/data_saving";
 
 
     public static String getAuthAccept(String nickname) {
@@ -51,5 +52,8 @@ public class LibraryOfPrefixes {
             dataOfMapList+=DELIMITER+data;
         }
         return dataOfMapList;
+    }
+    public static String getSavingMapMessage(String login ,String nameData,String dataSaving){
+        return DATA_SAVING+DELIMITER+login+DELIMITER+nameData+DELIMITER+dataSaving;
     }
 }

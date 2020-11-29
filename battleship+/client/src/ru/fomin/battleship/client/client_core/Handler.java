@@ -116,7 +116,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             case LibraryOfPrefixes.AUTH_ACCEPT:
                 isValidAuthentication = true;
                 clientAuthenticationFrame.dispose();
-                preparingForGameFrame = new PreparingForGameFrame(socketThread, arr[1], this);
+                preparingForGameFrame = new PreparingForGameFrame(socketThread, arr[1], this, login);
                 break;
             case LibraryOfPrefixes.AUTH_DENIED:
                 showAuthenticationError();
@@ -142,11 +142,13 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                 break;
             case LibraryOfPrefixes.LIST_OF_DATA_MAP:
                 writeDataIntoTheList(arr);
+                preparingForGameFrame.updateDataMap();
                 break;
         }
     }
 
     private void writeDataIntoTheList(String[] dataMapArray) {
+        dataMapVector.clear();
         for(int i=1;i<dataMapArray.length;i+=2){
             String[] dataRow=new String[2];
             dataRow[0]=dataMapArray[i];
@@ -158,5 +160,9 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
     @Override
     public void sendMessageToServer(String message) {
         socketThread.sendMessage(message);
+    }
+    @Override
+    public Vector<String[]> getDataMap(){
+        return dataMapVector;
     }
 }

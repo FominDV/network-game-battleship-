@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.Vector;
 
 public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final String INFO_ABOUT_GAME = "<html>1)Select the \"REMOVE\" or \"POST\" mode\"<br>2)Click on the field and click \"POST\" to place the ship" +
@@ -31,6 +32,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final String WINDOW_TITLE = "Map-Maker by ";
     private final SocketThread SOCKET_THREAD;
     private final String NICK_NAME;
+    private final String LOGIN;
     private final WorkingWithNetwork listener;
     private boolean isPost = true;
     private boolean isReady = false;
@@ -43,6 +45,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final Color COLOR_OF_POST_MODE = new Color(59, 118, 17);
     private final Color COLOR_OF_REMOVE_MODE = new Color(68, 4, 4);
     private final Color COLOR_OF_READY = new Color(46, 220, 5);
+    private Vector<String[]> dataMapVector=new Vector<>();
 
     private final Font FONT_FOR_BUTTONS = new Font(Font.SERIF, Font.BOLD, 16);
     private final Font FONT_FOR_LABEL_SHIPS = new Font(Font.SERIF, Font.BOLD, 24);
@@ -77,10 +80,11 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private JLabel labelCount1Ship = new JLabel();
 
 
-    public PreparingForGameFrame(SocketThread socketThread, String nickname, WorkingWithNetwork listener) {
+    public PreparingForGameFrame(SocketThread socketThread, String nickname, WorkingWithNetwork listener, String login) {
         NICK_NAME = nickname;
         SOCKET_THREAD = socketThread;
         this.listener = listener;
+        LOGIN=login;
         SwingUtilities.invokeLater(() -> initialization());
     }
 
@@ -300,11 +304,14 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private void savingDialog(){
         if (!isSavedMap) {
             if (JOptionPane.showConfirmDialog(null, "Do you want to save the map?", "Saving map dialog", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION) {
-
+                String nameData=JOptionPane.showInputDialog(null,"Input name of your saving data:");
+                listener.sendMessageToServer(LibraryOfPrefixes.getSavingMapMessage(LOGIN ,nameData,mapBuilder.getDataSaving()));
             }
         }
     }
-
+    public void updateDataMap(){
+        dataMapVector=listener.getDataMap();
+    }
     public void startOnlineGame() {
 
     }

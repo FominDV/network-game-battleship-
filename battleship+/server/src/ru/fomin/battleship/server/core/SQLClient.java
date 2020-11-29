@@ -68,4 +68,14 @@ public class SQLClient {
             throw new RuntimeException(e);
         }
     }
+
+    public static boolean setNewDataMap(String[] arr) {
+        String query = String.format("insert into data_map (login, name, data) values ('%s','%s','%s')", arr[1],arr[2],arr[3]);
+        try {
+            ResultSet set = statement.executeQuery(query);
+        }catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
 }

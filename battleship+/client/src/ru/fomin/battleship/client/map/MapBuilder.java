@@ -322,4 +322,14 @@ public class MapBuilder {
                 break;
         }
     }
+
+    public String getDataSaving() {
+        String dataSaving="";
+        for(int i=0; i<map.length;i++){
+            for(int j=0;j<map.length;j++){
+                if(map[i][j].getStatus()==6) dataSaving+=i+""+j;
+            }
+        }
+        return dataSaving;
+    }
 }
