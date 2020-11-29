@@ -137,7 +137,7 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
                 putLog(client.getNickname() + " stopped searching opponent");
                 break;
             case LibraryOfPrefixes.DATA_SAVING:
-                if(!SQLClient.isValidNameForSave(arr[2], arr[1])){
+                if (!SQLClient.isValidNameForSave(arr[2], arr[1])) {
                     client.sendMessage(LibraryOfPrefixes.DUPLICATE_NAME);
                     break;
                 }
@@ -150,6 +150,11 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
                     break;
                 }
                 client.updateDataMap(SQLClient.getDataMap(client.getLogin()));
+                break;
+            case LibraryOfPrefixes.REMOVE_DATA:
+                SQLClient.removeData(arr[1], arr[2]);
+                client.updateDataMap(SQLClient.getDataMap(client.getLogin()));
+                putLog(client.getNickname() + " removed the " + arr[2] + " data");
                 break;
             default:
                 client.msgFormatError(msg);

@@ -78,7 +78,15 @@ public class SavingMapWindow extends JFrame implements ActionListener {
             return;
         }
         if (source.equals(BUTTON_REMOVE)) {
-
+            String selectedName=SAVINGS_OF_MAP_LIST.getSelectedValue();
+            if(selectedName!=null && preparingForGameFrame.isSavingConfirmMessageYesNo("Are you sure that you want to remove this data?")){
+                preparingForGameFrame.removeData(selectedName);
+                int bufferLength=dataMapVector.size();
+                //Wait while date will be removed
+                while (bufferLength==dataMapVector.size())
+                dataMapVector=listener.getDataMap();
+                fillSavingList();
+            }
             return;
         }
         if (source.equals(BUTTON_EXIT)) {
@@ -91,4 +99,5 @@ public class SavingMapWindow extends JFrame implements ActionListener {
         preparingForGameFrame.setVisible(true);
         dispose();
     }
+
 }

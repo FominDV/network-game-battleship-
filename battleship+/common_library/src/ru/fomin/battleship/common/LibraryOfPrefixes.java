@@ -19,6 +19,7 @@ public class LibraryOfPrefixes {
     public static final String SUCCESSFUL_SAVE ="/successful_save";
     public static final String FAIL_SAVE ="/fail_save";
     public static final String DUPLICATE_NAME ="/duplicate_name";
+    public static final String REMOVE_DATA ="/remove_data";
 
     public static String getAuthAccept(String nickname) {
         return AUTH_ACCEPT + DELIMITER + nickname;
@@ -57,5 +58,9 @@ public class LibraryOfPrefixes {
     }
     public static String getSavingMapMessage(String login ,String nameData,String dataSaving){
         return DATA_SAVING+DELIMITER+login+DELIMITER+nameData+DELIMITER+dataSaving;
+    }
+
+    public static String getRemoveDataMessage(String login, String selectedName) {
+        return REMOVE_DATA+DELIMITER+login+DELIMITER+selectedName;
     }
 }

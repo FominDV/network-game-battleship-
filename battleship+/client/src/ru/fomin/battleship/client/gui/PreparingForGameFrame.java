@@ -336,12 +336,16 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         JOptionPane.showMessageDialog(null, "Saving map is successful");
         isSavedMap=true;
     }
-    private boolean isSavingConfirmMessageYesNo(String message){
+    protected boolean isSavingConfirmMessageYesNo(String message){
         if(JOptionPane.showConfirmDialog(null, message, "Saving map dialog", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION) return true;
         return false;
     }
 
     public void showMessageAboutDuplicateNameOfSaving() {
         JOptionPane.showMessageDialog(null,"This name of saving has already been used by you!","ERROR OF DUPLICATING",JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void removeData(String selectedName) {
+        listener.sendMessageToServer(LibraryOfPrefixes.getRemoveDataMessage(LOGIN,selectedName));
     }
 }
