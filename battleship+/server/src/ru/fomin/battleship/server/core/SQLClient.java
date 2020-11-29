@@ -68,11 +68,21 @@ public class SQLClient {
             throw new RuntimeException(e);
         }
     }
+    public static boolean isValidNameForSave(String name, String login){
+        String query = String.format("select data from data_map where name = '%s' and login = '%s'", name,login);
+        try {
+            ResultSet set = statement.executeQuery(query);
+            if(set.next()) return false; else return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return true;
+        }
 
+    }
     public static boolean setNewDataMap(String[] arr) {
         String query = String.format("insert into data_map (login, name, data) values ('%s','%s','%s')", arr[1],arr[2],arr[3]);
         try {
-            ResultSet set = statement.executeQuery(query);
+            statement.executeUpdate(query);
         }catch (SQLException e) {
             return false;
         }

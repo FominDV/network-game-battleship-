@@ -166,6 +166,9 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             case LibraryOfPrefixes.FAIL_SAVE:
                 preparingForGameFrame.failSave();
                 break;
+            case LibraryOfPrefixes.DUPLICATE_NAME:
+                preparingForGameFrame.showMessageAboutDuplicateNameOfSaving();
+                break;
         }
     }
 

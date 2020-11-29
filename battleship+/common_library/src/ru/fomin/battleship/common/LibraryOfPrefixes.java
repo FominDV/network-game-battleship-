@@ -18,6 +18,7 @@ public class LibraryOfPrefixes {
     public static final String DATA_SAVING = "/data_saving";
     public static final String SUCCESSFUL_SAVE ="/successful_save";
     public static final String FAIL_SAVE ="/fail_save";
+    public static final String DUPLICATE_NAME ="/duplicate_name";
 
     public static String getAuthAccept(String nickname) {
         return AUTH_ACCEPT + DELIMITER + nickname;

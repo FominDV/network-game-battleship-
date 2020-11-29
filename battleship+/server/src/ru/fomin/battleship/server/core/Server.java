@@ -137,12 +137,17 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
                 putLog(client.getNickname() + " stopped searching opponent");
                 break;
             case LibraryOfPrefixes.DATA_SAVING:
+                if(!SQLClient.isValidNameForSave(arr[2], arr[1])){
+                    client.sendMessage(LibraryOfPrefixes.DUPLICATE_NAME);
+                    break;
+                }
                 if (SQLClient.setNewDataMap(arr)) {
                     putLog(client.getNickname() + " saved the map");
                     client.sendMessage(LibraryOfPrefixes.SUCCESSFUL_SAVE);
                 } else {
                     putLog(client.getNickname() + "saving the map failed");
                     client.sendMessage(LibraryOfPrefixes.FAIL_SAVE);
+                    break;
                 }
                 client.updateDataMap(SQLClient.getDataMap(client.getLogin()));
                 break;

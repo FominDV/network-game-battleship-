@@ -264,9 +264,16 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
 
             return;
         }
+        if (source.equals(BUTTON_LOAD)) {
+            goToSavingMapWindow();
+            return;
+        }
         throw new RuntimeException("Unknown source: " + source);
     }
-
+    private void goToSavingMapWindow(){
+        listener.setSavingMapWindow(new SavingMapWindow(this,listener,dataMapVector));
+        setVisible(false);
+    }
     private void showInstruction() {
         JOptionPane.showMessageDialog(null, INFO_ABOUT_GAME, "INSTRUCTION MANUAL", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -303,7 +310,12 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     }
     private void savingDialog(){
         if (!isSavedMap) {
-            if (JOptionPane.showConfirmDialog(null, "Do you want to save the map?", "Saving map dialog", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION) {
+            if(dataMapVector.size()>=5){
+              if(isSavingConfirmMessageYesNo("<html>You should have less or equal 5 savings of map!<br>Do you want to delete some of your saves </html>"))
+                goToSavingMapWindow();
+              return;
+            }
+            if (isSavingConfirmMessageYesNo("Do you want to save the map?")) {
                 String nameData=JOptionPane.showInputDialog(null,"Input name of your saving data:");
                 listener.sendMessageToServer(LibraryOfPrefixes.getSavingMapMessage(LOGIN ,nameData,mapBuilder.getDataSaving()));
             }
@@ -322,5 +334,14 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
 
     public void successfulSave() {
         JOptionPane.showMessageDialog(null, "Saving map is successful");
+        isSavedMap=true;
+    }
+    private boolean isSavingConfirmMessageYesNo(String message){
+        if(JOptionPane.showConfirmDialog(null, message, "Saving map dialog", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION) return true;
+        return false;
+    }
+
+    public void showMessageAboutDuplicateNameOfSaving() {
+        JOptionPane.showMessageDialog(null,"This name of saving has already been used by you!","ERROR OF DUPLICATING",JOptionPane.ERROR_MESSAGE);
     }
 }
