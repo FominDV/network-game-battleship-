@@ -10,6 +10,7 @@ import ru.fomin.network.SocketThreadListener;
 import javax.swing.*;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Vector;
 
 public class Handler implements SocketThreadListener, WorkingWithNetwork {
     private boolean isRegistration = false;
@@ -18,11 +19,14 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
     private ClientAuthenticationFrame clientAuthenticationFrame;
     private PreparingForGameFrame preparingForGameFrame;
     private RegistrationFrame registrationFrame;
+    private String login;
+    private Vector<String> dataMapVector=new Vector<>();
 
     public void login(String ip, int port, ClientAuthenticationFrame authenticationFrame, String login) throws IOException {
         this.clientAuthenticationFrame = authenticationFrame;
         Socket socket = new Socket(ip, port);
         socketThread = new SocketThread(this, login, socket);
+        this.login=login;
     }
 
     public void login(String ip, int port, RegistrationFrame registrationFrame, Boolean isRegistration) throws IOException {
@@ -135,6 +139,15 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             case LibraryOfPrefixes.DISCONNECT_OPPONENT:
                 preparingForGameFrame.reconnect();
                 break;
+            case LibraryOfPrefixes.LIST_OF_DATA_MAP:
+                writeDataIntoTheList(arr);
+                break;
+        }
+    }
+
+    private void writeDataIntoTheList(String[] dataMapArray) {
+        for(int i=1;i<dataMapArray.length;i++){
+            dataMapVector.add(dataMapArray[i]);
         }
     }
 
