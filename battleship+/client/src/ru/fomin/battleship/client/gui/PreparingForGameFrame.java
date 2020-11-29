@@ -34,6 +34,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final WorkingWithNetwork listener;
     private boolean isPost = true;
     private boolean isReady = false;
+    private boolean isSavedMap = false;
     private String opponentNickname = "empty";
     private SearchOpponentThread searchOpponentThread = null;
     private MapBuilder mapBuilder;
@@ -200,18 +201,6 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         this.opponentNickname = opponentNickname;
     }
 
-    public void setTitleAboutOpponent() {
-        if (!opponentNickname.equals("empty"))
-            setTitle(NICK_NAME + " VS " + opponentNickname);
-    }
-
-    public void reconnect() {
-        this.opponentNickname = "empty";
-        setTitle(WINDOW_TITLE + NICK_NAME);
-        stopSearching();
-    }
-
-
     public boolean isOpponentNicknameEmpty() {
         if (opponentNickname.equals("empty")) return true;
         else return false;
@@ -240,8 +229,8 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             return;
         }
         if (source.equals(BUTTON_EXIT)) {
-            if(JOptionPane.showConfirmDialog(null,"Are you sure you want to exit?","WARNING",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_NO_OPTION)
-            SOCKET_THREAD.close();
+            if (JOptionPane.showConfirmDialog(null, "Are you sure you want to exit?", "WARNING", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION)
+                SOCKET_THREAD.close();
             return;
         }
         if (source.equals(BUTTON_CANCEL)) {
@@ -262,6 +251,16 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             mapBuilder.cancelStatus4();
             return;
         }
+        if (source.equals(BUTTON_START)) {
+            if (!isReady) {
+                JOptionPane.showMessageDialog(null, "To start the game you should post all the ships","WARNING",JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            savingDialog();
+
+            return;
+        }
+        throw new RuntimeException("Unknown source: " + source);
     }
 
     private void showInstruction() {
@@ -282,6 +281,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             BUTTON_START.setBackground(COLOR_OF_READY);
         } else {
             isReady = false;
+            isSavedMap = false;
             BUTTON_START.setBackground(COLOR_OF_START);
         }
     }
@@ -291,10 +291,21 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     }
 
     public void remove(int x, int y) {
-        mapBuilder.remove(x,y);
+        mapBuilder.remove(x, y);
     }
 
     public boolean getMode() {
         return isPost;
+    }
+    private void savingDialog(){
+        if (!isSavedMap) {
+            if (JOptionPane.showConfirmDialog(null, "Do you want to save the map?", "Saving map dialog", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION) {
+
+            }
+        }
+    }
+
+    public void startOnlineGame() {
+
     }
 }

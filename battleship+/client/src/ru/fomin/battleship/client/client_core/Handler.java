@@ -137,7 +137,8 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                 preparingForGameFrame.setOpponentNickname(arr[1]);
                 break;
             case LibraryOfPrefixes.DISCONNECT_OPPONENT:
-                preparingForGameFrame.reconnect();
+                onSocketStop(socketThread);
+                socketThread.close();
                 break;
             case LibraryOfPrefixes.LIST_OF_DATA_MAP:
                 writeDataIntoTheList(arr);

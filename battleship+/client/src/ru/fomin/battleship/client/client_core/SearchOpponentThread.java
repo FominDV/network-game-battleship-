@@ -26,7 +26,7 @@ public class SearchOpponentThread extends Thread {
                 interrupt();
             }
         }
-        preparingGameFrame.setTitleAboutOpponent();
+        preparingGameFrame.startOnlineGame();
     }
 
 }

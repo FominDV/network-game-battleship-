@@ -42,7 +42,6 @@ public class ServerGUI extends JFrame implements ActionListener, Thread.Uncaught
         setTitle("Chat server");
         HEADER_LABEL.setFont(TEXT_HEADER);
         HEADER_LABEL.setHorizontalAlignment(SwingConstants.CENTER);
-        setAlwaysOnTop(true);
         LOG.setEditable(false);
         LOG.setLineWrap(true);
         JScrollPane scrollLog = new JScrollPane(LOG);
