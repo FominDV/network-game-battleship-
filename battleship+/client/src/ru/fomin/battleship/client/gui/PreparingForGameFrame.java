@@ -45,7 +45,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final Color COLOR_OF_POST_MODE = new Color(59, 118, 17);
     private final Color COLOR_OF_REMOVE_MODE = new Color(68, 4, 4);
     private final Color COLOR_OF_READY = new Color(46, 220, 5);
-    private Vector<String[]> dataMapVector=new Vector<>();
+    private Vector<String[]> dataMapVector = new Vector<>();
 
     private final Font FONT_FOR_BUTTONS = new Font(Font.SERIF, Font.BOLD, 16);
     private final Font FONT_FOR_LABEL_SHIPS = new Font(Font.SERIF, Font.BOLD, 24);
@@ -84,7 +84,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         NICK_NAME = nickname;
         SOCKET_THREAD = socketThread;
         this.listener = listener;
-        LOGIN=login;
+        LOGIN = login;
         SwingUtilities.invokeLater(() -> initialization());
     }
 
@@ -257,7 +257,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         }
         if (source.equals(BUTTON_START)) {
             if (!isReady) {
-                JOptionPane.showMessageDialog(null, "To start the game you should post all the ships","WARNING",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "To start the game you should post all the ships", "WARNING", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             savingDialog();
@@ -270,10 +270,12 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         }
         throw new RuntimeException("Unknown source: " + source);
     }
-    private void goToSavingMapWindow(){
-        listener.setSavingMapWindow(new SavingMapWindow(this,listener,dataMapVector));
+
+    private void goToSavingMapWindow() {
+        listener.setSavingMapWindow(new SavingMapWindow(this, listener, dataMapVector));
         setVisible(false);
     }
+
     private void showInstruction() {
         JOptionPane.showMessageDialog(null, INFO_ABOUT_GAME, "INSTRUCTION MANUAL", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -308,44 +310,59 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     public boolean getMode() {
         return isPost;
     }
-    private void savingDialog(){
+
+    private void savingDialog() {
         if (!isSavedMap) {
-            if(dataMapVector.size()>=5){
-              if(isSavingConfirmMessageYesNo("<html>You should have less or equal 5 savings of map!<br>Do you want to delete some of your saves </html>"))
-                goToSavingMapWindow();
-              return;
+            if (dataMapVector.size() >= 5) {
+                if (isSavingConfirmMessageYesNo("<html>You should have less or equal 5 savings of map!<br>Do you want to delete some of your saves </html>"))
+                    goToSavingMapWindow();
+                return;
             }
             if (isSavingConfirmMessageYesNo("Do you want to save the map?")) {
-                String nameData=JOptionPane.showInputDialog(null,"Input name of your saving data:");
-                listener.sendMessageToServer(LibraryOfPrefixes.getSavingMapMessage(LOGIN ,nameData,mapBuilder.getDataSaving()));
+                String nameData;
+                while (true) {
+                    nameData = JOptionPane.showInputDialog(null, "Input name of your saving data:");
+                    if (nameData.length() > 18) {
+                        if (isSavingConfirmMessageYesNo("<html>Length fo data name should be less or equal than 18<br>Do you want try again?</html>"))
+                            continue;
+                        else return;
+                    } else {
+                        break;
+                    }
+                }
+                listener.sendMessageToServer(LibraryOfPrefixes.getSavingMapMessage(LOGIN, nameData, mapBuilder.getDataSaving()));
             }
         }
     }
-    public void updateDataMap(){
-        dataMapVector=listener.getDataMap();
+
+    public void updateDataMap() {
+        dataMapVector = listener.getDataMap();
     }
+
     public void startOnlineGame() {
 
     }
 
     public void failSave() {
-        JOptionPane.showMessageDialog(null, "Saving map is failed","ERROR",JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Saving map is failed", "ERROR", JOptionPane.ERROR_MESSAGE);
     }
 
     public void successfulSave() {
         JOptionPane.showMessageDialog(null, "Saving map is successful");
-        isSavedMap=true;
+        isSavedMap = true;
     }
-    protected boolean isSavingConfirmMessageYesNo(String message){
-        if(JOptionPane.showConfirmDialog(null, message, "Saving map dialog", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION) return true;
+
+    protected boolean isSavingConfirmMessageYesNo(String message) {
+        if (JOptionPane.showConfirmDialog(null, message, "Saving map dialog", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION)
+            return true;
         return false;
     }
 
     public void showMessageAboutDuplicateNameOfSaving() {
-        JOptionPane.showMessageDialog(null,"This name of saving has already been used by you!","ERROR OF DUPLICATING",JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "This name of saving has already been used by you!", "ERROR OF DUPLICATING", JOptionPane.ERROR_MESSAGE);
     }
 
     public void removeData(String selectedName) {
-        listener.sendMessageToServer(LibraryOfPrefixes.getRemoveDataMessage(LOGIN,selectedName));
+        listener.sendMessageToServer(LibraryOfPrefixes.getRemoveDataMessage(LOGIN, selectedName));
     }
 }

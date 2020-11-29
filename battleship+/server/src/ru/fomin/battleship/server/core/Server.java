@@ -154,7 +154,7 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
             case LibraryOfPrefixes.REMOVE_DATA:
                 SQLClient.removeData(arr[1], arr[2]);
                 client.updateDataMap(SQLClient.getDataMap(client.getLogin()));
-                putLog(client.getNickname() + " removed the " + arr[2] + " data");
+                putLog(client.getNickname() + " removed the \"" + arr[2] + "\" data");
                 break;
             default:
                 client.msgFormatError(msg);
