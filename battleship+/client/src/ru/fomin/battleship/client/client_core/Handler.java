@@ -20,7 +20,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
     private PreparingForGameFrame preparingForGameFrame;
     private RegistrationFrame registrationFrame;
     private String login;
-    private Vector<String> dataMapVector=new Vector<>();
+    private Vector<String[]> dataMapVector=new Vector<>();
 
     public void login(String ip, int port, ClientAuthenticationFrame authenticationFrame, String login) throws IOException {
         this.clientAuthenticationFrame = authenticationFrame;
@@ -146,8 +146,11 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
     }
 
     private void writeDataIntoTheList(String[] dataMapArray) {
-        for(int i=1;i<dataMapArray.length;i++){
-            dataMapVector.add(dataMapArray[i]);
+        for(int i=1;i<dataMapArray.length;i+=2){
+            String[] dataRow=new String[2];
+            dataRow[0]=dataMapArray[i];
+            dataRow[1]=dataMapArray[i+1];
+            dataMapVector.add(dataRow);
         }
     }
 

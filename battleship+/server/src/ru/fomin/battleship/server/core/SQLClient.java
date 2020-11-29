@@ -13,7 +13,7 @@ public class SQLClient {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:server.db");
             statement = connection.createStatement();
-            insertClientData=connection.prepareStatement("insert into clients (login, password, nickname) values (?,?,?)");
+            insertClientData = connection.prepareStatement("insert into clients (login, password, nickname) values (?,?,?)");
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
@@ -42,25 +42,27 @@ public class SQLClient {
     }
 
     public synchronized static boolean setClientData(String login, String password, String nickName) throws SQLException {
-        String query = String.format("select login from clients where login = '%s'",
-                login);
+        String query = String.format("select login from clients where login = '%s'", login);
         ResultSet set = statement.executeQuery(query);
         if (set.next()) {
             return false;
         } else {
-            insertClientData.setString(1,login);
-            insertClientData.setString(2,password);
-            insertClientData.setString(3,nickName);
+            insertClientData.setString(1, login);
+            insertClientData.setString(2, password);
+            insertClientData.setString(3, nickName);
             insertClientData.executeUpdate();
             return true;
         }
     }
 
     public static Vector<String> getDataMap(String login) {
-        Vector<String> dataMap=new Vector<>();
-        String query = String.format("select data from data_map where login = '%s'",login);
+        Vector<String> dataMap = new Vector<>();
+        String query = String.format("select name,data from data_map where login = '%s'", login);
         try (ResultSet set = statement.executeQuery(query)) {
-            while (set.next()) dataMap.add(set.getString(1));
+            while (set.next()) {
+                dataMap.add(set.getString(1));
+                dataMap.add(set.getString(2));
+            }
             return dataMap;
         } catch (SQLException e) {
             throw new RuntimeException(e);
