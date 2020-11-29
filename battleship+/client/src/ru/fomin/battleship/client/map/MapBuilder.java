@@ -15,6 +15,7 @@ public class MapBuilder {
     private int count2Ship = 0;
     private int count3Ship = 0;
     private int count4Ship = 0;
+    private final String DELIMITER="x";
 
     public MapBuilder(Cell[][] map, PreparingForGameFrame preparingForGameFrame) {
         this.map = map;
@@ -327,9 +328,30 @@ public class MapBuilder {
         String dataSaving="";
         for(int i=0; i<map.length;i++){
             for(int j=0;j<map.length;j++){
-                if(map[i][j].getStatus()==6) dataSaving+=i+""+j;
+                if(map[i][j].getStatus()==6) if(dataSaving.equals("")) dataSaving+=i+DELIMITER+j; else dataSaving+=DELIMITER+i+DELIMITER+j;
             }
         }
         return dataSaving;
+    }
+
+    public void loadMap(String dataMap) {
+        int x,y;
+        String[] coordinates=dataMap.split(DELIMITER);
+        for(int i=0;i<map.length;i++){
+            for(int j=0;j<map.length;j++){
+                map[i][j].setImage(5);
+            }
+        }
+        for(int i=0; i< coordinates.length; i+=2){
+            x= Integer.parseInt(coordinates[i]);
+            y= Integer.parseInt(coordinates[i+1]);
+            map[x][y].setImage(4);
+        }
+        count1Ship=0;
+        count2Ship=0;
+        count3Ship=0;
+        count4Ship=0;
+        for(int i=0; i<10;i++) post();
+        setCountOfShips();
     }
 }

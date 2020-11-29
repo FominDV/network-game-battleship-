@@ -1,6 +1,7 @@
 package ru.fomin.battleship.client.gui;
 
 import ru.fomin.battleship.client.client_core.WorkingWithNetwork;
+import ru.fomin.battleship.common.LibraryOfPrefixes;
 
 import javax.swing.*;
 import java.awt.*;
@@ -75,7 +76,8 @@ public class SavingMapWindow extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source.equals(BUTTON_LOAD)) {
-
+            loadMap();
+            exit();
             return;
         }
         if (source.equals(BUTTON_REMOVE)) {
@@ -87,6 +89,12 @@ public class SavingMapWindow extends JFrame implements ActionListener {
             return;
         }
         throw new RuntimeException("Unknown source: " + source);
+    }
+
+    private void loadMap() {
+        String selectedName=SAVINGS_OF_MAP_LIST.getSelectedValue();
+        if(selectedName==null) return;
+        preparingForGameFrame.loadMap(selectedName);
     }
 
     private void exit() {

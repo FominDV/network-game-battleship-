@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.util.Vector;
 
 public class Handler implements SocketThreadListener, WorkingWithNetwork {
+    private String nickName;
     private boolean isRegistration = false;
     private boolean isValidAuthentication = false;
     private SocketThread socketThread;
@@ -132,6 +133,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             case LibraryOfPrefixes.AUTH_ACCEPT:
                 isValidAuthentication = true;
                 clientAuthenticationFrame.dispose();
+                nickName=arr[1];
                 preparingForGameFrame = new PreparingForGameFrame(socketThread, arr[1], this, login);
                 break;
             case LibraryOfPrefixes.AUTH_DENIED:
@@ -153,8 +155,9 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                 preparingForGameFrame.setOpponentNickname(arr[1]);
                 break;
             case LibraryOfPrefixes.DISCONNECT_OPPONENT:
-                onSocketStop(socketThread);
-                socketThread.close();
+                JOptionPane.showMessageDialog(null,"Connect with your opponent was lost","ERROR",JOptionPane.ERROR_MESSAGE);
+                preparingForGameFrame= new PreparingForGameFrame(socketThread, nickName, this, login);
+                onlineGameWindow.dispose();
                 break;
             case LibraryOfPrefixes.LIST_OF_DATA_MAP:
                 writeDataIntoTheList(arr);

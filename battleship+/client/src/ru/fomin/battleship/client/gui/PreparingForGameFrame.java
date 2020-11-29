@@ -265,7 +265,8 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             return;
         }
         if (source.equals(BUTTON_LOAD)) {
-            goToSavingMapWindow();
+            if(dataMapVector.size()!=0)
+            goToSavingMapWindow(); else JOptionPane.showMessageDialog(null, "<html>You have not any saved maps now!<br>You should fill the map and save it after click on button \"START\"</html>","EMPTY LIST OF SAVINGS", JOptionPane.ERROR_MESSAGE);
             return;
         }
         throw new RuntimeException("Unknown source: " + source);
@@ -364,5 +365,13 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
 
     public void removeData(String selectedName) {
         listener.sendMessageToServer(LibraryOfPrefixes.getRemoveDataMessage(LOGIN, selectedName));
+    }
+
+    public void loadMap(String selectedName) {
+        String dataMap="";
+        for (String[] data : dataMapVector) {
+            if (data[0].equals(selectedName)) dataMap = data[1];
+        }
+        mapBuilder.loadMap(dataMap);
     }
 }
