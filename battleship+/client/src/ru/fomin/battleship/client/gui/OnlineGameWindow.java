@@ -16,13 +16,12 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final String opponentNickname;
     private final String NICK_NAME;
     private String mapCodeOfUser;
-    private String mapCodeOfOpponent = "";
     private final int SIZE_OF_MAP;
     private WorkingWithNetwork listener;
     private MapBuilder mapBuilderOfUser;
     private MapBuilder mapBuilderOfOpponent;
-    private final int WIDTH = 1200;
-    private final int HEIGHT = 750;
+    private final int WIDTH = 1600;
+    private final int HEIGHT = 800;
 
     private final JPanel WRAPPER_FOR_MAP_OF_USER = new JPanel(new GridBagLayout());
     private final JPanel WRAPPER_FOR_MAP_OF_OPPONENT = new JPanel(new GridBagLayout());
@@ -47,7 +46,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null);
         setTitle(NICK_NAME + " VS " + opponentNickname);
-        setResizable(false);
+
         int wrapperSize = SIZE_OF_MAP * 50;
         WRAPPER_FOR_MAP_OF_USER.setSize(wrapperSize, wrapperSize);
         WRAPPER_FOR_MAP_OF_OPPONENT.setSize(wrapperSize, wrapperSize);
@@ -65,7 +64,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         add(WRAPPER_FOR_MAP_OF_USER, BorderLayout.WEST);
         add(WRAPPER_FOR_MAP_OF_OPPONENT, BorderLayout.EAST);
 
-        setVisible(false);
+        setVisible(true);
 
     }
 
@@ -79,7 +78,9 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         }
         Cell[][] map = new Cell[SIZE_OF_MAP][SIZE_OF_MAP];
         for (int i = 0; i < map.length; i++) {
-            panelMap.add(new JLabel(String.valueOf(i + 1)));
+            JLabel number = new JLabel((String.valueOf(i+1)));
+            number.setHorizontalAlignment(SwingConstants.CENTER);
+            panelMap.add(number);
             for (int j = 0; j < map.length; j++) {
                 map[i][j] = new Cell(5, this, i, j);
                 panelMap.add(map[i][j]);
@@ -103,9 +104,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
 
     }
 
-    public void setMapCodeOfOpponent(String mapCodeOfOpponent) {
-        this.mapCodeOfOpponent = mapCodeOfOpponent;
-    }
+
 
 
     private void showErrorMessage(String message){
