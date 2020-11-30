@@ -165,10 +165,6 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
                 findClientByNickname(client.getOpponentNickname()).sendMessage(LibraryOfPrefixes.getChatMessage(editChatMessage(arr[1], client.getNickname())));
                 putLog(client.getNickname() +" send message to "+client.getOpponentNickname());
                 break;
-            case LibraryOfPrefixes.MAP_CODE:
-                findClientByNickname(client.getOpponentNickname()).sendMessage(LibraryOfPrefixes.getMapCodeMessage(arr[1]));
-                putLog(client.getNickname() +" send map code to "+client.getOpponentNickname());
-                break;
             default:
                 client.msgFormatError(msg);
         }

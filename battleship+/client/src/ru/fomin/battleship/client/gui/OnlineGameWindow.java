@@ -12,8 +12,7 @@ import java.awt.event.ActionListener;
 
 import static java.lang.Thread.sleep;
 
-public class OnlineGameWindow extends JFrame implements ActionListener, Runnable {
-    private Thread loadingThread = new Thread(this);
+public class OnlineGameWindow extends JFrame implements ActionListener {
     private final String opponentNickname;
     private final String NICK_NAME;
     private String mapCodeOfUser;
@@ -38,14 +37,12 @@ public class OnlineGameWindow extends JFrame implements ActionListener, Runnable
         this.mapCodeOfUser = mapCodeOfUser;
         this.listener = listener;
         SIZE_OF_MAP = sizeOfMap;
-        loadingThread.start();
         SwingUtilities.invokeLater(() -> initialization());
     }
 
 
 
     private void initialization() {
-        listener.sendMessageToServer(LibraryOfPrefixes.getMapCodeMessage(mapCodeOfUser));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null);
@@ -59,6 +56,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener, Runnable
         PANEL_MAP_OF_OPPONENT = new JPanel(new GridLayout(sizeOfPanelMap, sizeOfPanelMap));
         mapBuilderOfUser = new MapBuilder(fillMap(PANEL_MAP_OF_USER), this);
         mapBuilderOfOpponent = new MapBuilder(fillMap(PANEL_MAP_OF_OPPONENT), this);
+        mapBuilderOfUser.loadMap(mapCodeOfUser);
         WRAPPER_FOR_MAP_OF_USER.add(PANEL_MAP_OF_USER);
         WRAPPER_FOR_MAP_OF_OPPONENT.add(PANEL_MAP_OF_OPPONENT);
 
@@ -71,10 +69,6 @@ public class OnlineGameWindow extends JFrame implements ActionListener, Runnable
 
     }
 
-    public void addShipsOnTheMap() {
-        mapBuilderOfUser.loadMap(mapCodeOfUser);
-        mapBuilderOfOpponent.loadMap(mapCodeOfOpponent);
-    }
 
     private Cell[][] fillMap(JPanel panelMap) {
         panelMap.add(new JLabel());
@@ -113,18 +107,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener, Runnable
         this.mapCodeOfOpponent = mapCodeOfOpponent;
     }
 
-    @Override
-    public void run() {
-        while (mapCodeOfOpponent.equals("")){
-            try {
-                sleep(500);
-            } catch (InterruptedException e) {
-                showErrorMessage("Error into the thread\n"+e.getStackTrace());
-            }
-        }
-        setVisible(true);
-        addShipsOnTheMap();
-    }
+
     private void showErrorMessage(String message){
         JOptionPane.showMessageDialog(null,message,"ERROR",JOptionPane.ERROR_MESSAGE);
     }
