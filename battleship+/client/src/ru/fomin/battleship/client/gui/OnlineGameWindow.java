@@ -10,7 +10,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class OnlineGameWindow extends JFrame implements ActionListener {
+import static java.lang.Thread.sleep;
+
+public class OnlineGameWindow extends JFrame implements ActionListener, Runnable {
     private Thread loadingThread = new Thread(this);
     private final String opponentNickname;
     private final String NICK_NAME;
@@ -36,14 +38,11 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         this.mapCodeOfUser = mapCodeOfUser;
         this.listener = listener;
         SIZE_OF_MAP = sizeOfMap;
-        listener.setLoadingOnlineGameWindow(new LoadingOnlineGameWindow(this,listener));
+        loadingThread.start();
         SwingUtilities.invokeLater(() -> initialization());
     }
 
-    public Boolean isGotMapCodeOfOpponent() {
-        if (mapCodeOfOpponent.equals("")) return false;
-        else return true;
-    }
+
 
     private void initialization() {
         listener.sendMessageToServer(LibraryOfPrefixes.getMapCodeMessage(mapCodeOfUser));
@@ -112,5 +111,21 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
 
     public void setMapCodeOfOpponent(String mapCodeOfOpponent) {
         this.mapCodeOfOpponent = mapCodeOfOpponent;
+    }
+
+    @Override
+    public void run() {
+        while (mapCodeOfOpponent.equals("")){
+            try {
+                sleep(500);
+            } catch (InterruptedException e) {
+                showErrorMessage("Error into the thread\n"+e.getStackTrace());
+            }
+        }
+        setVisible(true);
+        addShipsOnTheMap();
+    }
+    private void showErrorMessage(String message){
+        JOptionPane.showMessageDialog(null,message,"ERROR",JOptionPane.ERROR_MESSAGE);
     }
 }

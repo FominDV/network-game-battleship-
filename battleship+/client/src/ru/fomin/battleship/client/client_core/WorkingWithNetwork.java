@@ -1,6 +1,5 @@
 package ru.fomin.battleship.client.client_core;
 
-import ru.fomin.battleship.client.gui.LoadingOnlineGameWindow;
 import ru.fomin.battleship.client.gui.OnlineGameWindow;
 import ru.fomin.battleship.client.gui.SavingMapWindow;
 import ru.fomin.battleship.client.gui.SearchingOpponent;
@@ -13,5 +12,4 @@ public interface WorkingWithNetwork {
     void setSavingMapWindow(SavingMapWindow savingMapWindow);
     void setSearchingOpponent(SearchingOpponent searchingOpponent);
     void setOnlineGameWindow(OnlineGameWindow onlineGameWindow);
-    void setLoadingOnlineGameWindow(LoadingOnlineGameWindow loadingOnlineGameWindow);
 }
