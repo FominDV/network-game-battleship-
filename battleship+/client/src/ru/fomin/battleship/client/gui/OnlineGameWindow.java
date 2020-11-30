@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class OnlineGameWindow extends JFrame implements ActionListener {
+    private Thread loadingThread = new Thread(this);
     private final String opponentNickname;
     private final String NICK_NAME;
     private String mapCodeOfUser;
@@ -35,10 +36,14 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         this.mapCodeOfUser = mapCodeOfUser;
         this.listener = listener;
         SIZE_OF_MAP = sizeOfMap;
+        listener.setLoadingOnlineGameWindow(new LoadingOnlineGameWindow(this,listener));
         SwingUtilities.invokeLater(() -> initialization());
     }
 
-
+    public Boolean isGotMapCodeOfOpponent() {
+        if (mapCodeOfOpponent.equals("")) return false;
+        else return true;
+    }
 
     private void initialization() {
         listener.sendMessageToServer(LibraryOfPrefixes.getMapCodeMessage(mapCodeOfUser));
@@ -50,23 +55,26 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         int wrapperSize = SIZE_OF_MAP * 50;
         WRAPPER_FOR_MAP_OF_USER.setSize(wrapperSize, wrapperSize);
         WRAPPER_FOR_MAP_OF_OPPONENT.setSize(wrapperSize, wrapperSize);
-        int sizeOfPanelMap=SIZE_OF_MAP + 1;
+        int sizeOfPanelMap = SIZE_OF_MAP + 1;
         PANEL_MAP_OF_USER = new JPanel(new GridLayout(sizeOfPanelMap, sizeOfPanelMap));
         PANEL_MAP_OF_OPPONENT = new JPanel(new GridLayout(sizeOfPanelMap, sizeOfPanelMap));
         mapBuilderOfUser = new MapBuilder(fillMap(PANEL_MAP_OF_USER), this);
         mapBuilderOfOpponent = new MapBuilder(fillMap(PANEL_MAP_OF_OPPONENT), this);
-        mapBuilderOfUser.loadMap(mapCodeOfUser);
-        mapBuilderOfOpponent.loadMap(mapCodeOfOpponent);
         WRAPPER_FOR_MAP_OF_USER.add(PANEL_MAP_OF_USER);
         WRAPPER_FOR_MAP_OF_OPPONENT.add(PANEL_MAP_OF_OPPONENT);
 
         BUTTON_SEND.addActionListener(this);
 
-        add(WRAPPER_FOR_MAP_OF_USER,BorderLayout.WEST);
-        add(WRAPPER_FOR_MAP_OF_OPPONENT,BorderLayout.EAST);
+        add(WRAPPER_FOR_MAP_OF_USER, BorderLayout.WEST);
+        add(WRAPPER_FOR_MAP_OF_OPPONENT, BorderLayout.EAST);
 
-        setVisible(true);
+        setVisible(false);
 
+    }
+
+    public void addShipsOnTheMap() {
+        mapBuilderOfUser.loadMap(mapCodeOfUser);
+        mapBuilderOfOpponent.loadMap(mapCodeOfOpponent);
     }
 
     private Cell[][] fillMap(JPanel panelMap) {
@@ -90,7 +98,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        if (source==BUTTON_SEND) {
+        if (source == BUTTON_SEND) {
             listener.sendMessageToServer(LibraryOfPrefixes.getChatMessage(""));
             return;
         }

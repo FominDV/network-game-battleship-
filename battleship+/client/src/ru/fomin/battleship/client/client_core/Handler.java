@@ -21,6 +21,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
     private OnlineGameWindow onlineGameWindow;
     private SavingMapWindow savingMapWindow;
     private SearchingOpponent searchingOpponent;
+    private LoadingOnlineGameWindow loadingOnlineGameWindow;
     private String login;
     private Vector<String[]> dataMapVector = new Vector<>();
     private String ip;
@@ -76,6 +77,11 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             }
             try {
                 searchingOpponent.dispose();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            try {
+                loadingOnlineGameWindow.dispose();
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
@@ -227,5 +233,10 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
     @Override
     public void setOnlineGameWindow(OnlineGameWindow onlineGameWindow) {
         this.onlineGameWindow = onlineGameWindow;
+    }
+
+    @Override
+    public void setLoadingOnlineGameWindow(LoadingOnlineGameWindow loadingOnlineGameWindow) {
+        this.loadingOnlineGameWindow=loadingOnlineGameWindow;
     }
 }
