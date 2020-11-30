@@ -63,8 +63,4 @@ public class LibraryOfPrefixes {
     public static String getRemoveDataMessage(String login, String selectedName) {
         return REMOVE_DATA+DELIMITER+login+DELIMITER+selectedName;
     }
-
-
-    public static String getMapCode(String mapCode) {
-    }
 }

@@ -33,7 +33,6 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final String NICK_NAME;
     private final String LOGIN;
     private final WorkingWithNetwork listener;
-    private String mapCodeOfOpponent = "";
     private boolean isPost = true;
     private boolean isReady = false;
     private boolean isSavedMap = false;
@@ -205,10 +204,6 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
 
     public void setOpponentNickname(String opponentNickname) {
         this.opponentNickname = opponentNickname;
-        String mapCode = mapBuilder.getDataSaving();
-        while (mapCodeOfOpponent.equals("")) {
-            listener.sendMessageToServer(LibraryOfPrefixes.getMapCode(mapCode));
-        }
         searchingOpponent.dispose();
         startOnlineGame();
     }
@@ -342,10 +337,10 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
                     }
                 }
                 listener.sendMessageToServer(LibraryOfPrefixes.getSavingMapMessage(LOGIN, nameData, mapBuilder.getDataSaving()));
-            } else {
+            } else{
                 searchOpponent();
             }
-        } else {
+        } else{
             searchOpponent();
         }
     }
@@ -355,8 +350,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     }
 
     public void startOnlineGame() {
-        String mapCodeOfUser = mapBuilder.getDataSaving();
-        listener.setOnlineGameWindow(new OnlineGameWindow(opponentNickname, NICK_NAME, mapBuilder, listener, mapCodeOfUser, mapCodeOfOpponent));
+        listener.setOnlineGameWindow(new OnlineGameWindow(opponentNickname, NICK_NAME));
         dispose();
     }
 
@@ -391,10 +385,6 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         }
         mapBuilder.loadMap(dataMap);
         isSavedMap = true;
-    }
-
-    public void setMapCodeOfOpponent(String mapCodeOfOpponent) {
-        this.mapCodeOfOpponent = mapCodeOfOpponent;
     }
 
 }
