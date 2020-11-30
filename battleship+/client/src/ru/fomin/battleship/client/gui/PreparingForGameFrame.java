@@ -196,6 +196,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         if (searchOpponentThread == null || !(searchOpponentThread.isAlive())) {
             listener.sendMessageToServer(LibraryOfPrefixes.MESSAGE_ABOUT_START_SEARCHING);
             searchingOpponent = new SearchingOpponent(this);
+            listener.setSearchingOpponent(searchingOpponent);
             searchOpponentThread = new SearchOpponentThread(this, searchingOpponent);
             setVisible(false);
         }
@@ -221,8 +222,8 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     public void stopSearching() {
         searchOpponentThread.interrupt();
         searchOpponentThread.stop();
+        searchingOpponent.dispose();
         listener.sendMessageToServer(LibraryOfPrefixes.STOP_SEARCHING);
-
     }
 
     @Override

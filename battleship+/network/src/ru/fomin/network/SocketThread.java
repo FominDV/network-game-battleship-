@@ -9,8 +9,8 @@ import java.net.SocketException;
 import java.util.ArrayList;
 
 public class SocketThread extends Thread {
-    private final SocketThreadListener listener;
-    private final Socket SOCKET;
+    protected final SocketThreadListener listener;
+    protected final Socket SOCKET;
     private DataOutputStream out;
     private DataInputStream in;
 
@@ -37,11 +37,7 @@ public class SocketThread extends Thread {
         } catch (IOException e) {
             listener.onSocketException(this, e);
         } finally {
-            try {
-                SOCKET.close();
-            } catch (IOException e) {
-                listener.onSocketException(this, e);
-            }
+                close();
             listener.onSocketStop(this);
         }
     }

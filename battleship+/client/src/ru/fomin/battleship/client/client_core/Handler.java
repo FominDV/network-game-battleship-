@@ -51,12 +51,14 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
     @Override
     public void onSocketStop(SocketThread thread) {
         if (isValidAuthentication) {
+            isValidAuthentication = false;
             showConnectError();
             try {
                 clientAuthenticationFrame.dispose();
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
+
             try {
                 preparingForGameFrame.dispose();
             } catch (NullPointerException e) {
@@ -79,7 +81,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             }
             new ClientAuthenticationFrame();
         }
-        isValidAuthentication = false;
+
 
     }
 
@@ -115,7 +117,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
 
     @Override
     public void onSocketException(SocketThread thread, Exception exception) {
-        showException(thread, exception);
+        onSocketStop(thread);
         if (preparingForGameFrame != null) preparingForGameFrame.stopSearching();
     }
 
@@ -181,7 +183,8 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                 preparingForGameFrame.failSave();
                 break;
             case LibraryOfPrefixes.DUPLICATE_NAME:
-                preparingForGameFrame.showMessageAboutDuplicateNameOfSaving();;
+                preparingForGameFrame.showMessageAboutDuplicateNameOfSaving();
+                ;
                 break;
         }
     }

@@ -4,6 +4,7 @@ import ru.fomin.battleship.common.LibraryOfPrefixes;
 import ru.fomin.network.SocketThread;
 import ru.fomin.network.SocketThreadListener;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.Vector;
 
