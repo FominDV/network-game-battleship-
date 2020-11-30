@@ -41,9 +41,10 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private MapBuilder mapBuilder;
     private final Color COLOR_OF_BACKGROUND = new Color(99, 234, 234);
     private final Color COLOR_OF_START = new Color(215, 99, 99);
-    private final Color COLOR_OF_POST_MODE = new Color(59, 118, 17);
+    private final Color COLOR_OF_POST_MODE = new Color(50, 104, 1);
     private final Color COLOR_OF_REMOVE_MODE = new Color(68, 4, 4);
     private final Color COLOR_OF_READY = new Color(46, 220, 5);
+    private final Color COLOR_OF_PANEL_BACKGROUND = new Color(135, 170, 206);
     private Vector<String[]> dataMapVector = new Vector<>();
     private SearchingOpponent searchingOpponent;
 
@@ -58,6 +59,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final JPanel PANEL_LEFT_MAIN = new JPanel(new GridLayout(5, 1));
     private final JPanel PANEL_LEFT_TOP = new JPanel(new GridLayout(1, 1));
     private final JPanel[] PANEL_LEFT_BOTTOM = new JPanel[4];
+    private final JPanel PANEL_MAIN = new JPanel(new BorderLayout());
 
     private final JButton BUTTON_POST = new JButton("POST");
     private final JButton BUTTON_REMOVE = new JButton("REMOVE");
@@ -94,12 +96,22 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setTitle(WINDOW_TITLE + NICK_NAME);
         setResizable(false);
-        
+
         WRAPPER_FOR_MAP.setSize(SIZE_OF_MAP * 50, SIZE_OF_MAP * 50);
         fillMap();
         WRAPPER_FOR_MAP.add(PANEL_MAP);
-
-        for (int i = 0; i < PANEL_LEFT_BOTTOM.length; i++) PANEL_LEFT_BOTTOM[i] = new JPanel(new GridLayout(1, 2));
+        setContentPane(PANEL_MAIN);
+        for (int i = 0; i < PANEL_LEFT_BOTTOM.length; i++) {
+            PANEL_LEFT_BOTTOM[i] = new JPanel(new GridLayout(1, 2));
+            PANEL_LEFT_BOTTOM[i].setBackground(COLOR_OF_PANEL_BACKGROUND);
+        }
+        PANEL_MAP.setBackground(COLOR_OF_PANEL_BACKGROUND);
+        WRAPPER_FOR_MAP.setBackground(COLOR_OF_PANEL_BACKGROUND);
+        PANEL_TOP.setBackground(COLOR_OF_PANEL_BACKGROUND);
+        PANEL_BOTTOM.setBackground(COLOR_OF_PANEL_BACKGROUND);
+        PANEL_LEFT_TOP.setBackground(COLOR_OF_PANEL_BACKGROUND);
+        PANEL_LEFT_MAIN.setBackground(COLOR_OF_PANEL_BACKGROUND);
+        PANEL_MAIN.setBackground(COLOR_OF_PANEL_BACKGROUND);
 
         labelCount1Ship.setFont(FONT_FOR_LABEL_SHIPS);
         labelCount2Ship.setFont(FONT_FOR_LABEL_SHIPS);
@@ -167,10 +179,11 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         PANEL_BOTTOM.add(BUTTON_LOAD);
         PANEL_BOTTOM.add(BUTTON_START);
         PANEL_BOTTOM.add(BUTTON_EXIT);
-        add(WRAPPER_FOR_MAP, BorderLayout.EAST);
-        add(PANEL_BOTTOM, BorderLayout.SOUTH);
-        add(PANEL_TOP, BorderLayout.NORTH);
-        add(PANEL_LEFT_MAIN, BorderLayout.WEST);
+
+        PANEL_MAIN.add(WRAPPER_FOR_MAP, BorderLayout.EAST);
+        PANEL_MAIN.add(PANEL_BOTTOM, BorderLayout.SOUTH);
+        PANEL_MAIN.add(PANEL_TOP, BorderLayout.NORTH);
+        PANEL_MAIN.add(PANEL_LEFT_MAIN, BorderLayout.WEST);
 
         setVisible(true);
     }
@@ -339,10 +352,10 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
                     }
                 }
                 listener.sendMessageToServer(LibraryOfPrefixes.getSavingMapMessage(LOGIN, nameData, mapBuilder.getDataSaving()));
-            } else{
+            } else {
                 searchOpponent();
             }
-        } else{
+        } else {
             searchOpponent();
         }
     }
@@ -352,7 +365,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     }
 
     public void startOnlineGame() {
-        listener.setOnlineGameWindow(new OnlineGameWindow(opponentNickname, NICK_NAME, mapBuilder.getDataSaving(),listener));
+        listener.setOnlineGameWindow(new OnlineGameWindow(opponentNickname, NICK_NAME, mapBuilder.getDataSaving(), listener));
         dispose();
     }
 
