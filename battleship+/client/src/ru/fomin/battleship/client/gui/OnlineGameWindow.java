@@ -15,9 +15,9 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private String mapCodeOfOpponent="";
     private WorkingWithNetwork listener;
     private final int WIDTH=1200;
-    private final int HEIGHT=700;
+    private final int HEIGHT=750;
 
-    JLabel test=new JLabel("label");
+    
 
     JButton BUTTON_SEND=new JButton("SEND MESSAGE");
 
@@ -38,8 +38,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         setResizable(false);
 
         BUTTON_SEND.addActionListener(this);
-        add(test,BorderLayout.CENTER);
-        add(BUTTON_SEND,BorderLayout.WEST);
+
 
 
 
@@ -50,7 +49,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source.equals(BUTTON_SEND)) {
-            listener.sendMessageToServer(LibraryOfPrefixes.getChatMessage("hello"));
+            listener.sendMessageToServer(LibraryOfPrefixes.getChatMessage(""));
             return;
         }
 
@@ -58,7 +57,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     public void setChatMessage(String message){
-        test.setText(message);
+
     }
     public void setMapCodeOfOpponent(String mapCodeOfOpponent){
         this.mapCodeOfOpponent=mapCodeOfOpponent;
