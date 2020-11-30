@@ -26,7 +26,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final String REMOVE_MODE = "REMOVE MODE";
     private final String POST_MODE = "POST MODE";
     private final int SIZE_OF_MAP = 10;
-    private final int WIDTH = 850;
+    private final int WIDTH = 855;
     private final int HEIGHT = 700;
     private final String WINDOW_TITLE = "Map-Maker by ";
     private final SocketThread SOCKET_THREAD;
@@ -94,6 +94,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setTitle(WINDOW_TITLE + NICK_NAME);
         setResizable(false);
+        
         WRAPPER_FOR_MAP.setSize(SIZE_OF_MAP * 50, SIZE_OF_MAP * 50);
         fillMap();
         WRAPPER_FOR_MAP.add(PANEL_MAP);

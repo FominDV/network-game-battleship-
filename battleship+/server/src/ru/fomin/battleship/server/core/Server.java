@@ -11,7 +11,10 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
+
+import static java.lang.String.format;
 
 public class Server implements ServerSocketThreadListener, SocketThreadListener {
     private final DateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss: ");
@@ -159,7 +162,7 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
                 putLog(client.getNickname() + " removed the \"" + arr[2] + "\" data");
                 break;
             case LibraryOfPrefixes.CHAT_MESSAGE:
-                findClientByNickname(client.getOpponentNickname()).sendMessage(LibraryOfPrefixes.getChatMessage(arr[1]));
+                findClientByNickname(client.getOpponentNickname()).sendMessage(LibraryOfPrefixes.getChatMessage(editChatMessage(arr[1], client.getNickname())));
                 putLog(client.getNickname() +" send message to "+client.getOpponentNickname());
                 break;
             case LibraryOfPrefixes.MAP_CODE:
@@ -169,6 +172,11 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
             default:
                 client.msgFormatError(msg);
         }
+    }
+
+    private String editChatMessage(String message, String nickName){
+        Date date = new Date();
+        return format("%s(%tR):\n%s", nickName, date, message);
     }
 
     private synchronized void searchingOpponent(ClientThread client) {
