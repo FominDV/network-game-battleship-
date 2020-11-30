@@ -11,7 +11,8 @@ import java.awt.event.ActionListener;
 public class OnlineGameWindow extends JFrame implements ActionListener {
     private final String opponentNickname;
     private final String NICK_NAME;
-    private String mapCodUser;
+    private String mapCodeOfUser;
+    private String mapCodeOfOpponent;
     private WorkingWithNetwork listener;
     private final int WIDTH=800;
     private final int HEIGHT=400;
@@ -20,10 +21,10 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
 
     JButton BUTTON_SEND=new JButton("SEND MESSAGE");
 
-    public OnlineGameWindow(String opponentNickname, String nickName, String mapCodUser, WorkingWithNetwork listener) {
+    public OnlineGameWindow(String opponentNickname, String nickName, String mapCodeOfUser, WorkingWithNetwork listener) {
         this.opponentNickname = opponentNickname;
         NICK_NAME = nickName;
-        this.mapCodUser=mapCodUser;
+        this.mapCodeOfUser = mapCodeOfUser;
         this.listener=listener;
         SwingUtilities.invokeLater(() -> initialization());
     }
@@ -46,7 +47,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source.equals(BUTTON_SEND)) {
-            listener.sendMessageToServer(LibraryOfPrefixes.getChatMessage("sdsdsdsd"));
+            listener.sendMessageToServer(LibraryOfPrefixes.getMapCodeMessage(mapCodeOfUser));
             return;
         }
 
@@ -55,5 +56,10 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
 
     public void setChatMessage(String message){
         test.setText(message);
+    }
+    public void setMapCodeOfOpponent(String mapCodeOfOpponent){
+        this.mapCodeOfOpponent=mapCodeOfOpponent;
+        /////////////////////////////////
+        test.setText("<html>"+mapCodeOfUser+"<br>"+this.mapCodeOfOpponent+"</html>");
     }
 }

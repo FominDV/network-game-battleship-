@@ -13,6 +13,7 @@ public class ClientThread extends SocketThread {
     private boolean isAuthorized;
     private boolean isReconnecting;
     private boolean isSearching=false;
+    private ClientThread opponentThread;
     private String opponentNickname = "empty";
 
     public ClientThread(SocketThreadListener listener, String name, Socket socket) {
@@ -76,6 +77,7 @@ public void setLogin(String login){
     public void updateDataMap(Vector<String> dataMap) {
         sendMessage(LibraryOfPrefixes.getDataOfMapList(dataMap));
     }
+
 }
 
 

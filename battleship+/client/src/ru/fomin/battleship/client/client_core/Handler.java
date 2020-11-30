@@ -188,6 +188,9 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             case LibraryOfPrefixes.CHAT_MESSAGE:
                 onlineGameWindow.setChatMessage(arr[1]);
                 break;
+            case LibraryOfPrefixes.MAP_CODE:
+                onlineGameWindow.setMapCodeOfOpponent(arr[1]);
+                break;
         }
     }
 
