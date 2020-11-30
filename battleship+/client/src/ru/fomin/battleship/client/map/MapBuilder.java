@@ -1,5 +1,6 @@
 package ru.fomin.battleship.client.map;
 
+import ru.fomin.battleship.client.gui.OnlineGameWindow;
 import ru.fomin.battleship.client.gui.PreparingForGameFrame;
 
 import java.util.Vector;
@@ -7,6 +8,7 @@ import java.util.Vector;
 public class MapBuilder {
     private Cell[][] map;
     private PreparingForGameFrame preparingForGameFrame;
+    private OnlineGameWindow onlineGameWindow;
     private final int MAX_OF_SHIP4 = 1;
     private final int MAX_OF_SHIP3 = 2;
     private final int MAX_OF_SHIP2 = 3;
@@ -20,6 +22,10 @@ public class MapBuilder {
     public MapBuilder(Cell[][] map, PreparingForGameFrame preparingForGameFrame) {
         this.map = map;
         this.preparingForGameFrame = preparingForGameFrame;
+    }
+    public MapBuilder(Cell[][] map, OnlineGameWindow onlineGameWindow) {
+        this.map = map;
+        this.onlineGameWindow=onlineGameWindow;
     }
 
     public void setCountOfShips() {

@@ -1,5 +1,6 @@
 package ru.fomin.battleship.client.map;
 
+import ru.fomin.battleship.client.gui.OnlineGameWindow;
 import ru.fomin.battleship.client.gui.PreparingForGameFrame;
 
 import javax.swing.*;
@@ -22,6 +23,18 @@ public class Cell extends JButton {
     private PreparingForGameFrame preparingForGameFrame;
 
     public Cell(int status, PreparingForGameFrame preparingForGameFrame, int x, int y) {
+        setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        setMargin(new Insets(0, 0, 0, 0));
+        this.status = status;
+        this.preparingForGameFrame = preparingForGameFrame;
+        X=x;
+        Y=y;
+        setImage(status);
+        addActionListener(e -> {
+            actionClick();
+        });
+    }
+    public Cell(int status, OnlineGameWindow onlineGameWindow, int x, int y) {
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         setMargin(new Insets(0, 0, 0, 0));
         this.status = status;

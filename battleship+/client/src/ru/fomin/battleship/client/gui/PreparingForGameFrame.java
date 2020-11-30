@@ -188,7 +188,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    private void fillMap() {
+    protected void fillMap() {
         PANEL_MAP.add(new JLabel());
         for (int i = 1; i <= SIZE_OF_MAP; i++) {
             JLabel number = new JLabel((String.valueOf(i)));
@@ -365,7 +365,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     }
 
     public void startOnlineGame() {
-        listener.setOnlineGameWindow(new OnlineGameWindow(opponentNickname, NICK_NAME, mapBuilder.getDataSaving(), listener));
+        listener.setOnlineGameWindow(new OnlineGameWindow(opponentNickname, NICK_NAME, mapBuilder.getDataSaving(), listener, SIZE_OF_MAP));
         dispose();
     }
 
