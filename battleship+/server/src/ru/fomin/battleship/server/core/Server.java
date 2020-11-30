@@ -98,6 +98,8 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
         if (otherClient != null) {
             otherClient.sendMessage(LibraryOfPrefixes.DISCONNECT_OPPONENT);
             otherClient.setStopSearchingOpponent();
+            putLog("Connection with "+client.getNickname()+" was lost");
+            putLog(client.getNickname()+" was disconnected with "+otherClient.getNickname());
         }
         putLog("Socket stopped");
     }

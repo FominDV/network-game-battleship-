@@ -265,7 +265,6 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
                 return;
             }
             savingDialog();
-            searchOpponent();
             return;
         }
         if (source.equals(BUTTON_LOAD)) {
@@ -338,7 +337,11 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
                     }
                 }
                 listener.sendMessageToServer(LibraryOfPrefixes.getSavingMapMessage(LOGIN, nameData, mapBuilder.getDataSaving()));
+            } else{
+                searchOpponent();
             }
+        } else{
+            searchOpponent();
         }
     }
 
@@ -358,6 +361,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     public void successfulSave() {
         JOptionPane.showMessageDialog(null, "Saving map is successful");
         isSavedMap = true;
+        searchOpponent();
     }
 
     protected boolean isSavingConfirmMessageYesNo(String message) {
@@ -383,7 +387,4 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         isSavedMap = true;
     }
 
-    public void clearTheMap() {
-        mapBuilder.clearTheMap();
-    }
 }
