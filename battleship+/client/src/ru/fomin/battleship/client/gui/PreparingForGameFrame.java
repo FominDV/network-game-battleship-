@@ -351,7 +351,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     }
 
     public void startOnlineGame() {
-        listener.setOnlineGameWindow(new OnlineGameWindow(opponentNickname, NICK_NAME));
+        listener.setOnlineGameWindow(new OnlineGameWindow(opponentNickname, NICK_NAME, mapBuilder.getDataSaving(),listener));
         dispose();
     }
 

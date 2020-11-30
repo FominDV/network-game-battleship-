@@ -4,7 +4,6 @@ import ru.fomin.battleship.common.LibraryOfPrefixes;
 import ru.fomin.network.SocketThread;
 import ru.fomin.network.SocketThreadListener;
 
-import java.io.IOException;
 import java.net.Socket;
 import java.util.Vector;
 
@@ -14,7 +13,7 @@ public class ClientThread extends SocketThread {
     private boolean isAuthorized;
     private boolean isReconnecting;
     private boolean isSearching=false;
-    private String otherNickname = "empty";
+    private String opponentNickname = "empty";
 
     public ClientThread(SocketThreadListener listener, String name, Socket socket) {
         super(listener, name, socket);
@@ -45,11 +44,11 @@ public class ClientThread extends SocketThread {
         close();
     }
 
-    public void setOtherNickname(String otherNickname) {
-        this.otherNickname = otherNickname;
+    public void setOpponentNickname(String opponentNickname) {
+        this.opponentNickname = opponentNickname;
     }
-    public String getOtherNickname(){
-        return otherNickname;
+    public String getOpponentNickname(){
+        return opponentNickname;
     }
 
     void authAccept(String nickname) {

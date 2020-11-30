@@ -184,7 +184,9 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                 break;
             case LibraryOfPrefixes.DUPLICATE_NAME:
                 preparingForGameFrame.showMessageAboutDuplicateNameOfSaving();
-                ;
+                break;
+            case LibraryOfPrefixes.CHAT_MESSAGE:
+                onlineGameWindow.setChatMessage(arr[1]);
                 break;
         }
     }
