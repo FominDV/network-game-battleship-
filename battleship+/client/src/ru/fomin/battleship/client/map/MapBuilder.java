@@ -29,8 +29,10 @@ public class MapBuilder {
     }
 
     public void setCountOfShips() {
+        if(preparingForGameFrame!=null)
         preparingForGameFrame.setCountOfShips(count1Ship, count2Ship, count3Ship, count4Ship);
     }
+
 
     public boolean validCellForPreparingPost(boolean isPostMode, int x, int y) {
         if (isPostMode && map[x][y].getStatus() == 5 && validSpaces(x, y) && validShipLength(x, y)) return true;

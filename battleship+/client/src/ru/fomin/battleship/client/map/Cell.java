@@ -21,6 +21,7 @@ public class Cell extends JButton {
     private final int X;
     private final int Y;
     private PreparingForGameFrame preparingForGameFrame;
+    private OnlineGameWindow onlineGameWindow;
 
     public Cell(int status, PreparingForGameFrame preparingForGameFrame, int x, int y) {
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -38,7 +39,7 @@ public class Cell extends JButton {
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         setMargin(new Insets(0, 0, 0, 0));
         this.status = status;
-        this.preparingForGameFrame = preparingForGameFrame;
+        this.onlineGameWindow=onlineGameWindow;
         X=x;
         Y=y;
         setImage(status);
@@ -48,11 +49,15 @@ public class Cell extends JButton {
     }
 
     private void actionClick() {
-        if (preparingForGameFrame.validCellForPreparingPost(X,Y)) {
-            setImage(4);
+        if(preparingForGameFrame!=null) {
+            if (preparingForGameFrame.validCellForPreparingPost(X, Y)) {
+                setImage(4);
+            }
+            if (!preparingForGameFrame.getMode()) preparingForGameFrame.remove(X, Y);
         }
-           if(!preparingForGameFrame.getMode()) preparingForGameFrame.remove(X,Y);
+        if(onlineGameWindow!=null){
 
+        }
     }
 
     public void setImage(int status) {

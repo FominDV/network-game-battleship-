@@ -14,29 +14,31 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final String opponentNickname;
     private final String NICK_NAME;
     private String mapCodeOfUser;
-    private String mapCodeOfOpponent="";
+    private String mapCodeOfOpponent = "";
     private final int SIZE_OF_MAP;
     private WorkingWithNetwork listener;
     private MapBuilder mapBuilderOfUser;
     private MapBuilder mapBuilderOfOpponent;
-    private final int WIDTH=1200;
-    private final int HEIGHT=750;
+    private final int WIDTH = 1200;
+    private final int HEIGHT = 750;
 
     private final JPanel WRAPPER_FOR_MAP_OF_USER = new JPanel(new GridBagLayout());
     private final JPanel WRAPPER_FOR_MAP_OF_OPPONENT = new JPanel(new GridBagLayout());
     private JPanel PANEL_MAP_OF_USER;
     private JPanel PANEL_MAP_OF_OPPONENT;
 
-    JButton BUTTON_SEND=new JButton("SEND MESSAGE");
+    JButton BUTTON_SEND = new JButton("SEND MESSAGE");
 
     public OnlineGameWindow(String opponentNickname, String nickName, String mapCodeOfUser, WorkingWithNetwork listener, int sizeOfMap) {
         this.opponentNickname = opponentNickname;
         NICK_NAME = nickName;
         this.mapCodeOfUser = mapCodeOfUser;
-        this.listener=listener;
-        SIZE_OF_MAP=sizeOfMap;
+        this.listener = listener;
+        SIZE_OF_MAP = sizeOfMap;
         SwingUtilities.invokeLater(() -> initialization());
     }
+
+
 
     private void initialization() {
         listener.sendMessageToServer(LibraryOfPrefixes.getMapCodeMessage(mapCodeOfUser));
@@ -45,20 +47,29 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setTitle(NICK_NAME + " VS " + opponentNickname);
         setResizable(false);
-        int wrapperSize=SIZE_OF_MAP * 50;
+        int wrapperSize = SIZE_OF_MAP * 50;
         WRAPPER_FOR_MAP_OF_USER.setSize(wrapperSize, wrapperSize);
         WRAPPER_FOR_MAP_OF_OPPONENT.setSize(wrapperSize, wrapperSize);
-        PANEL_MAP_OF_USER = new JPanel(new GridLayout(SIZE_OF_MAP + 1, SIZE_OF_MAP + 1));
-        PANEL_MAP_OF_OPPONENT = new JPanel(new GridLayout(SIZE_OF_MAP + 1, SIZE_OF_MAP + 1));
-        fillMap(PANEL_MAP_OF_USER, mapBuilderOfUser);
-        fillMap(PANEL_MAP_OF_OPPONENT, mapBuilderOfOpponent);
+        int sizeOfPanelMap=SIZE_OF_MAP + 1;
+        PANEL_MAP_OF_USER = new JPanel(new GridLayout(sizeOfPanelMap, sizeOfPanelMap));
+        PANEL_MAP_OF_OPPONENT = new JPanel(new GridLayout(sizeOfPanelMap, sizeOfPanelMap));
+        mapBuilderOfUser = new MapBuilder(fillMap(PANEL_MAP_OF_USER), this);
+        mapBuilderOfOpponent = new MapBuilder(fillMap(PANEL_MAP_OF_OPPONENT), this);
+        mapBuilderOfUser.loadMap(mapCodeOfUser);
+        mapBuilderOfOpponent.loadMap(mapCodeOfOpponent);
+        WRAPPER_FOR_MAP_OF_USER.add(PANEL_MAP_OF_USER);
+        WRAPPER_FOR_MAP_OF_OPPONENT.add(PANEL_MAP_OF_OPPONENT);
 
         BUTTON_SEND.addActionListener(this);
 
+        add(WRAPPER_FOR_MAP_OF_USER,BorderLayout.WEST);
+        add(WRAPPER_FOR_MAP_OF_OPPONENT,BorderLayout.EAST);
+
         setVisible(true);
+
     }
 
-    private void fillMap(JPanel panelMap, MapBuilder mapBuilder) {
+    private Cell[][] fillMap(JPanel panelMap) {
         panelMap.add(new JLabel());
         for (int i = 1; i <= SIZE_OF_MAP; i++) {
             JLabel number = new JLabel((String.valueOf(i)));
@@ -73,13 +84,13 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
                 panelMap.add(map[i][j]);
             }
         }
-        mapBuilder = new MapBuilder(map, this);
+        return map;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        if (source.equals(BUTTON_SEND)) {
+        if (source==BUTTON_SEND) {
             listener.sendMessageToServer(LibraryOfPrefixes.getChatMessage(""));
             return;
         }
@@ -87,10 +98,11 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         throw new RuntimeException("Unknown source: " + source);
     }
 
-    public void setChatMessage(String message){
+    public void setChatMessage(String message) {
 
     }
-    public void setMapCodeOfOpponent(String mapCodeOfOpponent){
-        this.mapCodeOfOpponent=mapCodeOfOpponent;
+
+    public void setMapCodeOfOpponent(String mapCodeOfOpponent) {
+        this.mapCodeOfOpponent = mapCodeOfOpponent;
     }
 }
