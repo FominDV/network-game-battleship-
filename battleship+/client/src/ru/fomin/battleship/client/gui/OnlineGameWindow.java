@@ -12,12 +12,12 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final String opponentNickname;
     private final String NICK_NAME;
     private String mapCodeOfUser;
-    private String mapCodeOfOpponent;
+    private String mapCodeOfOpponent="";
     private WorkingWithNetwork listener;
-    private final int WIDTH=800;
-    private final int HEIGHT=400;
+    private final int WIDTH=1200;
+    private final int HEIGHT=700;
 
-    JLabel test=new JLabel("1");
+
 
     JButton BUTTON_SEND=new JButton("SEND MESSAGE");
 
@@ -30,6 +30,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     private void initialization() {
+        listener.sendMessageToServer(LibraryOfPrefixes.getMapCodeMessage(mapCodeOfUser));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null);
@@ -38,8 +39,10 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
 
         BUTTON_SEND.addActionListener(this);
 
-        add(BUTTON_SEND, BorderLayout.EAST);
-        add(test,BorderLayout.CENTER);
+
+
+
+
 
         setVisible(true);
     }
@@ -47,7 +50,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source.equals(BUTTON_SEND)) {
-            listener.sendMessageToServer(LibraryOfPrefixes.getMapCodeMessage(mapCodeOfUser));
+            listener.sendMessageToServer(LibraryOfPrefixes.getChatMessage(""));
             return;
         }
 
@@ -55,11 +58,9 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     public void setChatMessage(String message){
-        test.setText(message);
+
     }
     public void setMapCodeOfOpponent(String mapCodeOfOpponent){
         this.mapCodeOfOpponent=mapCodeOfOpponent;
-        /////////////////////////////////
-        test.setText("<html>"+mapCodeOfUser+"<br>"+this.mapCodeOfOpponent+"</html>");
     }
 }
