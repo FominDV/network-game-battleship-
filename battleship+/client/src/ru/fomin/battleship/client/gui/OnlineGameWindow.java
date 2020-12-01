@@ -35,7 +35,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final JPanel WRAPPER_FOR_MAP_OF_OPPONENT = new JPanel(new GridBagLayout());
     private JPanel panelMapOfUser;
     private JPanel panelMapOfOpponent;
-    private final JPanel PANEL_MAIN_CENTER=new JPanel(new BorderLayout());
+    private final JPanel PANEL_MAIN_CENTER=new JPanel(new FlowLayout());
     private final JPanel PANEL_CENTER_OF_CENTER=new JPanel(new BorderLayout());
     private final JPanel PANEL_LOG_AND_CHAT=new JPanel(new GridLayout(2,1));
 
@@ -92,13 +92,13 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         JScrollPane scrollChat = new JScrollPane(CHAT);
         PANEL_LOG_AND_CHAT.add(scrollLog);
         PANEL_LOG_AND_CHAT.add(scrollChat);
+        PANEL_CENTER_OF_CENTER.setPreferredSize(new Dimension(wrapperSize-150,wrapperSize));
         PANEL_CENTER_OF_CENTER.add(LABEL_TURN,BorderLayout.NORTH);
         PANEL_CENTER_OF_CENTER.add(PANEL_LOG_AND_CHAT,BorderLayout.CENTER);
         PANEL_CENTER_OF_CENTER.setMaximumSize(new Dimension(wrapperSize,wrapperSize-50));
-
-        PANEL_MAIN_CENTER.add(WRAPPER_FOR_MAP_OF_USER,BorderLayout.WEST);
-        PANEL_MAIN_CENTER.add(PANEL_CENTER_OF_CENTER,BorderLayout.CENTER);
-        PANEL_MAIN_CENTER.add(WRAPPER_FOR_MAP_OF_OPPONENT,BorderLayout.EAST);
+        PANEL_MAIN_CENTER.add(WRAPPER_FOR_MAP_OF_USER);
+        PANEL_MAIN_CENTER.add(PANEL_CENTER_OF_CENTER);
+        PANEL_MAIN_CENTER.add(WRAPPER_FOR_MAP_OF_OPPONENT);
 
 
 
