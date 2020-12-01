@@ -10,12 +10,31 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
+import static java.lang.String.format;
 import static java.lang.Thread.sleep;
 
 public class OnlineGameWindow extends JFrame implements ActionListener {
     private final String TEXT_TURN_OF_USER = "YOUR TURN";
     private final String TEXT_TURN_OF_OPPONENT = "TURN OF OPPONENT";
+    private final String TEXT_MODE_SIMPLE_SHOOT = "<html><p align='center'>MODE:<br>SIMPLE SHOOT</p></html>";
+    private final String TEXT_MODE_VOLLEY_SHOOT = "<html><p align='center'>MODE:<br>VOLLEY SHOOT</p></html>";
+    private final String TEXT_MODE_EXPLORATION = "<html><p align='center'>MODE:<br>EXPLORATION OF THE MAP</p></html>";
+    private final String TEXT_MODE_STRAIGHT_SHOOTING = "<html><p align='center'>MODE:<br>SHOOTING ON STRAIGHT</p></html>";
+    private final String TEXT_RECHARGE1="recharge in ";
+    private final String TEXT_RECHARGE2=" turns";
+    /*0-simple shoot
+    * 1-volley shoot
+    * 2-exploration of the map
+    * 3-shooting on straight*/
+    private int modeStatus=0;
+    private final int TURNS_FOR_VOLLEY=4;
+    private final int TURNS_FOR_EXPLORATION=3;
+    private final int TURNS_FOR_STRAIGHT_SHOOTING=2;
+    private int rechargeForVolley=0;
+    private int rechargeForExploration=0;
+    private int rechargeForStraightShooting=0;
 
     private boolean isTurnOfUser = false;
     private final String opponentNickname;
@@ -26,9 +45,18 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private OnlineGameMapBuilder mapBuilderOfUser;
     private OnlineGameMapBuilder mapBuilderOfOpponent;
     private final int WIDTH = 1440;
-    private final int HEIGHT = 800;
-    private final Color  COLOR_FOR_BORDER=new Color(162, 191, 234, 52);
-    private final Border BORDER_FOR_LOG_AND_CHAT=BorderFactory.createLineBorder(COLOR_FOR_BORDER, 20);
+    private final int HEIGHT = 750;
+
+    private final Color COLOR_FOR_BORDER_LOG =new Color(162, 191, 234, 52);
+    private final Color  COLOR_FOR_ACTIVE_MODE=new Color(57, 205, 41, 173);
+    private final Color  COLOR_FOR_NO_ACTIVE_MODE=new Color(215, 34, 34, 233);
+    private final Color  COLOR_FOR_EXIT=new Color(241, 83, 83, 233);
+    private final Color  COLOR_FOR_LABEL_MODE=new Color(106, 4, 10, 191);
+    private final Color  COLOR_FOR_BORDER_MODE=new Color(1, 23, 95, 233);
+
+    private final Border BORDER_FOR_LOG_AND_CHAT=BorderFactory.createLineBorder(COLOR_FOR_BORDER_LOG, 20);
+    private final Border BORDER_FOR_LABEL_MODE=BorderFactory.createLineBorder(COLOR_FOR_BORDER_MODE, 10);
+    private final Border BORDER_FOR_LABEL_RECHARGE=BorderFactory.createLineBorder(COLOR_FOR_NO_ACTIVE_MODE, 8);
 
 
     private final JPanel WRAPPER_FOR_MAP_OF_USER = new JPanel(new GridBagLayout());
@@ -38,16 +66,41 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final JPanel PANEL_MAIN_CENTER=new JPanel(new FlowLayout());
     private final JPanel PANEL_CENTER_OF_CENTER=new JPanel(new BorderLayout());
     private final JPanel PANEL_LOG_AND_CHAT=new JPanel(new GridLayout(2,1));
+    private final JPanel PANEL_MAIN_TOP=new JPanel(new BorderLayout());
+    private final JPanel PANEL_INFO_TOP=new JPanel(new GridLayout(1,2));
+    private final JPanel PANEL_ACTION_MENU_TOP=new JPanel(new GridLayout(1,5));
+    private final JPanel[] PANEL_MODE_TOP =new JPanel[3];
+    private final JPanel PANEL_BOTTOM=new JPanel(new BorderLayout());
 
 
     private final JTextArea LOG = new JTextArea();
     private final JTextArea CHAT = new JTextArea();
+    private final JTextField FIELD_FOR_CHAT_MESSAGE=new JTextField();
 
     private final JLabel LABEL_TURN = new JLabel(TEXT_TURN_OF_OPPONENT);
+    private final JLabel LABEL_MODE = new JLabel(TEXT_MODE_SIMPLE_SHOOT);
+    private final JLabel LABEL_RECHARGE_VOLLEY = new JLabel(TEXT_RECHARGE1+(TURNS_FOR_VOLLEY-rechargeForVolley)+TEXT_RECHARGE2);
+    private final JLabel LABEL_RECHARGE_EXPLORATION = new JLabel(TEXT_RECHARGE1+(TURNS_FOR_EXPLORATION-rechargeForExploration)+TEXT_RECHARGE2);
+    private final JLabel LABEL_RECHARGE_STRAIGHT = new JLabel(TEXT_RECHARGE1+(TURNS_FOR_STRAIGHT_SHOOTING-rechargeForStraightShooting)+TEXT_RECHARGE2);
 
     private final Font FONT_OF_TURN = new Font(Font.SERIF, Font.BOLD, 24);
+    private final Font FONT_OF_MODE = new Font(Font.SERIF, Font.BOLD, 26);
+    private final Font FONT_OF_RECHARGE = new Font(Font.SERIF, Font.BOLD, 18);
+    private final Font FONT_OF_BUTTON_MODE = new Font(Font.SERIF, Font.BOLD, 25);
+    private final Font FONT_OF_BUTTON_BOTTOM = new Font(Font.SERIF, Font.BOLD, 22);
+    private final Font FONT_OF_BUTTON_INFO = new Font(Font.SERIF, Font.BOLD, 19);
+    private final Font FONT_OF_FIELD_FOR_CHAT_MESSAGE = new Font(Font.SERIF, Font.ITALIC, 20);
+    private final Font FONT_OF_CHAT = new Font(Font.SERIF, Font.ITALIC, 16);
 
-    JButton BUTTON_SEND = new JButton("SEND MESSAGE");
+    private final JButton BUTTON_SEND = new JButton("SEND MESSAGE");
+    private final JButton BUTTON_INSTRUCTION = new JButton("INSTRUCTION MANUAL");
+    private final JButton BUTTON_DEVELOPER_INFO = new JButton("DEVELOPER");
+    private final JButton BUTTON_MODE_SIMPLE = new JButton("<html>SIMPLE<br>SHOOT</html>");
+    private final JButton BUTTON_MODE_VOLLEY = new JButton("<html>VOLLEY<br>SHOOT</html>");
+    private final JButton BUTTON_MODE_EXPLORATION = new JButton("<html>EXPLORATION<br>OF THE MAP</html>");
+    private final JButton BUTTON_MODE_STRAIGHT = new JButton("<html>SHOOTING<br>ON STRAIGHT</html>");
+    private final JButton BUTTON_EXIT = new JButton("EXIT");
+
 
 
     public OnlineGameWindow(String opponentNickname, String nickName, String mapCodeOfUser, WorkingWithNetwork listener, int sizeOfMap) {
@@ -65,7 +118,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null);
         setTitle(NICK_NAME + " VS " + opponentNickname);
-
+        setResizable(false);
         int wrapperSize = SIZE_OF_MAP * 50;
         WRAPPER_FOR_MAP_OF_USER.setSize(wrapperSize, wrapperSize);
         WRAPPER_FOR_MAP_OF_OPPONENT.setSize(wrapperSize, wrapperSize);
@@ -86,8 +139,12 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         CHAT.setEditable(false);
         CHAT.setLineWrap(true);
         CHAT.setWrapStyleWord(true);
+        CHAT.setFont(FONT_OF_CHAT);
         LOG.setBorder(BORDER_FOR_LOG_AND_CHAT);
         CHAT.setBorder(BORDER_FOR_LOG_AND_CHAT);
+        LOG.setMargin(new Insets(0,20,0,0));
+        FIELD_FOR_CHAT_MESSAGE.setFont(FONT_OF_FIELD_FOR_CHAT_MESSAGE);
+        FIELD_FOR_CHAT_MESSAGE.addActionListener(this);
         JScrollPane scrollLog = new JScrollPane(LOG);
         JScrollPane scrollChat = new JScrollPane(CHAT);
         PANEL_LOG_AND_CHAT.add(scrollLog);
@@ -100,12 +157,70 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         PANEL_MAIN_CENTER.add(PANEL_CENTER_OF_CENTER);
         PANEL_MAIN_CENTER.add(WRAPPER_FOR_MAP_OF_OPPONENT);
 
+        LABEL_TURN.setFont(FONT_OF_TURN);
+        LABEL_MODE.setFont(FONT_OF_MODE);
+        LABEL_RECHARGE_VOLLEY.setFont(FONT_OF_RECHARGE);
+        LABEL_RECHARGE_EXPLORATION.setFont(FONT_OF_RECHARGE);
+        LABEL_RECHARGE_STRAIGHT.setFont(FONT_OF_RECHARGE);
+        LABEL_TURN.setHorizontalAlignment(SwingConstants.CENTER);
+        LABEL_MODE.setHorizontalAlignment(SwingConstants.CENTER);
+        LABEL_RECHARGE_VOLLEY.setHorizontalAlignment(SwingConstants.CENTER);
+        LABEL_RECHARGE_EXPLORATION.setHorizontalAlignment(SwingConstants.CENTER);
+        LABEL_RECHARGE_STRAIGHT.setHorizontalAlignment(SwingConstants.CENTER);
+        LABEL_MODE.setForeground(COLOR_FOR_LABEL_MODE);
+        LABEL_MODE.setBorder(BORDER_FOR_LABEL_MODE);
+        LABEL_RECHARGE_VOLLEY.setBorder(BORDER_FOR_LABEL_RECHARGE);
+        LABEL_RECHARGE_EXPLORATION.setBorder(BORDER_FOR_LABEL_RECHARGE);
+        LABEL_RECHARGE_STRAIGHT.setBorder(BORDER_FOR_LABEL_RECHARGE);
 
+        BUTTON_SEND.setFont(FONT_OF_BUTTON_BOTTOM);
+        BUTTON_INSTRUCTION.setFont(FONT_OF_BUTTON_INFO);
+        BUTTON_DEVELOPER_INFO.setFont(FONT_OF_BUTTON_INFO);
+        BUTTON_MODE_SIMPLE.setFont(FONT_OF_BUTTON_MODE);
+        BUTTON_MODE_VOLLEY.setFont(FONT_OF_BUTTON_MODE);
+        BUTTON_MODE_EXPLORATION.setFont(FONT_OF_BUTTON_MODE);
+        BUTTON_MODE_STRAIGHT.setFont(FONT_OF_BUTTON_MODE);
+        BUTTON_EXIT.setFont(FONT_OF_BUTTON_BOTTOM);
+
+        BUTTON_EXIT.setBackground(COLOR_FOR_EXIT);
+        BUTTON_MODE_SIMPLE.setBackground(COLOR_FOR_ACTIVE_MODE);
+        BUTTON_MODE_VOLLEY.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
+        BUTTON_MODE_EXPLORATION.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
+        BUTTON_MODE_STRAIGHT.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
 
         BUTTON_SEND.addActionListener(this);
+        BUTTON_INSTRUCTION.addActionListener(this);
+        BUTTON_DEVELOPER_INFO.addActionListener(this);
+        BUTTON_MODE_SIMPLE.addActionListener(this);
+        BUTTON_MODE_VOLLEY.addActionListener(this);
+        BUTTON_MODE_EXPLORATION.addActionListener(this);
+        BUTTON_MODE_STRAIGHT.addActionListener(this);
+        BUTTON_EXIT.addActionListener(this);
 
+        for(int i = 0; i< PANEL_MODE_TOP.length; i++) PANEL_MODE_TOP[i]=new JPanel(new BorderLayout());
+        PANEL_MODE_TOP[0].add(BUTTON_MODE_VOLLEY,BorderLayout.CENTER);
+        PANEL_MODE_TOP[0].add(LABEL_RECHARGE_VOLLEY,BorderLayout.SOUTH);
+        PANEL_MODE_TOP[1].add(BUTTON_MODE_EXPLORATION,BorderLayout.CENTER);
+        PANEL_MODE_TOP[1].add(LABEL_RECHARGE_EXPLORATION,BorderLayout.SOUTH);
+        PANEL_MODE_TOP[2].add(BUTTON_MODE_STRAIGHT,BorderLayout.CENTER);
+        PANEL_MODE_TOP[2].add(LABEL_RECHARGE_STRAIGHT,BorderLayout.SOUTH);
+        PANEL_INFO_TOP.add(BUTTON_INSTRUCTION);
+        PANEL_INFO_TOP.add(BUTTON_DEVELOPER_INFO);
+        PANEL_ACTION_MENU_TOP.add(PANEL_MODE_TOP[0]);
+        PANEL_ACTION_MENU_TOP.add(PANEL_MODE_TOP[1]);
+        PANEL_ACTION_MENU_TOP.add(PANEL_MODE_TOP[2]);
+        PANEL_ACTION_MENU_TOP.add(BUTTON_MODE_SIMPLE);
+        PANEL_ACTION_MENU_TOP.add(LABEL_MODE);
+        PANEL_MAIN_TOP.add(PANEL_INFO_TOP,BorderLayout.NORTH);
+        PANEL_MAIN_TOP.add(PANEL_ACTION_MENU_TOP,BorderLayout.CENTER);
+
+        PANEL_BOTTOM.add(BUTTON_EXIT,BorderLayout.WEST);
+        PANEL_BOTTOM.add(BUTTON_SEND,BorderLayout.EAST);
+        PANEL_BOTTOM.add(FIELD_FOR_CHAT_MESSAGE,BorderLayout.CENTER);
 
         add(PANEL_MAIN_CENTER,BorderLayout.CENTER);
+        add(PANEL_MAIN_TOP,BorderLayout.NORTH);
+        add(PANEL_BOTTOM,BorderLayout.SOUTH);
         setVisible(true);
 
     }
@@ -136,8 +251,41 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        if (source == BUTTON_SEND) {
-            listener.sendMessageToServer(LibraryOfPrefixes.getChatMessage(""));
+        if (source == BUTTON_SEND||source==FIELD_FOR_CHAT_MESSAGE) {
+            String message=FIELD_FOR_CHAT_MESSAGE.getText();
+            if(!message.equals("")) {
+
+                sendMessageIntoChat(message);
+
+            }
+            return;
+        }
+        if (source == BUTTON_INSTRUCTION) {
+
+            return;
+        }
+        if (source == BUTTON_DEVELOPER_INFO) {
+
+            return;
+        }
+        if (source == BUTTON_EXIT) {
+
+            return;
+        }
+        if (source == BUTTON_MODE_VOLLEY) {
+
+            return;
+        }
+        if (source == BUTTON_MODE_EXPLORATION) {
+
+            return;
+        }
+        if (source == BUTTON_MODE_STRAIGHT) {
+
+            return;
+        }
+        if (source == BUTTON_MODE_SIMPLE) {
+
             return;
         }
 
@@ -145,9 +293,15 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     public void setChatMessage(String message) {
-
+        CHAT.append(message+"\n");
     }
-
+    private void sendMessageIntoChat(String message) {
+        listener.sendMessageToServer(LibraryOfPrefixes.getChatMessage(message));
+        Date date = new Date();
+        CHAT.append(format("YOU(%tR):\n%s\n", date, message));
+        FIELD_FOR_CHAT_MESSAGE.setText("");
+        FIELD_FOR_CHAT_MESSAGE.grabFocus();
+    }
 
     private void showErrorMessage(String message) {
         JOptionPane.showMessageDialog(null, message, "ERROR", JOptionPane.ERROR_MESSAGE);

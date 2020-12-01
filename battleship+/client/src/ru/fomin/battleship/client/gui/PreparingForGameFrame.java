@@ -21,7 +21,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             "<br>6)If you have saved maps, you can download the map by clicking \"LOAD THE MAP\"<br>7)You can only start the game by placing all the ships. To start the game, click \"START\"" +
             "<br>8)There should be an empty space around each ship<br>9)The game has 4 single-deck, 3 double-deck, 2 three-deck and 1 four-deck ships" +
             "<br>10)When all the ships are placed, the button will change color and become active</html>";
-    private final String INFO_ABOUT_DEVELOPER = "<html>Developer: Dmitriy Fomin<br>GitHub: https://github.com/FominDV <br> Email: 79067773397@yandex.ru</html>";
+    static final String INFO_ABOUT_DEVELOPER = "<html>Developer: Dmitriy Fomin<br>GitHub: https://github.com/FominDV <br> Email: 79067773397@yandex.ru</html>";
     private final String START = "START";
     private final String REMOVE_MODE = "REMOVE MODE";
     private final String POST_MODE = "POST MODE";
