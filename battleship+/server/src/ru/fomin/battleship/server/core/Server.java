@@ -165,14 +165,20 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
                 putLog(client.getNickname() + " removed the \"" + arr[2] + "\" data");
                 break;
             case LibraryOfPrefixes.CHAT_MESSAGE:
-                findClientByNickname(client.getOpponentNickname()).sendMessage(LibraryOfPrefixes.getChatMessage(editChatMessage(arr[1], client.getNickname())));
+                sendMessageToOpponent(client,LibraryOfPrefixes.getChatMessage(editChatMessage(arr[1], client.getNickname())));
                 putLog(client.getNickname() + " send message to " + client.getOpponentNickname());
+                break;
+            case LibraryOfPrefixes.CHANGE_TURN:
+                sendMessageToOpponent(client,LibraryOfPrefixes.CHANGE_TURN);
+                putLog("Now the turn of " + client.getOpponentNickname());
                 break;
             default:
                 client.msgFormatError(msg);
         }
     }
-
+    private void sendMessageToOpponent(ClientThread client, String message){
+        findClientByNickname(client.getOpponentNickname()).sendMessage(message);
+    }
     private String editChatMessage(String message, String nickName) {
         Date date = new Date();
         return format("%s(%tR):\n%s", nickName, date, message);

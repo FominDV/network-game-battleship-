@@ -2,16 +2,14 @@ package ru.fomin.battleship.client.gui;
 
 import ru.fomin.battleship.client.client_core.WorkingWithNetwork;
 import ru.fomin.battleship.client.map.Cell;
-import ru.fomin.battleship.client.map.MapBuilder;
+import ru.fomin.battleship.client.map.OnlineGameMapBuilder;
 import ru.fomin.battleship.common.LibraryOfPrefixes;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
 
-import static java.lang.Math.random;
 import static java.lang.Thread.sleep;
 
 public class OnlineGameWindow extends JFrame implements ActionListener {
@@ -24,17 +22,26 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private String mapCodeOfUser;
     private final int SIZE_OF_MAP;
     private WorkingWithNetwork listener;
-    private MapBuilder mapBuilderOfUser;
-    private MapBuilder mapBuilderOfOpponent;
+    private OnlineGameMapBuilder mapBuilderOfUser;
+    private OnlineGameMapBuilder mapBuilderOfOpponent;
     private final int WIDTH = 1440;
     private final int HEIGHT = 800;
 
     private final JPanel WRAPPER_FOR_MAP_OF_USER = new JPanel(new GridBagLayout());
     private final JPanel WRAPPER_FOR_MAP_OF_OPPONENT = new JPanel(new GridBagLayout());
-    private JPanel PANEL_MAP_OF_USER;
-    private JPanel PANEL_MAP_OF_OPPONENT;
+    private JPanel panelMapOfUser;
+    private JPanel panelMapOfOpponent;
+    private final JPanel PANEL_MAIN_CENTER=new JPanel(new BorderLayout());
+    private final JPanel PANEL_CENTER_OF_CENTER=new JPanel(new BorderLayout());
+    private final JPanel PANEL_LOG_AND_CHAT=new JPanel(new GridLayout(2,1));
+    private final JPanel WRAPPER_FOR_PANEL_MAIN_CENTER = new JPanel(new GridBagLayout());
+
+    private final JTextArea LOG = new JTextArea();
+    private final JTextArea CHAT = new JTextArea();
 
     private final JLabel LABEL_TURN = new JLabel(TEXT_TURN_OF_OPPONENT);
+
+    private final Font FONT_OF_TURN = new Font(Font.SERIF, Font.BOLD, 24);
 
     JButton BUTTON_SEND = new JButton("SEND MESSAGE");
 
@@ -58,19 +65,39 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         WRAPPER_FOR_MAP_OF_USER.setSize(wrapperSize, wrapperSize);
         WRAPPER_FOR_MAP_OF_OPPONENT.setSize(wrapperSize, wrapperSize);
         int sizeOfPanelMap = SIZE_OF_MAP + 1;
-        PANEL_MAP_OF_USER = new JPanel(new GridLayout(sizeOfPanelMap, sizeOfPanelMap));
-        PANEL_MAP_OF_OPPONENT = new JPanel(new GridLayout(sizeOfPanelMap, sizeOfPanelMap));
-        mapBuilderOfUser = new MapBuilder(fillMap(PANEL_MAP_OF_USER), this);
-        mapBuilderOfOpponent = new MapBuilder(fillMap(PANEL_MAP_OF_OPPONENT), this);
+        panelMapOfUser = new JPanel(new GridLayout(sizeOfPanelMap, sizeOfPanelMap));
+        panelMapOfOpponent = new JPanel(new GridLayout(sizeOfPanelMap, sizeOfPanelMap));
+        mapBuilderOfUser = new OnlineGameMapBuilder(fillMap(panelMapOfUser), this);
+        mapBuilderOfOpponent = new OnlineGameMapBuilder(fillMap(panelMapOfOpponent), this);
         mapBuilderOfUser.loadMap(mapCodeOfUser);
-        WRAPPER_FOR_MAP_OF_USER.add(PANEL_MAP_OF_USER);
-        WRAPPER_FOR_MAP_OF_OPPONENT.add(PANEL_MAP_OF_OPPONENT);
+        WRAPPER_FOR_MAP_OF_USER.add(panelMapOfUser);
+        WRAPPER_FOR_MAP_OF_OPPONENT.add(panelMapOfOpponent);
+
+        LABEL_TURN.setFont(FONT_OF_TURN);
+        LABEL_TURN.setHorizontalAlignment(SwingConstants.CENTER);
+        LOG.setEditable(false);
+        LOG.setLineWrap(true);
+        LOG.setWrapStyleWord(true);
+        CHAT.setEditable(false);
+        CHAT.setLineWrap(true);
+        CHAT.setWrapStyleWord(true);
+        JScrollPane scrollLog = new JScrollPane(LOG);
+        JScrollPane scrollChat = new JScrollPane(CHAT);
+        PANEL_LOG_AND_CHAT.add(scrollLog);
+        PANEL_LOG_AND_CHAT.add(scrollChat);
+        PANEL_CENTER_OF_CENTER.add(LABEL_TURN,BorderLayout.NORTH);
+        PANEL_CENTER_OF_CENTER.add(PANEL_LOG_AND_CHAT,BorderLayout.CENTER);
+        WRAPPER_FOR_PANEL_MAIN_CENTER.setSize(1440,wrapperSize);
+        PANEL_MAIN_CENTER.add(WRAPPER_FOR_MAP_OF_USER,BorderLayout.WEST);
+        PANEL_MAIN_CENTER.add(PANEL_CENTER_OF_CENTER,BorderLayout.CENTER);
+        PANEL_MAIN_CENTER.add(WRAPPER_FOR_MAP_OF_OPPONENT,BorderLayout.EAST);
+        WRAPPER_FOR_PANEL_MAIN_CENTER.add(PANEL_MAIN_CENTER);
+
 
         BUTTON_SEND.addActionListener(this);
-        
-        add(WRAPPER_FOR_MAP_OF_USER, BorderLayout.WEST);
-        add(WRAPPER_FOR_MAP_OF_OPPONENT, BorderLayout.EAST);
 
+
+        add(WRAPPER_FOR_PANEL_MAIN_CENTER,BorderLayout.CENTER);
         setVisible(true);
 
     }
@@ -89,7 +116,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             number.setHorizontalAlignment(SwingConstants.CENTER);
             panelMap.add(number);
             for (int j = 0; j < map.length; j++) {
-                if (panelMap == PANEL_MAP_OF_USER) map[i][j] = new Cell(5, this, i, j, false);
+                if (panelMap == panelMapOfUser) map[i][j] = new Cell(5, this, i, j, false);
                 else map[i][j] = new Cell(1, this, i, j, true);
 
                 panelMap.add(map[i][j]);
@@ -136,6 +163,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         if (isTurnOfUser) {
             isTurnOfUser = false;
             LABEL_TURN.setText(TEXT_TURN_OF_OPPONENT);
+            listener.sendMessageToServer(LibraryOfPrefixes.CHANGE_TURN);
         } else {
             isTurnOfUser = true;
             LABEL_TURN.setText(TEXT_TURN_OF_USER);

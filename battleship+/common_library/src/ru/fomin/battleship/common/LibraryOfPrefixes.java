@@ -22,6 +22,7 @@ public class LibraryOfPrefixes {
     public static final String REMOVE_DATA ="/remove_data";
     public static final String CHAT_MESSAGE ="/chat_message";
     public static final String TURN ="/turn";
+    public static final String CHANGE_TURN = "/change_turn";
 
     public static String getAuthAccept(String nickname) {
         return AUTH_ACCEPT + DELIMITER + nickname;

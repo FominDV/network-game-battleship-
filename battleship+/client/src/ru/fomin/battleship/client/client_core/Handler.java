@@ -191,6 +191,9 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             case LibraryOfPrefixes.TURN:
                 onlineGameWindow.setTurnOfUser(arr[1]);
                 break;
+            case LibraryOfPrefixes.CHANGE_TURN:
+                onlineGameWindow.changeTurn();
+                break;
         }
     }
 

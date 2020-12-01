@@ -6,26 +6,24 @@ import ru.fomin.battleship.client.gui.PreparingForGameFrame;
 import java.util.Vector;
 
 public class MapBuilder {
-    private Cell[][] map;
+    protected Cell[][] map;
     private PreparingForGameFrame preparingForGameFrame;
-    private OnlineGameWindow onlineGameWindow;
-    private final int MAX_OF_SHIP4 = 1;
-    private final int MAX_OF_SHIP3 = 2;
-    private final int MAX_OF_SHIP2 = 3;
-    private final int MAX_OF_SHIP1 = 4;
-    private int count1Ship = 0;
-    private int count2Ship = 0;
-    private int count3Ship = 0;
-    private int count4Ship = 0;
-    private final String DELIMITER="x";
+    protected final int MAX_OF_SHIP4 = 1;
+    protected final int MAX_OF_SHIP3 = 2;
+    protected final int MAX_OF_SHIP2 = 3;
+    protected final int MAX_OF_SHIP1 = 4;
+    protected int count1Ship = 0;
+    protected int count2Ship = 0;
+    protected int count3Ship = 0;
+    protected int count4Ship = 0;
+    protected final String DELIMITER="x";
 
     public MapBuilder(Cell[][] map, PreparingForGameFrame preparingForGameFrame) {
         this.map = map;
         this.preparingForGameFrame = preparingForGameFrame;
     }
-    public MapBuilder(Cell[][] map, OnlineGameWindow onlineGameWindow) {
-        this.map = map;
-        this.onlineGameWindow=onlineGameWindow;
+
+    public MapBuilder() {
     }
 
     public void setCountOfShips() {
@@ -363,11 +361,5 @@ public class MapBuilder {
         setCountOfShips();
     }
 
-    public void clearTheMap() {
-        for(int i=0;i<map.length;i++){
-            for(int j=0;j<map.length;j++){
-                map[i][j].setImage(5);
-            }
-        }
-    }
+
 }
