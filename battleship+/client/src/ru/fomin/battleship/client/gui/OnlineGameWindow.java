@@ -6,6 +6,7 @@ import ru.fomin.battleship.client.map.OnlineGameMapBuilder;
 import ru.fomin.battleship.common.LibraryOfPrefixes;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,6 +27,9 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private OnlineGameMapBuilder mapBuilderOfOpponent;
     private final int WIDTH = 1440;
     private final int HEIGHT = 800;
+    private final Color  COLOR_FOR_BORDER=new Color(162, 191, 234, 52);
+    private final Border BORDER_FOR_LOG_AND_CHAT=BorderFactory.createLineBorder(COLOR_FOR_BORDER, 20);
+
 
     private final JPanel WRAPPER_FOR_MAP_OF_USER = new JPanel(new GridBagLayout());
     private final JPanel WRAPPER_FOR_MAP_OF_OPPONENT = new JPanel(new GridBagLayout());
@@ -34,7 +38,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final JPanel PANEL_MAIN_CENTER=new JPanel(new BorderLayout());
     private final JPanel PANEL_CENTER_OF_CENTER=new JPanel(new BorderLayout());
     private final JPanel PANEL_LOG_AND_CHAT=new JPanel(new GridLayout(2,1));
-    private final JPanel WRAPPER_FOR_PANEL_MAIN_CENTER = new JPanel(new GridBagLayout());
+
 
     private final JTextArea LOG = new JTextArea();
     private final JTextArea CHAT = new JTextArea();
@@ -44,6 +48,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final Font FONT_OF_TURN = new Font(Font.SERIF, Font.BOLD, 24);
 
     JButton BUTTON_SEND = new JButton("SEND MESSAGE");
+
 
     public OnlineGameWindow(String opponentNickname, String nickName, String mapCodeOfUser, WorkingWithNetwork listener, int sizeOfMap) {
         this.opponentNickname = opponentNickname;
@@ -81,23 +86,26 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         CHAT.setEditable(false);
         CHAT.setLineWrap(true);
         CHAT.setWrapStyleWord(true);
+        LOG.setBorder(BORDER_FOR_LOG_AND_CHAT);
+        CHAT.setBorder(BORDER_FOR_LOG_AND_CHAT);
         JScrollPane scrollLog = new JScrollPane(LOG);
         JScrollPane scrollChat = new JScrollPane(CHAT);
         PANEL_LOG_AND_CHAT.add(scrollLog);
         PANEL_LOG_AND_CHAT.add(scrollChat);
         PANEL_CENTER_OF_CENTER.add(LABEL_TURN,BorderLayout.NORTH);
         PANEL_CENTER_OF_CENTER.add(PANEL_LOG_AND_CHAT,BorderLayout.CENTER);
-        WRAPPER_FOR_PANEL_MAIN_CENTER.setSize(1440,wrapperSize);
+        PANEL_CENTER_OF_CENTER.setMaximumSize(new Dimension(wrapperSize,wrapperSize-50));
+
         PANEL_MAIN_CENTER.add(WRAPPER_FOR_MAP_OF_USER,BorderLayout.WEST);
         PANEL_MAIN_CENTER.add(PANEL_CENTER_OF_CENTER,BorderLayout.CENTER);
         PANEL_MAIN_CENTER.add(WRAPPER_FOR_MAP_OF_OPPONENT,BorderLayout.EAST);
-        WRAPPER_FOR_PANEL_MAIN_CENTER.add(PANEL_MAIN_CENTER);
+
 
 
         BUTTON_SEND.addActionListener(this);
 
 
-        add(WRAPPER_FOR_PANEL_MAIN_CENTER,BorderLayout.CENTER);
+        add(PANEL_MAIN_CENTER,BorderLayout.CENTER);
         setVisible(true);
 
     }
