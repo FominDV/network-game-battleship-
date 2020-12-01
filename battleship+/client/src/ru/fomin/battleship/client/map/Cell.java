@@ -5,18 +5,16 @@ import ru.fomin.battleship.client.gui.PreparingForGameFrame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Cell extends JButton {
     /*Status:
-     * 0-unknown cell/sea
-     * 1-empty cell after shoot
+     * 1-unknown cell
      * 2-wounded
      * 3-dead
      * 4-preparing for posting ships
      * 5-known cell free
      * 6-known cell with ship*/
+    private boolean isActive;
     private int status;
     private final int X;
     private final int Y;
@@ -28,20 +26,22 @@ public class Cell extends JButton {
         setMargin(new Insets(0, 0, 0, 0));
         this.status = status;
         this.preparingForGameFrame = preparingForGameFrame;
-        X=x;
-        Y=y;
+        X = x;
+        Y = y;
         setImage(status);
         addActionListener(e -> {
             actionClick();
         });
     }
-    public Cell(int status, OnlineGameWindow onlineGameWindow, int x, int y) {
+
+    public Cell(int status, OnlineGameWindow onlineGameWindow, int x, int y, boolean isActive) {
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         setMargin(new Insets(0, 0, 0, 0));
         this.status = status;
-        this.onlineGameWindow=onlineGameWindow;
-        X=x;
-        Y=y;
+        this.onlineGameWindow = onlineGameWindow;
+        X = x;
+        Y = y;
+        this.isActive = isActive;
         setImage(status);
         addActionListener(e -> {
             actionClick();
@@ -49,20 +49,22 @@ public class Cell extends JButton {
     }
 
     private void actionClick() {
-        if(preparingForGameFrame!=null) {
+        if (preparingForGameFrame != null) {
             if (preparingForGameFrame.validCellForPreparingPost(X, Y)) {
                 setImage(4);
             }
             if (!preparingForGameFrame.getMode()) preparingForGameFrame.remove(X, Y);
         }
-        if(onlineGameWindow!=null){
-
+        if (onlineGameWindow != null && isActive && onlineGameWindow.getTurnOfUser()) {
+            onlineGameWindow.changeTurn();
         }
     }
 
     public void setImage(int status) {
         switch (status) {
             case 1:
+                this.status=1;
+                setIcon(new ImageIcon(getClass().getResource("../img/seaUnknown.png")));
                 break;
             case 2:
                 break;
@@ -78,7 +80,7 @@ public class Cell extends JButton {
                 setIcon(new ImageIcon(getClass().getResource("../img/sea.png")));
                 break;
             case 6:
-                this.status=6;
+                this.status = 6;
                 break;
             case 11:
                 setIcon(new ImageIcon(getClass().getResource("../img/ship1.png")));

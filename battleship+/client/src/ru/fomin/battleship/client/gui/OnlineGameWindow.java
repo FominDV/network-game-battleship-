@@ -9,10 +9,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
+import static java.lang.Math.random;
 import static java.lang.Thread.sleep;
 
 public class OnlineGameWindow extends JFrame implements ActionListener {
+    private final String TEXT_TURN_OF_USER = "YOUR TURN";
+    private final String TEXT_TURN_OF_OPPONENT = "TURN OF OPPONENT";
+
+    private boolean isTurnOfUser = false;
     private final String opponentNickname;
     private final String NICK_NAME;
     private String mapCodeOfUser;
@@ -20,13 +26,15 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private WorkingWithNetwork listener;
     private MapBuilder mapBuilderOfUser;
     private MapBuilder mapBuilderOfOpponent;
-    private final int WIDTH = 1600;
+    private final int WIDTH = 1440;
     private final int HEIGHT = 800;
 
     private final JPanel WRAPPER_FOR_MAP_OF_USER = new JPanel(new GridBagLayout());
     private final JPanel WRAPPER_FOR_MAP_OF_OPPONENT = new JPanel(new GridBagLayout());
     private JPanel PANEL_MAP_OF_USER;
     private JPanel PANEL_MAP_OF_OPPONENT;
+
+    private final JLabel LABEL_TURN = new JLabel(TEXT_TURN_OF_OPPONENT);
 
     JButton BUTTON_SEND = new JButton("SEND MESSAGE");
 
@@ -38,7 +46,6 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         SIZE_OF_MAP = sizeOfMap;
         SwingUtilities.invokeLater(() -> initialization());
     }
-
 
 
     private void initialization() {
@@ -60,7 +67,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         WRAPPER_FOR_MAP_OF_OPPONENT.add(PANEL_MAP_OF_OPPONENT);
 
         BUTTON_SEND.addActionListener(this);
-
+        
         add(WRAPPER_FOR_MAP_OF_USER, BorderLayout.WEST);
         add(WRAPPER_FOR_MAP_OF_OPPONENT, BorderLayout.EAST);
 
@@ -78,11 +85,13 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         }
         Cell[][] map = new Cell[SIZE_OF_MAP][SIZE_OF_MAP];
         for (int i = 0; i < map.length; i++) {
-            JLabel number = new JLabel((String.valueOf(i+1)));
+            JLabel number = new JLabel((String.valueOf(i + 1)));
             number.setHorizontalAlignment(SwingConstants.CENTER);
             panelMap.add(number);
             for (int j = 0; j < map.length; j++) {
-                map[i][j] = new Cell(5, this, i, j);
+                if (panelMap == PANEL_MAP_OF_USER) map[i][j] = new Cell(5, this, i, j, false);
+                else map[i][j] = new Cell(1, this, i, j, true);
+
                 panelMap.add(map[i][j]);
             }
         }
@@ -105,9 +114,31 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
 
+    private void showErrorMessage(String message) {
+        JOptionPane.showMessageDialog(null, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+    }
 
+    public boolean getTurnOfUser() {
+        return isTurnOfUser;
+    }
 
-    private void showErrorMessage(String message){
-        JOptionPane.showMessageDialog(null,message,"ERROR",JOptionPane.ERROR_MESSAGE);
+    public void setTurnOfUser(String codeNumberOfTurn) {
+        if (codeNumberOfTurn.equals("1")) {
+            isTurnOfUser = true;
+            LABEL_TURN.setText(TEXT_TURN_OF_USER);
+        } else {
+            isTurnOfUser = false;
+            LABEL_TURN.setText(TEXT_TURN_OF_OPPONENT);
+        }
+    }
+
+    public void changeTurn() {
+        if (isTurnOfUser) {
+            isTurnOfUser = false;
+            LABEL_TURN.setText(TEXT_TURN_OF_OPPONENT);
+        } else {
+            isTurnOfUser = true;
+            LABEL_TURN.setText(TEXT_TURN_OF_USER);
+        }
     }
 }

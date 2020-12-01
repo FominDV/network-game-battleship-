@@ -12,11 +12,14 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.Vector;
 
+import static java.lang.Math.random;
 import static java.lang.String.format;
 
 public class Server implements ServerSocketThreadListener, SocketThreadListener {
+    private final Random RANDOM = new Random();
     private final DateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss: ");
     private final ServerListener listener;
     private ServerSocketThread thread;
@@ -101,8 +104,8 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
         if (otherClient != null) {
             otherClient.sendMessage(LibraryOfPrefixes.DISCONNECT_OPPONENT);
             otherClient.setStopSearchingOpponent();
-            putLog("Connection with "+client.getNickname()+" was lost");
-            putLog(client.getNickname()+" was disconnected with "+otherClient.getNickname());
+            putLog("Connection with " + client.getNickname() + " was lost");
+            putLog(client.getNickname() + " was disconnected with " + otherClient.getNickname());
         }
         putLog("Socket stopped");
     }
@@ -163,14 +166,14 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
                 break;
             case LibraryOfPrefixes.CHAT_MESSAGE:
                 findClientByNickname(client.getOpponentNickname()).sendMessage(LibraryOfPrefixes.getChatMessage(editChatMessage(arr[1], client.getNickname())));
-                putLog(client.getNickname() +" send message to "+client.getOpponentNickname());
+                putLog(client.getNickname() + " send message to " + client.getOpponentNickname());
                 break;
             default:
                 client.msgFormatError(msg);
         }
     }
 
-    private String editChatMessage(String message, String nickName){
+    private String editChatMessage(String message, String nickName) {
         Date date = new Date();
         return format("%s(%tR):\n%s", nickName, date, message);
     }
@@ -184,8 +187,23 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
                 client.sendMessage(LibraryOfPrefixes.getSearchOpponent(((ClientThread) searchingClient).getNickname()));
                 searchingClient.sendMessage((LibraryOfPrefixes.getSearchOpponent(client.getNickname())));
                 putLog(client.getNickname() + " connected with " + ((ClientThread) searchingClient).getNickname());
+                if (turnOfClient()) {
+                    client.sendMessage(LibraryOfPrefixes.getTurnMessage(1));
+                    searchingClient.sendMessage(LibraryOfPrefixes.getTurnMessage(0));
+                    putLog(client.getNickname() + " get the first turn");
+                } else {
+                    client.sendMessage(LibraryOfPrefixes.getTurnMessage(0));
+                    searchingClient.sendMessage(LibraryOfPrefixes.getTurnMessage(1));
+                    putLog(((ClientThread)searchingClient).getNickname() + " get the first turn");
+                }
             }
         }
+    }
+
+    private boolean turnOfClient() {
+
+        if (random()>0.5) return true;
+        else return false;
     }
 
     private void handleNonAuthMessage(ClientThread client, String msg) {

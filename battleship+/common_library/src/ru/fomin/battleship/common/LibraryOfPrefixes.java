@@ -21,6 +21,7 @@ public class LibraryOfPrefixes {
     public static final String DUPLICATE_NAME ="/duplicate_name";
     public static final String REMOVE_DATA ="/remove_data";
     public static final String CHAT_MESSAGE ="/chat_message";
+    public static final String TURN ="/turn";
 
     public static String getAuthAccept(String nickname) {
         return AUTH_ACCEPT + DELIMITER + nickname;
@@ -66,6 +67,9 @@ public class LibraryOfPrefixes {
     }
     public static String getChatMessage(String message) {
         return CHAT_MESSAGE+DELIMITER+message;
+    }
+    public static String getTurnMessage(int number) {
+        return TURN+DELIMITER+number;
     }
 
 }
