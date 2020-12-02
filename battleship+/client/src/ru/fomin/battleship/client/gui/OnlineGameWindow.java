@@ -274,29 +274,29 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     public void appendIntoLog(String message){
-        LOG.setText(message);
+        LOG.append(message);
     }
 
     public void appendIntoLog(String message, boolean isActionAgain) {
-        message=NICK_NAME + ":\n*Used mode of " + createMessageAboutMode()+"\n"+message+"\n*"+createMessageAboutNextTurn(isActionAgain);
-      LOG.setText(message);
+        message=NICK_NAME + ":\n*Used mode of " + createMessageAboutMode()+"\n"+message+"\n*"+createMessageAboutNextTurn(isActionAgain)+"\n";
+      LOG.append(message);
       listener.sendMessageToServer(LibraryOfPrefixes.getLogMessage(message));
     }
 
     private String createMessageAboutNextTurn(boolean isActionAgain){
-        if(isActionAgain) return "Can action again\n"; else return "";
+        if(isActionAgain) return "Can action again"; else return "End game turn";
     }
 
     private String createMessageAboutMode() {
         switch (pastMode){
             case 0:
-                return format("'simple shoot' (%s;%s)",pastUsingCellForActionCoordinates[0],pastUsingCellForActionCoordinates[1]);
+                return format("'simple shoot' (%s;%s)",pastUsingCellForActionCoordinates[0]+1,pastUsingCellForActionCoordinates[1]+1);
             case 1:
-                return format("'volley shoot' (%s;%s)",pastUsingCellForActionCoordinates[0],pastUsingCellForActionCoordinates[1]);
+                return format("'volley shoot' (%s;%s)",pastUsingCellForActionCoordinates[0]+1,pastUsingCellForActionCoordinates[1]+1);
             case 2:
-                return format("'exploration of the map' (%s;%s)",pastUsingCellForActionCoordinates[0],pastUsingCellForActionCoordinates[1]);
+                return format("'exploration of the map' (%s;%s)",pastUsingCellForActionCoordinates[0]+1,pastUsingCellForActionCoordinates[1]+1);
             case 3:
-                return format("'shooting on straight' (%s;%s)",pastUsingCellForActionCoordinates[0],pastUsingCellForActionCoordinates[1]);
+                return format("'shooting on straight' (%s;%s)",pastUsingCellForActionCoordinates[0]+1,pastUsingCellForActionCoordinates[1]+1);
             default:
                 return "";
         }
