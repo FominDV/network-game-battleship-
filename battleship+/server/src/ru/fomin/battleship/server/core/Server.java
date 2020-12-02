@@ -183,6 +183,10 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
             case LibraryOfPrefixes.CODE_OF_RESULT_TURN:
                 sendMessageToOpponent(client,LibraryOfPrefixes.getCodeResultOfTurn(arr[1]));
                 break;
+            case LibraryOfPrefixes.LOG_MESSAGE:
+                sendMessageToOpponent(client,LibraryOfPrefixes.getLogMessage(arr[1]));
+                putLog(arr[1]);
+                break;
             default:
                 client.msgFormatError(msg);
         }

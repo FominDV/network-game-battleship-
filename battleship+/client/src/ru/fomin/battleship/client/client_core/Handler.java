@@ -208,6 +208,9 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             case LibraryOfPrefixes.CODE_OF_RESULT_TURN:
                 onlineGameWindow.processDataOfResultTurn(arr[1]);
                 break;
+            case LibraryOfPrefixes.LOG_MESSAGE:
+                onlineGameWindow.appendIntoLog(arr[1]);
+                break;
         }
     }
 

@@ -6,6 +6,7 @@ import java.util.Vector;
 
 public class OnlineGameMapBuilder extends MapBuilder {
     private OnlineGameWindow onlineGameWindow;
+    private String messageForLog;
     public OnlineGameMapBuilder(Cell[][] map, OnlineGameWindow onlineGameWindow) {
         this.map = map;
         this.onlineGameWindow = onlineGameWindow;
@@ -67,8 +68,9 @@ public class OnlineGameMapBuilder extends MapBuilder {
     }
 
     public void processDataOfResultTurn(String codeOfResultTurn) {
+        messageForLog="";
         boolean isDamageOrDestroy = false;
-        int[] lastUsingCellForActionCoordinates=onlineGameWindow.getLastUsingCellForActionCoordinates();
+        int[] lastUsingCellForActionCoordinates=onlineGameWindow.getPastUsingCellForActionCoordinates();
         String[] codeElements=codeOfResultTurn.split(delimiter);
         int[] codeIntegerElements=new int[codeElements.length];
         for(int i =0;i<codeElements.length;i++){
@@ -81,8 +83,10 @@ public class OnlineGameMapBuilder extends MapBuilder {
         }
         if(isDamageOrDestroy&&onlineGameWindow.getPastMode()==0){
             onlineGameWindow.changeTurn();
+            onlineGameWindow.appendIntoLog(messageForLog, true);
         }else{
             onlineGameWindow.sendMessageAboutChangeTurn();
+            onlineGameWindow.appendIntoLog(messageForLog, false);
         }
     }
 

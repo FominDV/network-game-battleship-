@@ -59,7 +59,7 @@ public class Cell extends JButton {
         if (onlineGameWindow != null && isActive && onlineGameWindow.getTurnOfUser()) {
             onlineGameWindow.changeTurn();
             onlineGameWindow.changePastMode();
-            onlineGameWindow.setLastUsingCellForActionCoordinates(new int[]{X,Y});
+            onlineGameWindow.setPastUsingCellForActionCoordinates(new int[]{X,Y});
             /*Last symbol in codeOfGameTurn means:
             * 0-shooting
             * 1-exploration*/

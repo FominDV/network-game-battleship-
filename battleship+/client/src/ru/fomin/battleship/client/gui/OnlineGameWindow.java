@@ -20,17 +20,17 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
      * 1-volley shoot
      * 2-exploration of the map
      * 3-shooting on straight*/
-    private int modeStatus=0;
+    private int modeStatus = 0;
     private int pastMode;
-    private int[] lastUsingCellForActionCoordinates=new int[2];
-    private final int TURNS_FOR_VOLLEY=4;
-    private final int TURNS_FOR_EXPLORATION=3;
-    private final int TURNS_FOR_STRAIGHT_SHOOTING=2;
-    private int rechargeForVolley=0;
-    private int rechargeForExploration=0;
-    private int rechargeForStraightShooting=0;
+    private int[] pastUsingCellForActionCoordinates = new int[2];
+    private final int TURNS_FOR_VOLLEY = 4;
+    private final int TURNS_FOR_EXPLORATION = 3;
+    private final int TURNS_FOR_STRAIGHT_SHOOTING = 2;
+    private int rechargeForVolley = 0;
+    private int rechargeForExploration = 0;
+    private int rechargeForStraightShooting = 0;
 
-    private final String INSTRUCTION="<html>1)For win you should destroy all ships of opponent<br>" +
+    private final String INSTRUCTION = "<html>1)For win you should destroy all ships of opponent<br>" +
             "2)Before making any action, you should choose the mode of action<br>" +
             "3)You can select the action mode by pressing the buttons on the top panel<br>" +
             "4)Modes of the volley shoot, exploration of the map and shooting on straight should be recharged for selecting it<br>" +
@@ -45,9 +45,9 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             "12)By using mode of volley shoot any random cells can be already shot before<br>" +
             "13)By using mode of shooting on straight if random straight have not two unknown cells," +
             " another straight will be selected. If two straights have not two unknown cells, only one or zero cells will be shot<br>" +
-            "14)For recharge of volley shoot "+TURNS_FOR_VOLLEY+" game turns is needed<br>" +
-            "15)For recharge of exploration of the map "+TURNS_FOR_EXPLORATION+" game turns is needed<br>" +
-            "16)For recharge of shooting on straight "+TURNS_FOR_STRAIGHT_SHOOTING+" game turns is needed<br>" +
+            "14)For recharge of volley shoot " + TURNS_FOR_VOLLEY + " game turns is needed<br>" +
+            "15)For recharge of exploration of the map " + TURNS_FOR_EXPLORATION + " game turns is needed<br>" +
+            "16)For recharge of shooting on straight " + TURNS_FOR_STRAIGHT_SHOOTING + " game turns is needed<br>" +
             "17)If you lose a four-deck ship, you can no longer use the mode of volley shoot<br>" +
             "18)If you lose a three-deck ship recharge of the mode of exploration of the map will be increased on two game turns<br>" +
             "19)If you lose all three-deck ships, you can no longer use the mode of exploration of the map<br>" +
@@ -62,8 +62,8 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final String TEXT_MODE_VOLLEY_SHOOT = "<html><p align='center'>MODE:<br>VOLLEY SHOOT</p></html>";
     private final String TEXT_MODE_EXPLORATION = "<html><p align='center'>MODE:<br>EXPLORATION OF THE MAP</p></html>";
     private final String TEXT_MODE_STRAIGHT_SHOOTING = "<html><p align='center'>MODE:<br>SHOOTING ON STRAIGHT</p></html>";
-    private final String TEXT_RECHARGE1="recharge in ";
-    private final String TEXT_RECHARGE2=" turns";
+    private final String TEXT_RECHARGE1 = "recharge in ";
+    private final String TEXT_RECHARGE2 = " turns";
 
 
     private boolean isTurnOfUser = false;
@@ -77,41 +77,41 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final int WIDTH = 1440;
     private final int HEIGHT = 750;
 
-    private final Color COLOR_FOR_BORDER_LOG =new Color(162, 191, 234, 52);
-    private final Color  COLOR_FOR_ACTIVE_MODE=new Color(57, 205, 41, 173);
-    private final Color  COLOR_FOR_NO_ACTIVE_MODE=new Color(215, 34, 34, 233);
-    private final Color  COLOR_FOR_EXIT=new Color(241, 83, 83, 233);
-    private final Color  COLOR_FOR_LABEL_MODE=new Color(106, 4, 10, 191);
-    private final Color  COLOR_FOR_BORDER_MODE=new Color(1, 23, 95, 233);
+    private final Color COLOR_FOR_BORDER_LOG = new Color(162, 191, 234, 52);
+    private final Color COLOR_FOR_ACTIVE_MODE = new Color(57, 205, 41, 173);
+    private final Color COLOR_FOR_NO_ACTIVE_MODE = new Color(215, 34, 34, 233);
+    private final Color COLOR_FOR_EXIT = new Color(241, 83, 83, 233);
+    private final Color COLOR_FOR_LABEL_MODE = new Color(106, 4, 10, 191);
+    private final Color COLOR_FOR_BORDER_MODE = new Color(1, 23, 95, 233);
 
-    private final Border BORDER_FOR_LOG_AND_CHAT=BorderFactory.createLineBorder(COLOR_FOR_BORDER_LOG, 20);
-    private final Border BORDER_FOR_LABEL_MODE=BorderFactory.createLineBorder(COLOR_FOR_BORDER_MODE, 10);
-    private final Border BORDER_FOR_LABEL_RECHARGE=BorderFactory.createLineBorder(COLOR_FOR_NO_ACTIVE_MODE, 8);
+    private final Border BORDER_FOR_LOG_AND_CHAT = BorderFactory.createLineBorder(COLOR_FOR_BORDER_LOG, 20);
+    private final Border BORDER_FOR_LABEL_MODE = BorderFactory.createLineBorder(COLOR_FOR_BORDER_MODE, 10);
+    private final Border BORDER_FOR_LABEL_RECHARGE = BorderFactory.createLineBorder(COLOR_FOR_NO_ACTIVE_MODE, 8);
 
 
     private final JPanel WRAPPER_FOR_MAP_OF_USER = new JPanel(new GridBagLayout());
     private final JPanel WRAPPER_FOR_MAP_OF_OPPONENT = new JPanel(new GridBagLayout());
     private JPanel panelMapOfUser;
     private JPanel panelMapOfOpponent;
-    private final JPanel PANEL_MAIN_CENTER=new JPanel(new FlowLayout());
-    private final JPanel PANEL_CENTER_OF_CENTER=new JPanel(new BorderLayout());
-    private final JPanel PANEL_LOG_AND_CHAT=new JPanel(new GridLayout(2,1));
-    private final JPanel PANEL_MAIN_TOP=new JPanel(new BorderLayout());
-    private final JPanel PANEL_INFO_TOP=new JPanel(new GridLayout(1,2));
-    private final JPanel PANEL_ACTION_MENU_TOP=new JPanel(new GridLayout(1,5));
-    private final JPanel[] PANEL_MODE_TOP =new JPanel[3];
-    private final JPanel PANEL_BOTTOM=new JPanel(new BorderLayout());
+    private final JPanel PANEL_MAIN_CENTER = new JPanel(new FlowLayout());
+    private final JPanel PANEL_CENTER_OF_CENTER = new JPanel(new BorderLayout());
+    private final JPanel PANEL_LOG_AND_CHAT = new JPanel(new GridLayout(2, 1));
+    private final JPanel PANEL_MAIN_TOP = new JPanel(new BorderLayout());
+    private final JPanel PANEL_INFO_TOP = new JPanel(new GridLayout(1, 2));
+    private final JPanel PANEL_ACTION_MENU_TOP = new JPanel(new GridLayout(1, 5));
+    private final JPanel[] PANEL_MODE_TOP = new JPanel[3];
+    private final JPanel PANEL_BOTTOM = new JPanel(new BorderLayout());
 
 
     private final JTextArea LOG = new JTextArea();
     private final JTextArea CHAT = new JTextArea();
-    private final JTextField FIELD_FOR_CHAT_MESSAGE=new JTextField();
+    private final JTextField FIELD_FOR_CHAT_MESSAGE = new JTextField();
 
     private final JLabel LABEL_TURN = new JLabel(TEXT_TURN_OF_OPPONENT);
     private final JLabel LABEL_MODE = new JLabel(TEXT_MODE_SIMPLE_SHOOT);
-    private final JLabel LABEL_RECHARGE_VOLLEY = new JLabel(TEXT_RECHARGE1+(TURNS_FOR_VOLLEY-rechargeForVolley)+TEXT_RECHARGE2);
-    private final JLabel LABEL_RECHARGE_EXPLORATION = new JLabel(TEXT_RECHARGE1+(TURNS_FOR_EXPLORATION-rechargeForExploration)+TEXT_RECHARGE2);
-    private final JLabel LABEL_RECHARGE_STRAIGHT = new JLabel(TEXT_RECHARGE1+(TURNS_FOR_STRAIGHT_SHOOTING-rechargeForStraightShooting)+TEXT_RECHARGE2);
+    private final JLabel LABEL_RECHARGE_VOLLEY = new JLabel(TEXT_RECHARGE1 + (TURNS_FOR_VOLLEY - rechargeForVolley) + TEXT_RECHARGE2);
+    private final JLabel LABEL_RECHARGE_EXPLORATION = new JLabel(TEXT_RECHARGE1 + (TURNS_FOR_EXPLORATION - rechargeForExploration) + TEXT_RECHARGE2);
+    private final JLabel LABEL_RECHARGE_STRAIGHT = new JLabel(TEXT_RECHARGE1 + (TURNS_FOR_STRAIGHT_SHOOTING - rechargeForStraightShooting) + TEXT_RECHARGE2);
 
     private final Font FONT_OF_TURN = new Font(Font.SERIF, Font.BOLD, 24);
     private final Font FONT_OF_MODE = new Font(Font.SERIF, Font.BOLD, 26);
@@ -130,7 +130,6 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final JButton BUTTON_MODE_EXPLORATION = new JButton("<html>EXPLORATION<br>OF THE MAP</html>");
     private final JButton BUTTON_MODE_STRAIGHT = new JButton("<html>SHOOTING<br>ON STRAIGHT</html>");
     private final JButton BUTTON_EXIT = new JButton("EXIT");
-
 
 
     public OnlineGameWindow(String opponentNickname, String nickName, String mapCodeOfUser, WorkingWithNetwork listener, int sizeOfMap) {
@@ -178,10 +177,10 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         scrollChat.setBorder(BORDER_FOR_LOG_AND_CHAT);
         PANEL_LOG_AND_CHAT.add(scrollLog);
         PANEL_LOG_AND_CHAT.add(scrollChat);
-        PANEL_CENTER_OF_CENTER.setPreferredSize(new Dimension(wrapperSize-150,wrapperSize));
-        PANEL_CENTER_OF_CENTER.add(LABEL_TURN,BorderLayout.NORTH);
-        PANEL_CENTER_OF_CENTER.add(PANEL_LOG_AND_CHAT,BorderLayout.CENTER);
-        PANEL_CENTER_OF_CENTER.setMaximumSize(new Dimension(wrapperSize,wrapperSize-50));
+        PANEL_CENTER_OF_CENTER.setPreferredSize(new Dimension(wrapperSize - 150, wrapperSize));
+        PANEL_CENTER_OF_CENTER.add(LABEL_TURN, BorderLayout.NORTH);
+        PANEL_CENTER_OF_CENTER.add(PANEL_LOG_AND_CHAT, BorderLayout.CENTER);
+        PANEL_CENTER_OF_CENTER.setMaximumSize(new Dimension(wrapperSize, wrapperSize - 50));
         PANEL_MAIN_CENTER.add(WRAPPER_FOR_MAP_OF_USER);
         PANEL_MAIN_CENTER.add(PANEL_CENTER_OF_CENTER);
         PANEL_MAIN_CENTER.add(WRAPPER_FOR_MAP_OF_OPPONENT);
@@ -226,13 +225,13 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         BUTTON_MODE_STRAIGHT.addActionListener(this);
         BUTTON_EXIT.addActionListener(this);
 
-        for(int i = 0; i< PANEL_MODE_TOP.length; i++) PANEL_MODE_TOP[i]=new JPanel(new BorderLayout());
-        PANEL_MODE_TOP[0].add(BUTTON_MODE_VOLLEY,BorderLayout.CENTER);
-        PANEL_MODE_TOP[0].add(LABEL_RECHARGE_VOLLEY,BorderLayout.SOUTH);
-        PANEL_MODE_TOP[1].add(BUTTON_MODE_EXPLORATION,BorderLayout.CENTER);
-        PANEL_MODE_TOP[1].add(LABEL_RECHARGE_EXPLORATION,BorderLayout.SOUTH);
-        PANEL_MODE_TOP[2].add(BUTTON_MODE_STRAIGHT,BorderLayout.CENTER);
-        PANEL_MODE_TOP[2].add(LABEL_RECHARGE_STRAIGHT,BorderLayout.SOUTH);
+        for (int i = 0; i < PANEL_MODE_TOP.length; i++) PANEL_MODE_TOP[i] = new JPanel(new BorderLayout());
+        PANEL_MODE_TOP[0].add(BUTTON_MODE_VOLLEY, BorderLayout.CENTER);
+        PANEL_MODE_TOP[0].add(LABEL_RECHARGE_VOLLEY, BorderLayout.SOUTH);
+        PANEL_MODE_TOP[1].add(BUTTON_MODE_EXPLORATION, BorderLayout.CENTER);
+        PANEL_MODE_TOP[1].add(LABEL_RECHARGE_EXPLORATION, BorderLayout.SOUTH);
+        PANEL_MODE_TOP[2].add(BUTTON_MODE_STRAIGHT, BorderLayout.CENTER);
+        PANEL_MODE_TOP[2].add(LABEL_RECHARGE_STRAIGHT, BorderLayout.SOUTH);
         PANEL_INFO_TOP.add(BUTTON_INSTRUCTION);
         PANEL_INFO_TOP.add(BUTTON_DEVELOPER_INFO);
         PANEL_ACTION_MENU_TOP.add(PANEL_MODE_TOP[0]);
@@ -240,33 +239,67 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         PANEL_ACTION_MENU_TOP.add(PANEL_MODE_TOP[2]);
         PANEL_ACTION_MENU_TOP.add(BUTTON_MODE_SIMPLE);
         PANEL_ACTION_MENU_TOP.add(LABEL_MODE);
-        PANEL_MAIN_TOP.add(PANEL_INFO_TOP,BorderLayout.NORTH);
-        PANEL_MAIN_TOP.add(PANEL_ACTION_MENU_TOP,BorderLayout.CENTER);
+        PANEL_MAIN_TOP.add(PANEL_INFO_TOP, BorderLayout.NORTH);
+        PANEL_MAIN_TOP.add(PANEL_ACTION_MENU_TOP, BorderLayout.CENTER);
 
-        PANEL_BOTTOM.add(BUTTON_EXIT,BorderLayout.WEST);
-        PANEL_BOTTOM.add(BUTTON_SEND,BorderLayout.EAST);
-        PANEL_BOTTOM.add(FIELD_FOR_CHAT_MESSAGE,BorderLayout.CENTER);
+        PANEL_BOTTOM.add(BUTTON_EXIT, BorderLayout.WEST);
+        PANEL_BOTTOM.add(BUTTON_SEND, BorderLayout.EAST);
+        PANEL_BOTTOM.add(FIELD_FOR_CHAT_MESSAGE, BorderLayout.CENTER);
 
-        add(PANEL_MAIN_CENTER,BorderLayout.CENTER);
-        add(PANEL_MAIN_TOP,BorderLayout.NORTH);
-        add(PANEL_BOTTOM,BorderLayout.SOUTH);
+        add(PANEL_MAIN_CENTER, BorderLayout.CENTER);
+        add(PANEL_MAIN_TOP, BorderLayout.NORTH);
+        add(PANEL_BOTTOM, BorderLayout.SOUTH);
         setVisible(true);
 
     }
-    public void setLastUsingCellForActionCoordinates(int[] lastUsingCellForActionCoordinates){
-        this.lastUsingCellForActionCoordinates = lastUsingCellForActionCoordinates;
+
+    public void setPastUsingCellForActionCoordinates(int[] pastUsingCellForActionCoordinates) {
+        this.pastUsingCellForActionCoordinates = pastUsingCellForActionCoordinates;
     }
-    public int[] getLastUsingCellForActionCoordinates(){
-        return lastUsingCellForActionCoordinates;
+
+    public int[] getPastUsingCellForActionCoordinates() {
+        return pastUsingCellForActionCoordinates;
     }
-    public int getModeStatus(){
+
+    public int getModeStatus() {
         return modeStatus;
     }
-    public void changePastMode(){
-        pastMode=modeStatus;
+
+    public void changePastMode() {
+        pastMode = modeStatus;
     }
-    public int getPastMode(){
+
+    public int getPastMode() {
         return pastMode;
+    }
+
+    public void appendIntoLog(String message){
+        LOG.setText(message);
+    }
+
+    public void appendIntoLog(String message, boolean isActionAgain) {
+        message=NICK_NAME + ":\n*Used mode of " + createMessageAboutMode()+"\n"+message+"\n*"+createMessageAboutNextTurn(isActionAgain);
+      LOG.setText(message);
+      listener.sendMessageToServer(LibraryOfPrefixes.getLogMessage(message));
+    }
+
+    private String createMessageAboutNextTurn(boolean isActionAgain){
+        if(isActionAgain) return "Can action again\n"; else return "";
+    }
+
+    private String createMessageAboutMode() {
+        switch (pastMode){
+            case 0:
+                return format("'simple shoot' (%s;%s)",pastUsingCellForActionCoordinates[0],pastUsingCellForActionCoordinates[1]);
+            case 1:
+                return format("'volley shoot' (%s;%s)",pastUsingCellForActionCoordinates[0],pastUsingCellForActionCoordinates[1]);
+            case 2:
+                return format("'exploration of the map' (%s;%s)",pastUsingCellForActionCoordinates[0],pastUsingCellForActionCoordinates[1]);
+            case 3:
+                return format("'shooting on straight' (%s;%s)",pastUsingCellForActionCoordinates[0],pastUsingCellForActionCoordinates[1]);
+            default:
+                return "";
+        }
     }
 
     private Cell[][] fillMap(JPanel panelMap) {
@@ -294,15 +327,15 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
-        if (source == BUTTON_SEND||source==FIELD_FOR_CHAT_MESSAGE) {
-            String message=FIELD_FOR_CHAT_MESSAGE.getText();
-            if(!message.equals("")) {
+        if (source == BUTTON_SEND || source == FIELD_FOR_CHAT_MESSAGE) {
+            String message = FIELD_FOR_CHAT_MESSAGE.getText();
+            if (!message.equals("")) {
                 sendMessageIntoChat(message);
             }
             return;
         }
         if (source == BUTTON_INSTRUCTION) {
-            showInfoMessage(INSTRUCTION,"INSTRUCTION MANUAL");
+            showInfoMessage(INSTRUCTION, "INSTRUCTION MANUAL");
             return;
         }
         if (source == BUTTON_DEVELOPER_INFO) {
@@ -310,8 +343,8 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             return;
         }
         if (source == BUTTON_EXIT) {
-            if(isConfirmMessage("Are you sure to want exit to map-builder from this game?")){
-            exitToMapBuilder();
+            if (isConfirmMessage("Are you sure to want exit to map-builder from this game?")) {
+                exitToMapBuilder();
             }
             return;
         }
@@ -338,13 +371,17 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private void exitToMapBuilder() {
         listener.exitToMapBuilder();
     }
-    private boolean isConfirmMessage(String question){
-        if(JOptionPane.showConfirmDialog(null,question,"CONFIRM WINDOW",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_NO_OPTION)
-            return true; else return false;
+
+    private boolean isConfirmMessage(String question) {
+        if (JOptionPane.showConfirmDialog(null, question, "CONFIRM WINDOW", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION)
+            return true;
+        else return false;
     }
+
     public void setChatMessage(String message) {
-        CHAT.append(message+"\n");
+        CHAT.append(message + "\n");
     }
+
     private void sendMessageIntoChat(String message) {
         listener.sendMessageToServer(LibraryOfPrefixes.getChatMessage(message));
         Date date = new Date();
@@ -356,8 +393,9 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private void showErrorMessage(String message) {
         JOptionPane.showMessageDialog(null, message, "ERROR", JOptionPane.ERROR_MESSAGE);
     }
-    private void showInfoMessage(String message, String title){
-     JOptionPane.showMessageDialog(null,message,title,JOptionPane.INFORMATION_MESSAGE);
+
+    private void showInfoMessage(String message, String title) {
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
     }
 
     public boolean getTurnOfUser() {
@@ -383,20 +421,24 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             LABEL_TURN.setText(TEXT_TURN_OF_USER);
         }
     }
-    public void sendMessageAboutChangeTurn(){
+
+    public void sendMessageAboutChangeTurn() {
         listener.sendMessageToServer(LibraryOfPrefixes.CHANGE_TURN);
     }
-    public void sendCodeOfGameTurn(String codeOfGameTurn){
+
+    public void sendCodeOfGameTurn(String codeOfGameTurn) {
         listener.sendMessageToServer(LibraryOfPrefixes.getCodeOfGameTurnMessage(codeOfGameTurn));
     }
 
     public void processDataOfOpponentTurn(String codeOfGameTurn) {
         mapBuilderOfUser.processDataOfOpponentTurn(codeOfGameTurn);
     }
-    public void sendCodeResultOfGameTurn(String codeOfTurnResult){
+
+    public void sendCodeResultOfGameTurn(String codeOfTurnResult) {
         listener.sendMessageToServer(LibraryOfPrefixes.getCodeResultOfTurn(codeOfTurnResult));
     }
-   public void processDataOfResultTurn(String codeOfResultTurn){
+
+    public void processDataOfResultTurn(String codeOfResultTurn) {
         mapBuilderOfOpponent.processDataOfResultTurn(codeOfResultTurn);
     }
 }

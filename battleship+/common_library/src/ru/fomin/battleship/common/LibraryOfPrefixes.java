@@ -26,6 +26,7 @@ public class LibraryOfPrefixes {
     public static final String EXIT_TO_MAP_BUILDER="/exit_to_map_builder";
     public static final String CODE_OF_GAME_TURN="/code_of_game_turn";
     public static final String CODE_OF_RESULT_TURN="/code_of_result_turn";
+    public static final String LOG_MESSAGE="/log_message";
 
     public static String getAuthAccept(String nickname) {
         return AUTH_ACCEPT + DELIMITER + nickname;
@@ -82,4 +83,7 @@ public class LibraryOfPrefixes {
    public static String getCodeResultOfTurn(String codeOfTurnResult){
         return CODE_OF_RESULT_TURN+DELIMITER+codeOfTurnResult;
    }
+  public static String  getLogMessage(String message){
+        return LOG_MESSAGE+DELIMITER+message;
+    }
 }
