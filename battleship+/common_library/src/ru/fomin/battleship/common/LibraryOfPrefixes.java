@@ -23,6 +23,7 @@ public class LibraryOfPrefixes {
     public static final String CHAT_MESSAGE ="/chat_message";
     public static final String TURN ="/turn";
     public static final String CHANGE_TURN = "/change_turn";
+    public static final String EXIT_TO_MAP_BUILDER="/exit_to_map_builder";
 
     public static String getAuthAccept(String nickname) {
         return AUTH_ACCEPT + DELIMITER + nickname;

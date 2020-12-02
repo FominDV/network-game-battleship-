@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.util.Vector;
 
 public class Handler implements SocketThreadListener, WorkingWithNetwork {
+    private boolean isNotExitToMapBuilder=true;
     private String nickName;
     private boolean isRegistration = false;
     private boolean isValidAuthentication = false;
@@ -135,12 +136,8 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
     }
     @Override
    public void exitToMapBuilder(){
-        socketThread.close();
-        try {
-            login(ip, port, clientAuthenticationFrame, login);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        sendMessageToServer(LibraryOfPrefixes.EXIT_TO_MAP_BUILDER);
+
     }
     private void handleMessage(String msg) {
         String[] arr = msg.split(LibraryOfPrefixes.DELIMITER);
@@ -168,9 +165,11 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                 socketThread.close();
                 break;
             case LibraryOfPrefixes.SEARCH_OPPONENT:
+                isNotExitToMapBuilder=true;
                 preparingForGameFrame.setOpponentNickname(arr[1]);
                 break;
             case LibraryOfPrefixes.DISCONNECT_OPPONENT:
+                if(isNotExitToMapBuilder){
                     JOptionPane.showMessageDialog(null, "Connect with your opponent was lost", "ERROR", JOptionPane.ERROR_MESSAGE);
                     socketThread.close();
                     onlineGameWindow.dispose();
@@ -179,7 +178,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                         login(ip, port, clientAuthenticationFrame, login);
                     } catch (IOException e) {
                         e.printStackTrace();
-                }
+                }}
                 break;
             case LibraryOfPrefixes.LIST_OF_DATA_MAP:
                 writeDataIntoTheList(arr);
@@ -202,6 +201,17 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                 break;
             case LibraryOfPrefixes.CHANGE_TURN:
                 onlineGameWindow.changeTurn();
+                break;
+            case LibraryOfPrefixes.EXIT_TO_MAP_BUILDER:
+                isNotExitToMapBuilder=false;
+                socketThread.close();
+                onlineGameWindow.dispose();
+                isValidAuthentication = false;
+                try {
+                    login(ip, port, clientAuthenticationFrame, login);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }
