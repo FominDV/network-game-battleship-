@@ -21,6 +21,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
      * 2-exploration of the map
      * 3-shooting on straight*/
     private int modeStatus=0;
+    private int pastMode;
     private final int TURNS_FOR_VOLLEY=4;
     private final int TURNS_FOR_EXPLORATION=3;
     private final int TURNS_FOR_STRAIGHT_SHOOTING=2;
@@ -251,7 +252,12 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         setVisible(true);
 
     }
-
+    public int getModeStatus(){
+        return modeStatus;
+    }
+    public void changePastMode(){
+        pastMode=modeStatus;
+    }
 
     private Cell[][] fillMap(JPanel panelMap) {
         panelMap.add(new JLabel());
@@ -369,5 +375,18 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
     public void sendMessageAboutChangeTurn(){
         listener.sendMessageToServer(LibraryOfPrefixes.CHANGE_TURN);
+    }
+    public void sendCodeOfGameTurn(String codeOfGameTurn){
+        listener.sendMessageToServer(LibraryOfPrefixes.getCodeOfGameTurnMessage(codeOfGameTurn));
+    }
+
+    public void processDataOfOpponentTurn(String codeOfGameTurn) {
+        mapBuilderOfUser.processDataOfOpponentTurn(codeOfGameTurn);
+    }
+    public void sendCodeResultOfGameTurn(String codeOfTurnResult){
+        listener.sendMessageToServer(LibraryOfPrefixes.getCodeResultOfTurn(codeOfTurnResult));
+    }
+   public void processDataOfResultTurn(String codeOfResultTurn){
+        mapBuilderOfOpponent.processDataOfResultTurn(codeOfResultTurn);
     }
 }

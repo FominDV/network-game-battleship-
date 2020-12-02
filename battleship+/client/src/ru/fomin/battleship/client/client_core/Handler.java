@@ -202,6 +202,12 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                 isNotExitToMapBuilder = false;
                 reRegistration();
                 break;
+            case LibraryOfPrefixes.CODE_OF_GAME_TURN:
+                onlineGameWindow.processDataOfOpponentTurn(arr[1]);
+                break;
+            case LibraryOfPrefixes.CODE_OF_RESULT_TURN:
+                onlineGameWindow.processDataOfResultTurn(arr[1]);
+                break;
         }
     }
 

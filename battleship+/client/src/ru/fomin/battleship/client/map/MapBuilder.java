@@ -1,6 +1,5 @@
 package ru.fomin.battleship.client.map;
 
-import ru.fomin.battleship.client.gui.OnlineGameWindow;
 import ru.fomin.battleship.client.gui.PreparingForGameFrame;
 
 import java.util.Vector;
@@ -16,7 +15,7 @@ public class MapBuilder {
     protected int count2Ship = 0;
     protected int count3Ship = 0;
     protected int count4Ship = 0;
-    protected final String DELIMITER="x";
+    static String delimiter ="x";
 
     public MapBuilder(Cell[][] map, PreparingForGameFrame preparingForGameFrame) {
         this.map = map;
@@ -334,7 +333,7 @@ public class MapBuilder {
         String dataSaving="";
         for(int i=0; i<map.length;i++){
             for(int j=0;j<map.length;j++){
-                if(map[i][j].getStatus()==6) if(dataSaving.equals("")) dataSaving+=i+DELIMITER+j; else dataSaving+=DELIMITER+i+DELIMITER+j;
+                if(map[i][j].getStatus()==6) if(dataSaving.equals("")) dataSaving+=i+ delimiter +j; else dataSaving+= delimiter +i+ delimiter +j;
             }
         }
         return dataSaving;
@@ -342,7 +341,7 @@ public class MapBuilder {
 
     public void loadMap(String dataMap) {
         int x,y;
-        String[] coordinates=dataMap.split(DELIMITER);
+        String[] coordinates=dataMap.split(delimiter);
         for(int i=0;i<map.length;i++){
             for(int j=0;j<map.length;j++){
                 map[i][j].setImage(5);

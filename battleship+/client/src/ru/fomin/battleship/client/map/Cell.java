@@ -9,11 +9,11 @@ import java.awt.*;
 public class Cell extends JButton {
     /*Status:
      * 1-unknown cell
-     * 2-wounded
      * 3-dead
      * 4-preparing for posting ships
      * 5-known cell free
      * 6-known cell with ship*/
+    static String delimiter=MapBuilder.delimiter;
     private boolean isActive;
     private int status;
     private final int X;
@@ -57,6 +57,23 @@ public class Cell extends JButton {
         }
         if (onlineGameWindow != null && isActive && onlineGameWindow.getTurnOfUser()) {
             onlineGameWindow.changeTurn();
+            onlineGameWindow.changePastMode();
+            /*Last symbol in codeOfGameTurn means:
+            * 0-shooting
+            * 1-exploration*/
+            String codeOfGameTurn="";
+            switch (onlineGameWindow.getModeStatus()){
+                case 0:
+                    codeOfGameTurn=X+delimiter+Y+delimiter+0;
+                    onlineGameWindow.sendCodeOfGameTurn(codeOfGameTurn);
+                    break;
+                case 1:
+
+                    break;
+                case 3:
+
+                    break;
+            }
 
         }
     }

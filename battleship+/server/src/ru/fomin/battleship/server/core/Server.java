@@ -176,6 +176,13 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
                 client.sendMessage(LibraryOfPrefixes.EXIT_TO_MAP_BUILDER);
                 putLog(client.getOpponentNickname()+" left the game VS "+client.getOpponentNickname());
                 break;
+            case LibraryOfPrefixes.CODE_OF_GAME_TURN:
+                sendMessageToOpponent(client,LibraryOfPrefixes.getCodeOfGameTurnMessage(arr[1]));
+                putLog(client.getNickname()+" made game turn");
+                break;
+            case LibraryOfPrefixes.CODE_OF_RESULT_TURN:
+                sendMessageToOpponent(client,LibraryOfPrefixes.getCodeResultOfTurn(arr[1]));
+                break;
             default:
                 client.msgFormatError(msg);
         }
