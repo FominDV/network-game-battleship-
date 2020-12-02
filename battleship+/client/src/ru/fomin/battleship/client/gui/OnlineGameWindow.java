@@ -140,7 +140,6 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         CHAT.setLineWrap(true);
         CHAT.setWrapStyleWord(true);
         CHAT.setFont(FONT_OF_CHAT);
-        LOG.setMargin(new Insets(0,20,0,0));
         FIELD_FOR_CHAT_MESSAGE.setFont(FONT_OF_FIELD_FOR_CHAT_MESSAGE);
         FIELD_FOR_CHAT_MESSAGE.addActionListener(this);
         JScrollPane scrollLog = new JScrollPane(LOG);
@@ -254,9 +253,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         if (source == BUTTON_SEND||source==FIELD_FOR_CHAT_MESSAGE) {
             String message=FIELD_FOR_CHAT_MESSAGE.getText();
             if(!message.equals("")) {
-
                 sendMessageIntoChat(message);
-
             }
             return;
         }
@@ -269,7 +266,9 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             return;
         }
         if (source == BUTTON_EXIT) {
-
+            if(JOptionPane.showConfirmDialog(null,"Are you sure to want exit to map-builder from this game?","WARNING",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_NO_OPTION){
+            exitToMapBuilder();
+            }
             return;
         }
         if (source == BUTTON_MODE_VOLLEY) {
@@ -292,6 +291,10 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         throw new RuntimeException("Unknown source: " + source);
     }
 
+    private void exitToMapBuilder() {
+        listener.exitToMapBuilder();
+    }
+
     public void setChatMessage(String message) {
         CHAT.append(message+"\n");
     }
@@ -305,6 +308,9 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
 
     private void showErrorMessage(String message) {
         JOptionPane.showMessageDialog(null, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+    }
+    private void showInfoMessage(String message, String title){
+     JOptionPane.showMessageDialog(null,message,title,JOptionPane.INFORMATION_MESSAGE);
     }
 
     public boolean getTurnOfUser() {
@@ -325,10 +331,12 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         if (isTurnOfUser) {
             isTurnOfUser = false;
             LABEL_TURN.setText(TEXT_TURN_OF_OPPONENT);
-            listener.sendMessageToServer(LibraryOfPrefixes.CHANGE_TURN);
         } else {
             isTurnOfUser = true;
             LABEL_TURN.setText(TEXT_TURN_OF_USER);
         }
+    }
+    public void sendMessageAboutChangeTurn(){
+        listener.sendMessageToServer(LibraryOfPrefixes.CHANGE_TURN);
     }
 }

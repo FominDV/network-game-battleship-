@@ -132,7 +132,12 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
         }
         JOptionPane.showMessageDialog(null, msg, "Exception", JOptionPane.ERROR_MESSAGE);
     }
+    @Override
+   public void exitToMapBuilder(){
+        socketThread.close();
 
+
+    }
     private void handleMessage(String msg) {
         String[] arr = msg.split(LibraryOfPrefixes.DELIMITER);
         String msgType = arr[0];

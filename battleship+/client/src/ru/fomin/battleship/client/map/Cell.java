@@ -56,6 +56,7 @@ public class Cell extends JButton {
             if (!preparingForGameFrame.getMode()) preparingForGameFrame.remove(X, Y);
         }
         if (onlineGameWindow != null && isActive && onlineGameWindow.getTurnOfUser()) {
+            onlineGameWindow.changeTurn();
 
         }
     }

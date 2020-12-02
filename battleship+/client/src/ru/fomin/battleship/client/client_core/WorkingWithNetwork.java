@@ -12,4 +12,5 @@ public interface WorkingWithNetwork {
     void setSavingMapWindow(SavingMapWindow savingMapWindow);
     void setSearchingOpponent(SearchingOpponent searchingOpponent);
     void setOnlineGameWindow(OnlineGameWindow onlineGameWindow);
+    void exitToMapBuilder();
 }
