@@ -16,7 +16,38 @@ import static java.lang.String.format;
 import static java.lang.Thread.sleep;
 
 public class OnlineGameWindow extends JFrame implements ActionListener {
-    private final String INSTRUCTION="";
+    /*0-simple shoot
+     * 1-volley shoot
+     * 2-exploration of the map
+     * 3-shooting on straight*/
+    private int modeStatus=0;
+    private final int TURNS_FOR_VOLLEY=4;
+    private final int TURNS_FOR_EXPLORATION=3;
+    private final int TURNS_FOR_STRAIGHT_SHOOTING=2;
+    private int rechargeForVolley=0;
+    private int rechargeForExploration=0;
+    private int rechargeForStraightShooting=0;
+
+    private final String INSTRUCTION="<html>1)For win you should destroy all ships of opponent<br>" +
+            "2)Before making any action, you should choose the mode of action<br>+" +
+            "3)You can select the action mode by pressing the buttons on the top panel<br>+" +
+            "4)Modes of the volley shoot, exploration of the map and shooting on straight should be recharged for selecting it<br>+" +
+            "5)For action you should click on active cell of your opponent's map<br>" +
+            "6)Mode of the volley shoot shoots in selected cell and four random cells around this cell<br>" +
+            "7)Mode of the exploration of the map shows for you selected cell and all cells around it<br>" +
+            "8)Mode of the shooting in straight shoots in selected cell and two " +
+            "random cells on random straight where selected cell is <br>" +
+            "9)Mode of the simple shoot shoots only in selected cell<br>" +
+            "10)If you destroy or damage ship of opponent, you action again<br>" +
+            "11)If you used any mode other than simple shoot and destroyed or damaged ship of opponent, then you don't action again anyway<br>" +
+            "12)By using mode of volley shoot any random cells can be already shot before<br>" +
+            "13)By using mode of shooting on straight if random straight have not two unknown cells," +
+            " another straight will be selected. If two straights have not two unknown cells, only one or zero cells will be shot<br>" +
+            "14)For recharge of volley shoot "+TURNS_FOR_VOLLEY+" game turns is needed<br>" +
+            "15)For recharge of exploration of the map "+TURNS_FOR_EXPLORATION+" game turns is needed<br>" +
+            "16)For recharge of shooting on straight "+TURNS_FOR_STRAIGHT_SHOOTING+" game turns is needed<br>" +
+            "17)For exit to map-builder you should click the button 'EXIT'<br>" +
+            "18)For send message into chat you should print your message in the field and press 'enter' or button 'SEND'<br></html>";
     private final String TEXT_TURN_OF_USER = "YOUR TURN";
     private final String TEXT_TURN_OF_OPPONENT = "TURN OF OPPONENT";
     private final String TEXT_MODE_SIMPLE_SHOOT = "<html><p align='center'>MODE:<br>SIMPLE SHOOT</p></html>";
@@ -25,17 +56,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final String TEXT_MODE_STRAIGHT_SHOOTING = "<html><p align='center'>MODE:<br>SHOOTING ON STRAIGHT</p></html>";
     private final String TEXT_RECHARGE1="recharge in ";
     private final String TEXT_RECHARGE2=" turns";
-    /*0-simple shoot
-    * 1-volley shoot
-    * 2-exploration of the map
-    * 3-shooting on straight*/
-    private int modeStatus=0;
-    private final int TURNS_FOR_VOLLEY=4;
-    private final int TURNS_FOR_EXPLORATION=3;
-    private final int TURNS_FOR_STRAIGHT_SHOOTING=2;
-    private int rechargeForVolley=0;
-    private int rechargeForExploration=0;
-    private int rechargeForStraightShooting=0;
+
 
     private boolean isTurnOfUser = false;
     private final String opponentNickname;
@@ -267,7 +288,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             return;
         }
         if (source == BUTTON_EXIT) {
-            if(JOptionPane.showConfirmDialog(null,"Are you sure to want exit to map-builder from this game?","WARNING",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_NO_OPTION){
+            if(isConfirmMessage("Are you sure to want exit to map-builder from this game?")){
             exitToMapBuilder();
             }
             return;
@@ -295,7 +316,10 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private void exitToMapBuilder() {
         listener.exitToMapBuilder();
     }
-
+    private boolean isConfirmMessage(String question){
+        if(JOptionPane.showConfirmDialog(null,question,"CONFIRM WINDOW",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_NO_OPTION)
+            return true; else return false;
+    }
     public void setChatMessage(String message) {
         CHAT.append(message+"\n");
     }
