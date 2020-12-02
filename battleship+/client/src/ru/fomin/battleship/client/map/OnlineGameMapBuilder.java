@@ -68,6 +68,6 @@ public class OnlineGameMapBuilder extends MapBuilder {
 
     public void processDataOfResultTurn(String codeOfResultTurn) {
         boolean isDamageOrDestroy = false;
-
+        
     }
 }
