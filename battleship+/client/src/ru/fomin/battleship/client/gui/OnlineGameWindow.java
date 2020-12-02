@@ -22,6 +22,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
      * 3-shooting on straight*/
     private int modeStatus=0;
     private int pastMode;
+    private int[] lastUsingCellForActionCoordinates=new int[2];
     private final int TURNS_FOR_VOLLEY=4;
     private final int TURNS_FOR_EXPLORATION=3;
     private final int TURNS_FOR_STRAIGHT_SHOOTING=2;
@@ -252,11 +253,20 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         setVisible(true);
 
     }
+    public void setLastUsingCellForActionCoordinates(int[] lastUsingCellForActionCoordinates){
+        this.lastUsingCellForActionCoordinates = lastUsingCellForActionCoordinates;
+    }
+    public int[] getLastUsingCellForActionCoordinates(){
+        return lastUsingCellForActionCoordinates;
+    }
     public int getModeStatus(){
         return modeStatus;
     }
     public void changePastMode(){
         pastMode=modeStatus;
+    }
+    public int getPastMode(){
+        return pastMode;
     }
 
     private Cell[][] fillMap(JPanel panelMap) {

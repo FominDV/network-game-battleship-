@@ -6,7 +6,6 @@ import java.util.Vector;
 
 public class OnlineGameMapBuilder extends MapBuilder {
     private OnlineGameWindow onlineGameWindow;
-
     public OnlineGameMapBuilder(Cell[][] map, OnlineGameWindow onlineGameWindow) {
         this.map = map;
         this.onlineGameWindow = onlineGameWindow;
@@ -25,6 +24,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
             onlineGameWindow.sendCodeResultOfGameTurn(processShootingDataOfOpponentTurn(codeElementsIntegerArray));
         else onlineGameWindow.sendCodeResultOfGameTurn(processExplorationDataOfOpponentTurn(codeElementsIntegerArray));
     }
+
 
     private String processShootingDataOfOpponentTurn(int[] codeElementsArray) {
         String codeOfTurnResult = determineStatusCellAfterShoot(codeElementsArray[0], codeElementsArray[1]);
@@ -68,6 +68,22 @@ public class OnlineGameMapBuilder extends MapBuilder {
 
     public void processDataOfResultTurn(String codeOfResultTurn) {
         boolean isDamageOrDestroy = false;
-        
+        int[] lastUsingCellForActionCoordinates=onlineGameWindow.getLastUsingCellForActionCoordinates();
+        String[] codeElements=codeOfResultTurn.split(delimiter);
+        int[] codeIntegerElements=new int[codeElements.length];
+        for(int i =0;i<codeElements.length;i++){
+            codeIntegerElements[i]=Integer.parseInt(codeElements[i]);
+        }
+        for(int i=0; i<codeIntegerElements.length;i+=3){
+           if(lastUsingCellForActionCoordinates[0]==codeIntegerElements[i]&&lastUsingCellForActionCoordinates[1]==codeIntegerElements[i+1]&&(codeIntegerElements[i+2]==2||codeIntegerElements[i+2]==3))
+            isDamageOrDestroy=true;
+           map[codeIntegerElements[i]][codeIntegerElements[i+1]].setImage(codeIntegerElements[i+2]);
+        }
+        if(isDamageOrDestroy&&onlineGameWindow.getPastMode()==0){
+            onlineGameWindow.changeTurn();
+        }else{
+            onlineGameWindow.sendMessageAboutChangeTurn();
+        }
     }
+
 }
