@@ -140,13 +140,13 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         CHAT.setLineWrap(true);
         CHAT.setWrapStyleWord(true);
         CHAT.setFont(FONT_OF_CHAT);
-        LOG.setBorder(BORDER_FOR_LOG_AND_CHAT);
-        CHAT.setBorder(BORDER_FOR_LOG_AND_CHAT);
         LOG.setMargin(new Insets(0,20,0,0));
         FIELD_FOR_CHAT_MESSAGE.setFont(FONT_OF_FIELD_FOR_CHAT_MESSAGE);
         FIELD_FOR_CHAT_MESSAGE.addActionListener(this);
         JScrollPane scrollLog = new JScrollPane(LOG);
         JScrollPane scrollChat = new JScrollPane(CHAT);
+        scrollLog.setBorder(BORDER_FOR_LOG_AND_CHAT);
+        scrollChat.setBorder(BORDER_FOR_LOG_AND_CHAT);
         PANEL_LOG_AND_CHAT.add(scrollLog);
         PANEL_LOG_AND_CHAT.add(scrollChat);
         PANEL_CENTER_OF_CENTER.setPreferredSize(new Dimension(wrapperSize-150,wrapperSize));
