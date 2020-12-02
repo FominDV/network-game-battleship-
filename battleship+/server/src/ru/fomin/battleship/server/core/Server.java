@@ -172,10 +172,6 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
                 sendMessageToOpponent(client,LibraryOfPrefixes.CHANGE_TURN);
                 putLog("Now the turn of " + client.getOpponentNickname());
                 break;
-            case LibraryOfPrefixes.DISCONNECT_OPPONENT:
-                sendMessageToOpponent(client,LibraryOfPrefixes.DISCONNECT_OPPONENT);
-                putLog(client.getOpponentNickname()+" left the game");
-                break;
             default:
                 client.msgFormatError(msg);
         }

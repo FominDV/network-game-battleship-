@@ -79,6 +79,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
+
             new ClientAuthenticationFrame();
         }
 
@@ -135,8 +136,11 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
     @Override
    public void exitToMapBuilder(){
         socketThread.close();
-
-
+        try {
+            login(ip, port, clientAuthenticationFrame, login);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     private void handleMessage(String msg) {
         String[] arr = msg.split(LibraryOfPrefixes.DELIMITER);
@@ -167,14 +171,14 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                 preparingForGameFrame.setOpponentNickname(arr[1]);
                 break;
             case LibraryOfPrefixes.DISCONNECT_OPPONENT:
-                JOptionPane.showMessageDialog(null, "Connect with your opponent was lost", "ERROR", JOptionPane.ERROR_MESSAGE);
-                socketThread.close();
-                onlineGameWindow.dispose();
-                isValidAuthentication = false;
-                try {
-                    login(ip, port, clientAuthenticationFrame, login);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Connect with your opponent was lost", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    socketThread.close();
+                    onlineGameWindow.dispose();
+                    isValidAuthentication = false;
+                    try {
+                        login(ip, port, clientAuthenticationFrame, login);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                 }
                 break;
             case LibraryOfPrefixes.LIST_OF_DATA_MAP:
