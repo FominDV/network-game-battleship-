@@ -2,6 +2,8 @@ package ru.fomin.battleship.client.map;
 
 import ru.fomin.battleship.client.gui.OnlineGameWindow;
 
+import java.util.Vector;
+
 public class OnlineGameMapBuilder extends MapBuilder {
     private OnlineGameWindow onlineGameWindow;
 
@@ -20,26 +22,28 @@ public class OnlineGameMapBuilder extends MapBuilder {
         for (int i = 0; i < codeElementsArray.length - 1; i++)
             codeElementsIntegerArray[i] = Integer.parseInt(codeElementsArray[i]);
         if (codeElementsArray[codeElementsArray.length - 1].equals("0"))
-            onlineGameWindow.sendCodeResultOfGameTurn(processShootingDataOfOpponentTurn(codeElementsIntegerArray)) ;
+            onlineGameWindow.sendCodeResultOfGameTurn(processShootingDataOfOpponentTurn(codeElementsIntegerArray));
         else onlineGameWindow.sendCodeResultOfGameTurn(processExplorationDataOfOpponentTurn(codeElementsIntegerArray));
     }
 
     private String processShootingDataOfOpponentTurn(int[] codeElementsArray) {
-        int[] partOfCodeResultOfTurn=determineStatusCellAfterShoot(codeElementsArray[0],codeElementsArray[1]);
-        String codeOfTurnResult = partOfCodeResultOfTurn[0]+delimiter+partOfCodeResultOfTurn[1]+delimiter+partOfCodeResultOfTurn[2];
-        if(codeElementsArray.length==2) return codeOfTurnResult;
+        int ResultOfTurnForCell = determineStatusCellAfterShoot(codeElementsArray[0], codeElementsArray[1]);
+        String codeOfTurnResult = codeElementsArray[0] + delimiter + codeElementsArray[1] + delimiter + ResultOfTurnForCell;
+        if (codeElementsArray.length == 2) return codeOfTurnResult;
         for (int i = 2; i < codeElementsArray.length; i += 2) {
-           partOfCodeResultOfTurn=determineStatusCellAfterShoot(codeElementsArray[i],codeElementsArray[i+1]);
-            codeOfTurnResult+=delimiter+partOfCodeResultOfTurn[0]+delimiter+partOfCodeResultOfTurn[1]+partOfCodeResultOfTurn[2];
+            ResultOfTurnForCell = determineStatusCellAfterShoot(codeElementsArray[i], codeElementsArray[i + 1]);
+            codeOfTurnResult += delimiter + codeElementsArray[i] + delimiter + codeElementsArray[i + 1] + ResultOfTurnForCell;
         }
         return codeOfTurnResult;
     }
-    private int[] determineStatusCellAfterShoot(int x, int y){
-        int[] partOfCodeResultOfTurn=new int[3];
-        if(map[x][y].getStatus()==6){
-            
-        }else{
 
+    private int determineStatusCellAfterShoot(int x, int y) {
+        int ResultOfTurnForCell = -1;
+        if (map[x][y].getStatus() == 6) {
+           Vector<Cell> cellsOfShip=getCellsOfShip(x,y,6);
+
+        } else {
+            return 5;
         }
     }
 
@@ -48,11 +52,11 @@ public class OnlineGameMapBuilder extends MapBuilder {
         for (int i = 2; i < codeElementsArray.length; i += 2) {
             codeOfTurnResult += delimiter + codeElementsArray[i] + delimiter + codeElementsArray[i + 1] + delimiter + map[codeElementsArray[i]][codeElementsArray[i + 1]].getStatus();
         }
-       return codeOfTurnResult;
+        return codeOfTurnResult;
     }
 
     public void processDataOfResultTurn(String codeOfResultTurn) {
-        boolean isDamageOrDestroy=false;
+        boolean isDamageOrDestroy = false;
 
     }
 }

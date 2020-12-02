@@ -9,6 +9,7 @@ import java.awt.*;
 public class Cell extends JButton {
     /*Status:
      * 1-unknown cell
+     * 2-damage
      * 3-dead
      * 4-preparing for posting ships
      * 5-known cell free
