@@ -27,24 +27,35 @@ public class OnlineGameMapBuilder extends MapBuilder {
     }
 
     private String processShootingDataOfOpponentTurn(int[] codeElementsArray) {
-        int ResultOfTurnForCell = determineStatusCellAfterShoot(codeElementsArray[0], codeElementsArray[1]);
-        String codeOfTurnResult = codeElementsArray[0] + delimiter + codeElementsArray[1] + delimiter + ResultOfTurnForCell;
+        String codeOfTurnResult = determineStatusCellAfterShoot(codeElementsArray[0], codeElementsArray[1]);
         if (codeElementsArray.length == 2) return codeOfTurnResult;
         for (int i = 2; i < codeElementsArray.length; i += 2) {
-            ResultOfTurnForCell = determineStatusCellAfterShoot(codeElementsArray[i], codeElementsArray[i + 1]);
-            codeOfTurnResult += delimiter + codeElementsArray[i] + delimiter + codeElementsArray[i + 1] + ResultOfTurnForCell;
+            codeOfTurnResult += delimiter + determineStatusCellAfterShoot(codeElementsArray[i], codeElementsArray[i + 1]);
         }
         return codeOfTurnResult;
     }
 
-    private int determineStatusCellAfterShoot(int x, int y) {
-        int ResultOfTurnForCell = -1;
+    private String determineStatusCellAfterShoot(int x, int y) {
+        String resultOfTurn = x + delimiter + y;
         if (map[x][y].getStatus() == 6) {
-           Vector<Cell> cellsOfShip=getCellsOfShip(x,y,6);
-
+            map[x][y].setImage(2);
+            Vector<Cell> cellsOfShip = getCellsOfShip(x, y, 6, 2);
+            int countOfDamagedCells = 0;
+            for (Cell cell : cellsOfShip) if (cell.getStatus() == 2) countOfDamagedCells++;
+            if (countOfDamagedCells == cellsOfShip.size()) {
+                resultOfTurn+=delimiter+3;
+                for (Cell cell : cellsOfShip) {
+                    cell.setImage(3);
+                    int[] coordinates=cell.getCoordinates();
+                    resultOfTurn+=delimiter+coordinates[0]+delimiter+coordinates[1]+delimiter+3;
+                }
+            }else{
+                resultOfTurn += delimiter + 2;
+            }
         } else {
-            return 5;
+            resultOfTurn += delimiter + map[x][y].getStatus();
         }
+        return resultOfTurn;
     }
 
     private String processExplorationDataOfOpponentTurn(int[] codeElementsArray) {

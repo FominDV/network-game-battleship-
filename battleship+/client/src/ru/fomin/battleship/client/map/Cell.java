@@ -79,6 +79,13 @@ public class Cell extends JButton {
         }
     }
 
+    public int[] getCoordinates(){
+        int[] coordinates=new int[2];
+        coordinates[0]=X;
+        coordinates[1]=Y;
+        return coordinates;
+    }
+
     public void setImage(int status) {
         switch (status) {
             case 1:
@@ -86,8 +93,14 @@ public class Cell extends JButton {
                 setIcon(new ImageIcon(getClass().getResource("../img/seaUnknown.png")));
                 break;
             case 2:
+                this.status=2;
+                setIcon(null);
+                setBackground(Color.magenta);
                 break;
             case 3:
+                this.status=3;
+                setIcon(null);
+                setBackground(Color.BLACK);
                 break;
             case 4:
                 this.status = 4;
