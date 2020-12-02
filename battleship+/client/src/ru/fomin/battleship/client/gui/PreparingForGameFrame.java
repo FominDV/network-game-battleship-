@@ -301,7 +301,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         JOptionPane.showMessageDialog(null, INFO_ABOUT_GAME, "INSTRUCTION MANUAL", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void showDeveloperInfo() {
+    static void showDeveloperInfo() {
         JOptionPane.showMessageDialog(null, INFO_ABOUT_DEVELOPER, "INFORMATION ABOUT DEVELOPER", JOptionPane.INFORMATION_MESSAGE);
     }
 

@@ -16,6 +16,7 @@ import static java.lang.String.format;
 import static java.lang.Thread.sleep;
 
 public class OnlineGameWindow extends JFrame implements ActionListener {
+    private final String INSTRUCTION="";
     private final String TEXT_TURN_OF_USER = "YOUR TURN";
     private final String TEXT_TURN_OF_OPPONENT = "TURN OF OPPONENT";
     private final String TEXT_MODE_SIMPLE_SHOOT = "<html><p align='center'>MODE:<br>SIMPLE SHOOT</p></html>";
@@ -258,11 +259,11 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             return;
         }
         if (source == BUTTON_INSTRUCTION) {
-
+            showInfoMessage(INSTRUCTION,"INSTRUCTION MANUAL");
             return;
         }
         if (source == BUTTON_DEVELOPER_INFO) {
-
+            PreparingForGameFrame.showDeveloperInfo();
             return;
         }
         if (source == BUTTON_EXIT) {

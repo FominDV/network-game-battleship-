@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.util.Vector;
 
 public class Handler implements SocketThreadListener, WorkingWithNetwork {
-    private boolean isNotExitToMapBuilder=true;
+    private boolean isNotExitToMapBuilder = true;
     private String nickName;
     private boolean isRegistration = false;
     private boolean isValidAuthentication = false;
@@ -134,11 +134,13 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
         }
         JOptionPane.showMessageDialog(null, msg, "Exception", JOptionPane.ERROR_MESSAGE);
     }
+
     @Override
-   public void exitToMapBuilder(){
+    public void exitToMapBuilder() {
         sendMessageToServer(LibraryOfPrefixes.EXIT_TO_MAP_BUILDER);
 
     }
+
     private void handleMessage(String msg) {
         String[] arr = msg.split(LibraryOfPrefixes.DELIMITER);
         String msgType = arr[0];
@@ -165,20 +167,14 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                 socketThread.close();
                 break;
             case LibraryOfPrefixes.SEARCH_OPPONENT:
-                isNotExitToMapBuilder=true;
+                isNotExitToMapBuilder = true;
                 preparingForGameFrame.setOpponentNickname(arr[1]);
                 break;
             case LibraryOfPrefixes.DISCONNECT_OPPONENT:
-                if(isNotExitToMapBuilder){
+                if (isNotExitToMapBuilder) {
                     JOptionPane.showMessageDialog(null, "Connect with your opponent was lost", "ERROR", JOptionPane.ERROR_MESSAGE);
-                    socketThread.close();
-                    onlineGameWindow.dispose();
-                    isValidAuthentication = false;
-                    try {
-                        login(ip, port, clientAuthenticationFrame, login);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                }}
+                    reRegistration();
+                }
                 break;
             case LibraryOfPrefixes.LIST_OF_DATA_MAP:
                 writeDataIntoTheList(arr);
@@ -203,16 +199,20 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                 onlineGameWindow.changeTurn();
                 break;
             case LibraryOfPrefixes.EXIT_TO_MAP_BUILDER:
-                isNotExitToMapBuilder=false;
-                socketThread.close();
-                onlineGameWindow.dispose();
-                isValidAuthentication = false;
-                try {
-                    login(ip, port, clientAuthenticationFrame, login);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                isNotExitToMapBuilder = false;
+                reRegistration();
                 break;
+        }
+    }
+
+    private void reRegistration() {
+        socketThread.close();
+        onlineGameWindow.dispose();
+        isValidAuthentication = false;
+        try {
+            login(ip, port, clientAuthenticationFrame, login);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
