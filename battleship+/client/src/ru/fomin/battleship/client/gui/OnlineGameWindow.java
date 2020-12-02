@@ -29,9 +29,9 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private int rechargeForStraightShooting=0;
 
     private final String INSTRUCTION="<html>1)For win you should destroy all ships of opponent<br>" +
-            "2)Before making any action, you should choose the mode of action<br>+" +
-            "3)You can select the action mode by pressing the buttons on the top panel<br>+" +
-            "4)Modes of the volley shoot, exploration of the map and shooting on straight should be recharged for selecting it<br>+" +
+            "2)Before making any action, you should choose the mode of action<br>" +
+            "3)You can select the action mode by pressing the buttons on the top panel<br>" +
+            "4)Modes of the volley shoot, exploration of the map and shooting on straight should be recharged for selecting it<br>" +
             "5)For action you should click on active cell of your opponent's map<br>" +
             "6)Mode of the volley shoot shoots in selected cell and four random cells around this cell<br>" +
             "7)Mode of the exploration of the map shows for you selected cell and all cells around it<br>" +
