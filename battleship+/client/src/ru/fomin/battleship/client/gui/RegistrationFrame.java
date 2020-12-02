@@ -203,5 +203,6 @@ public class RegistrationFrame extends JFrame implements ActionListener {
         FIELD_NICKNAME.setText("");
         FIELD_LOGIN.setText("");
         FIELD_PASSWORD.setText("");
+        FIELD_REPEAT_PASSWORD.setText("");
     }
 }

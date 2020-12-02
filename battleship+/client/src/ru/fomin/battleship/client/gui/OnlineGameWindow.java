@@ -46,8 +46,14 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             "14)For recharge of volley shoot "+TURNS_FOR_VOLLEY+" game turns is needed<br>" +
             "15)For recharge of exploration of the map "+TURNS_FOR_EXPLORATION+" game turns is needed<br>" +
             "16)For recharge of shooting on straight "+TURNS_FOR_STRAIGHT_SHOOTING+" game turns is needed<br>" +
-            "17)For exit to map-builder you should click the button 'EXIT'<br>" +
-            "18)For send message into chat you should print your message in the field and press 'enter' or button 'SEND'<br></html>";
+            "17)If you lose a four-deck ship, you can no longer use the mode of volley shoot<br>" +
+            "18)If you lose a three-deck ship recharge of the mode of exploration of the map will be increased on two game turns<br>" +
+            "19)If you lose all three-deck ships, you can no longer use the mode of exploration of the map<br>" +
+            "20)If you lose a two-deck ship recharge of the mode of shooting on straight will be increased on one game turn<br>" +
+            "21)If you lose all two-deck ships, you can no longer use the mode of shooting on straight<br>" +
+            "22)If you lose a one-deck ship recharge of any special mode will be increased on one game turn<br>" +
+            "23)For exit to map-builder you should click the button 'EXIT'<br>" +
+            "24)For send message into chat you should print your message in the field and press 'enter' or button 'SEND'<br></html>";
     private final String TEXT_TURN_OF_USER = "YOUR TURN";
     private final String TEXT_TURN_OF_OPPONENT = "TURN OF OPPONENT";
     private final String TEXT_MODE_SIMPLE_SHOOT = "<html><p align='center'>MODE:<br>SIMPLE SHOOT</p></html>";
