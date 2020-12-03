@@ -223,7 +223,7 @@ public class MapBuilder {
         }
     }
 
-    private void setImageForShip3(Vector<Cell> cellsOfShip, int direction) {
+    private void setImageForShip3(Vector<Cell> cellsOfShip, int direction, String[] imagesForShip3) {
         if (direction == 1) {
             cellsOfShip.get(0).setImage(311);
             cellsOfShip.get(1).setImage(312);
@@ -273,6 +273,7 @@ public class MapBuilder {
         Vector<Cell> cellsOfShip = new Vector<>();
         int bufferNumberOfCells;
         if (direction == 0) cellsOfShip.add(map[x][y]);
+        //vertical
         if (direction == -1) {
             bufferNumberOfCells = 0;
             for (int i = 1; i <= map.length; i++) {
@@ -284,8 +285,9 @@ public class MapBuilder {
             for (int i = 1; i <= map.length; i++) {
                 if (x - i >= 0 && (map[x - i][y].getStatus() == status1||map[x - i][y].getStatus() == status2)) bufferNumberOfCells++;  else break;
             }
-            for (int i = 1; i >=bufferNumberOfCells; i--) cellsOfShip.add(map[x - i][y]);
+            for (int i = 1; i <=bufferNumberOfCells; i++) cellsOfShip.add(map[x - i][y]);
         }
+        //horizontal
         if (direction == 1) {
             bufferNumberOfCells = 0;
             for (int i = 1; i <= map.length; i++) {
@@ -297,7 +299,7 @@ public class MapBuilder {
             for (int i = 1; i <= map.length; i++) {
                 if (y + i < map.length && (map[x][y + i].getStatus() == status1||map[x][y + i].getStatus() == status2)) bufferNumberOfCells++;  else break;
             }
-            for (int i = 1; i >=bufferNumberOfCells; i++) cellsOfShip.add(map[x][y + i]);
+            for (int i = 1; i <=bufferNumberOfCells; i++) cellsOfShip.add(map[x][y + i]);
         }
         return cellsOfShip;
     }

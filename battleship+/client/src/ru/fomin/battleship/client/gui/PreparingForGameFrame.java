@@ -334,9 +334,9 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
 
     private void savingDialog() {
         if (!isSavedMap) {
-            if (dataMapVector.size() >= 5) {
+            if (dataMapVector.size() == 5) {
                 if (isSavingConfirmMessageYesNo("<html>You should have less or equal 5 savings of map!<br>Do you want to delete some of your saves </html>"))
-                    goToSavingMapWindow();
+                    goToSavingMapWindow(); else searchOpponent();
                 return;
             }
             if (isSavingConfirmMessageYesNo("Do you want to save the map?")) {

@@ -51,7 +51,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
             if (countOfDamagedCells == cellsOfShip.size()) {
                 increaseTurnsForRecharge(cellsOfShip.size());
                 resultOfTurn = delimiterAboutDestroyed;
-                for (Cell cell: cellsOfShip) {
+                for (Cell cell : cellsOfShip) {
                     cell.setImage(3);
                     int[] coordinates = cell.getCoordinates();
                     resultOfTurn += delimiter + coordinates[0] + delimiter + coordinates[1] + delimiter + 3;
@@ -109,7 +109,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
                 if (onlineGameWindow.getPastMode() != 2 && map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].getStatus() == 2)
                     damagedCells += String.format(" (%s;%s)", codeIntegerElements[i][j] + 1, codeIntegerElements[i][j + 1] + 1);
                 //decision "is it destroyed ship or something else"
-                if (j==codeIntegerElements[i].length-3&& isDestroyedShip(codeIntegerElements[i])) {
+                if (j == codeIntegerElements[i].length - 3 && isDestroyedShip(codeIntegerElements[i])) {
                     messageForLog += createMessageAboutDestroyedShip(codeIntegerElements[i].length / 3);
                     //there must be method for images****************************************************************************
                     showCellsAroundShip(codeIntegerElements[i]);
@@ -138,9 +138,13 @@ public class OnlineGameMapBuilder extends MapBuilder {
                 showCellsAroundHorizontalShip(codeOfShip);
                 break;
             case -1:
-
+                showCellsAroundVerticalShip(codeOfShip);
                 break;
         }
+    }
+
+    private void showCellsAroundVerticalShip(int[] codeOfShip) {
+
     }
 
     private void showCellsAroundHorizontalShip(int[] codeOfShip) {
