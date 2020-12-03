@@ -32,8 +32,10 @@ public class OnlineGameMapBuilder extends MapBuilder {
         String codeOfTurnResult = determineStatusCellAfterShoot(codeElementsArray[0], codeElementsArray[1]);
         if (codeElementsArray.length == 2) return codeOfTurnResult;
         for (int i = 2; i < codeElementsArray.length; i += 2) {
-            codeOfTurnResult += delimiter + determineStatusCellAfterShoot(codeElementsArray[i], codeElementsArray[i + 1]);
+            codeOfTurnResult +=delimiter+ determineStatusCellAfterShoot(codeElementsArray[i], codeElementsArray[i + 1]);
         }
+        
+
         return codeOfTurnResult;
     }
 
@@ -45,12 +47,17 @@ public class OnlineGameMapBuilder extends MapBuilder {
             int countOfDamagedCells = 0;
             for (Cell cell : cellsOfShip) if (cell.getStatus() == 2) countOfDamagedCells++;
             if (countOfDamagedCells == cellsOfShip.size()) {
-                resultOfTurn += delimiter + 3;
+                resultOfTurn = null;
+                boolean isFirstElement = true;
                 for (Cell cell : cellsOfShip) {
                     cell.setImage(3);
                     int[] coordinates = cell.getCoordinates();
-                    if(x!=coordinates[0]&&y!=coordinates[1])
-                    resultOfTurn += delimiter + coordinates[0] + delimiter + coordinates[1] + delimiter + 3;
+                    if (isFirstElement) {
+                        resultOfTurn = coordinates[0] + delimiter + coordinates[1] + delimiter + 3;
+                        isFirstElement = false;
+                    } else {
+                        resultOfTurn += delimiter + coordinates[0] + delimiter + coordinates[1] + delimiter + 3;
+                    }
                 }
             } else {
                 resultOfTurn += delimiter + 2;
