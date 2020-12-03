@@ -283,15 +283,15 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     public void appendIntoLog(String message, boolean isActionAgain) {
-        message = NICK_NAME + ":\n*Used mode of " + createMessageAboutMode() + "\n" + message + "\n*" + createMessageAboutNextTurn(isActionAgain);
+        message = NICK_NAME + ":\n*Used mode of " + createMessageAboutMode() + "\n" + message  + createMessageAboutNextTurn(isActionAgain);
         LOG.append(message + "\n");
         LOG.setCaretPosition(LOG.getDocument().getLength());
         listener.sendMessageToServer(LibraryOfPrefixes.getLogMessage(message));
     }
 
     private String createMessageAboutNextTurn(boolean isActionAgain) {
-        if (isActionAgain) return "Can action again";
-        else return "End game turn";
+        if (isActionAgain) return "*Can action again";
+        else return "*End game turn";
     }
 
     private String createMessageAboutMode() {

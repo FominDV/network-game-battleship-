@@ -84,33 +84,30 @@ public class OnlineGameMapBuilder extends MapBuilder {
         for (int i = 0; i < codeBlocks.length; i++)
             codeElements[i] = codeBlocks[i].split(delimiter);
         //convert to integer
-        int[][] codeIntegerElements = new int[codeBlocks.length][];
+        int[][] codeIntegerElements = new int[codeElements.length][];
         for (int i = 0; i < codeElements.length; i++) {
+            codeIntegerElements[i]=new int[codeElements[i].length];
             for (int j = 0; j < codeElements[i].length; j++) {
                 codeIntegerElements[i][j] = Integer.parseInt(codeElements[i][j]);
             }
         }
         //set status for cells
-        for(int i=0; i<codeIntegerElements.length;i++){
-            for(int j=0;j<codeIntegerElements[i].length;j+=3){
+        boolean isDecisionShipWasNotMade;
+        for (int i = 0; i < codeIntegerElements.length; i++) {
+            isDecisionShipWasNotMade = true;
+            for (int j = 0; j < codeIntegerElements[i].length; j += 3) {
                 //decision effect of shooting
-                if (lastUsingCellForActionCoordinates[0] == codeIntegerElements[i][j] && lastUsingCellForActionCoordinates[1] == codeIntegerElements[i][j+1] && (codeIntegerElements[i][j+2] == 2 || codeIntegerElements[i][j+2] == 3))
+                if (lastUsingCellForActionCoordinates[0] == codeIntegerElements[i][j] && lastUsingCellForActionCoordinates[1] == codeIntegerElements[i][j + 1] && (codeIntegerElements[i][j + 2] == 2 || codeIntegerElements[i][j + 2] == 3))
                     isDamageOrDestroy = true;
                 //decision "is it destroyed ship or something else"
-                if(isDestroyedShip(codeIntegerElements[i])) int i=3;
-
+                if (isDecisionShipWasNotMade && isDestroyedShip(codeIntegerElements[i])) {
+                  messageForLog+=  createMessageAboutDestroyedShip(codeIntegerElements[i].length/3);
+                    //there must be method for images****************************************************************************
+                    isDecisionShipWasNotMade = false;
+                }
+                map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].setImage(codeIntegerElements[i][j + 2]);
+                map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].setNotActive();
             }
-        }
-
-
-
-
-
-        for (int i = 0; i < codeIntegerElements.length; i += 3) {
-            if (lastUsingCellForActionCoordinates[0] == codeIntegerElements[i] && lastUsingCellForActionCoordinates[1] == codeIntegerElements[i + 1] && (codeIntegerElements[i + 2] == 2 || codeIntegerElements[i + 2] == 3))
-                isDamageOrDestroy = true;
-            map[codeIntegerElements[i]][codeIntegerElements[i + 1]].setImage(codeIntegerElements[i + 2]);
-            map[codeIntegerElements[i]][codeIntegerElements[i + 1]].setNotActive();
         }
         //decision of next game turn
         if (isDamageOrDestroy && onlineGameWindow.getPastMode() == 0) {
@@ -121,11 +118,27 @@ public class OnlineGameMapBuilder extends MapBuilder {
             onlineGameWindow.appendIntoLog(messageForLog, false);
         }
     }
-private boolean isDestroyedShip(int[] codeOfCells){
-        for(int i=0;i< codeOfCells.length;i+=3){
-            if(codeOfCells[i+2]==3)
+private String createMessageAboutDestroyedShip(int lengthOfShip){
+        switch (lengthOfShip){
+            case 4:
+                return "*Four-deck ship was destroyed\n";
+            case 3:
+                return "*Three-deck ship was destroyed\n";
+            case 2:
+                return "*Two-deck ship was destroyed\n";
+            case 1:
+                return "*One-deck ship was destroyed\n";
+            default:
+                return "";
         }
 }
+    private boolean isDestroyedShip(int[] codeOfCells) {
+        for (int i = 0; i < codeOfCells.length; i += 3) {
+            if (codeOfCells[i + 2] != 3) return false;
+        }
+        return true;
+    }
+
     private void increaseTurnsForRecharge(int lengthOfShip) {
         switch (lengthOfShip) {
             case 4:
