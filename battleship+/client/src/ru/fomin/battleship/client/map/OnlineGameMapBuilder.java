@@ -30,7 +30,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
 
     private String processShootingDataOfOpponentTurn(int[] codeElementsArray) {
         String codeOfTurnResult = determineStatusCellAfterShoot(codeElementsArray[0], codeElementsArray[1]);
-        if (codeElementsArray.length == 2) return codeOfTurnResult;
+        if (codeElementsArray.length != 2)
         for (int i = 2; i < codeElementsArray.length; i += 2) {
             codeOfTurnResult +=determineStatusCellAfterShoot(codeElementsArray[i], codeElementsArray[i + 1]);
         }
