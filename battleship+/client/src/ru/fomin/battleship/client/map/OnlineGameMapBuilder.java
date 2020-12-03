@@ -36,14 +36,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
             for (int i = 2; i < codeElementsArray.length; i += 2) {
                 codeOfTurnResult += determineStatusCellAfterShoot(codeElementsArray[i], codeElementsArray[i + 1]);
             }
-        StringBuffer stringBuffer = new StringBuffer(codeOfTurnResult);
-        if (codeOfTurnResult.charAt(codeOfTurnResult.length() - 1) == delimiterAboutDestroyed.charAt(0))
-            stringBuffer.deleteCharAt(codeOfTurnResult.length() - 1);
-        stringBuffer.deleteCharAt(0);
-        if (stringBuffer.charAt(0) == delimiter.charAt(0))
-            stringBuffer.deleteCharAt(0);
-        codeOfTurnResult = String.valueOf(stringBuffer);
-        return codeOfTurnResult;
+        return editCodeForSending(codeOfTurnResult);
     }
 
     private String determineStatusCellAfterShoot(int x, int y) {
@@ -55,11 +48,11 @@ public class OnlineGameMapBuilder extends MapBuilder {
             for (Cell cell : cellsOfShip) if (cell.getStatus() == 2) countOfDamagedCells++;
             if (countOfDamagedCells == cellsOfShip.size()) {
                 increaseTurnsForRecharge(cellsOfShip.size());
-                resultOfTurn =  delimiterAboutDestroyed ;
+                resultOfTurn = delimiterAboutDestroyed;
                 for (int i = 0; i < cellsOfShip.size(); i++) {
                     cellsOfShip.get(i).setImage(3);
                     int[] coordinates = cellsOfShip.get(i).getCoordinates();
-                    resultOfTurn +=  delimiter + coordinates[0] + delimiter + coordinates[1] + delimiter + 3;
+                    resultOfTurn += delimiter + coordinates[0] + delimiter + coordinates[1] + delimiter + 3;
                 }
                 resultOfTurn += delimiterAboutDestroyed;
             } else {
@@ -85,17 +78,41 @@ public class OnlineGameMapBuilder extends MapBuilder {
         messageForLog = "";
         boolean isDamageOrDestroy = false;
         int[] lastUsingCellForActionCoordinates = onlineGameWindow.getPastUsingCellForActionCoordinates();
-        String[] codeElements = codeOfResultTurn.split(delimiter);
-        int[] codeIntegerElements = new int[codeElements.length];
+
+        String[] codeBlocks = codeOfResultTurn.split(delimiterCombo);
+        String[][] codeElements = new String[codeBlocks.length][];
+        for (int i = 0; i < codeBlocks.length; i++)
+            codeElements[i] = codeBlocks[i].split(delimiter);
+        //convert to integer
+        int[][] codeIntegerElements = new int[codeBlocks.length][];
         for (int i = 0; i < codeElements.length; i++) {
-            codeIntegerElements[i] = Integer.parseInt(codeElements[i]);
+            for (int j = 0; j < codeElements[i].length; j++) {
+                codeIntegerElements[i][j] = Integer.parseInt(codeElements[i][j]);
+            }
         }
+        //set status for cells
+        for(int i=0; i<codeIntegerElements.length;i++){
+            for(int j=0;j<codeIntegerElements[i].length;j+=3){
+                //decision effect of shooting
+                if (lastUsingCellForActionCoordinates[0] == codeIntegerElements[i][j] && lastUsingCellForActionCoordinates[1] == codeIntegerElements[i][j+1] && (codeIntegerElements[i][j+2] == 2 || codeIntegerElements[i][j+2] == 3))
+                    isDamageOrDestroy = true;
+                //decision "is it destroyed ship or something else"
+                if(isDestroyedShip(codeIntegerElements[i])) int i=3;
+
+            }
+        }
+
+
+
+
+
         for (int i = 0; i < codeIntegerElements.length; i += 3) {
             if (lastUsingCellForActionCoordinates[0] == codeIntegerElements[i] && lastUsingCellForActionCoordinates[1] == codeIntegerElements[i + 1] && (codeIntegerElements[i + 2] == 2 || codeIntegerElements[i + 2] == 3))
                 isDamageOrDestroy = true;
             map[codeIntegerElements[i]][codeIntegerElements[i + 1]].setImage(codeIntegerElements[i + 2]);
             map[codeIntegerElements[i]][codeIntegerElements[i + 1]].setNotActive();
         }
+        //decision of next game turn
         if (isDamageOrDestroy && onlineGameWindow.getPastMode() == 0) {
             onlineGameWindow.changeTurn();
             onlineGameWindow.appendIntoLog(messageForLog, true);
@@ -104,25 +121,46 @@ public class OnlineGameMapBuilder extends MapBuilder {
             onlineGameWindow.appendIntoLog(messageForLog, false);
         }
     }
-  private void   increaseTurnsForRecharge(int lengthOfShip){
-        switch (lengthOfShip){
+private boolean isDestroyedShip(int[] codeOfCells){
+        for(int i=0;i< codeOfCells.length;i+=3){
+            if(codeOfCells[i+2]==3)
+        }
+}
+    private void increaseTurnsForRecharge(int lengthOfShip) {
+        switch (lengthOfShip) {
             case 4:
                 count4Ship--;
                 onlineGameWindow.blockTurnsForVolley();
                 break;
             case 3:
                 count3Ship--;
-                if(count3Ship==0) onlineGameWindow.blockTurnsForExploration(); else onlineGameWindow.changeTurnsForExploration();
+                if (count3Ship == 0) onlineGameWindow.blockTurnsForExploration();
+                else onlineGameWindow.changeTurnsForExploration();
                 break;
             case 2:
                 count2Ship--;
-                if(count2Ship==0) onlineGameWindow.blockTurnsForShootingOnStraight(); else onlineGameWindow.changeTurnsForShootingOnStraight();
+                if (count2Ship == 0) onlineGameWindow.blockTurnsForShootingOnStraight();
+                else onlineGameWindow.changeTurnsForShootingOnStraight();
                 break;
             case 1:
                 count1Ship--;
                 onlineGameWindow.changeTurnsForAllShootingModes();
                 break;
         }
+    }
 
-  }
+    private String editCodeForSending(String codeOfTurnResult) {
+        StringBuffer stringBuffer = new StringBuffer(codeOfTurnResult);
+        if (codeOfTurnResult.charAt(codeOfTurnResult.length() - 1) == delimiterAboutDestroyed.charAt(0))
+            stringBuffer.deleteCharAt(codeOfTurnResult.length() - 1);
+        stringBuffer.deleteCharAt(0);
+        if (stringBuffer.charAt(0) == delimiter.charAt(0))
+            stringBuffer.deleteCharAt(0);
+        for (int i = 0; i < 3; i++) {
+            int index = stringBuffer.indexOf(delimiterAboutDestroyed + delimiterAboutDestroyed);
+            if (index != -1) stringBuffer.deleteCharAt(index);
+        }
+        codeOfTurnResult = String.valueOf(stringBuffer);
+        return codeOfTurnResult;
+    }
 }
