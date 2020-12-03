@@ -32,32 +32,27 @@ public class OnlineGameMapBuilder extends MapBuilder {
         String codeOfTurnResult = determineStatusCellAfterShoot(codeElementsArray[0], codeElementsArray[1]);
         if (codeElementsArray.length == 2) return codeOfTurnResult;
         for (int i = 2; i < codeElementsArray.length; i += 2) {
-            codeOfTurnResult +=delimiter+ determineStatusCellAfterShoot(codeElementsArray[i], codeElementsArray[i + 1]);
+            codeOfTurnResult +=determineStatusCellAfterShoot(codeElementsArray[i], codeElementsArray[i + 1]);
         }
-        
-
+        StringBuffer stringBuffer = new StringBuffer(codeOfTurnResult);
+        stringBuffer.deleteCharAt(0);
+        codeOfTurnResult= String.valueOf(stringBuffer);
         return codeOfTurnResult;
     }
 
     private String determineStatusCellAfterShoot(int x, int y) {
-        String resultOfTurn = x + delimiter + y;
+        String resultOfTurn =delimiter+ x + delimiter + y;
         if (map[x][y].getStatus() == 6) {
             map[x][y].setImage(2);
             Vector<Cell> cellsOfShip = getCellsOfShip(x, y, 6, 2);
             int countOfDamagedCells = 0;
             for (Cell cell : cellsOfShip) if (cell.getStatus() == 2) countOfDamagedCells++;
             if (countOfDamagedCells == cellsOfShip.size()) {
-                resultOfTurn = null;
-                boolean isFirstElement = true;
+                resultOfTurn = "";
                 for (Cell cell : cellsOfShip) {
                     cell.setImage(3);
                     int[] coordinates = cell.getCoordinates();
-                    if (isFirstElement) {
-                        resultOfTurn = coordinates[0] + delimiter + coordinates[1] + delimiter + 3;
-                        isFirstElement = false;
-                    } else {
-                        resultOfTurn += delimiter + coordinates[0] + delimiter + coordinates[1] + delimiter + 3;
-                    }
+                    resultOfTurn += delimiter + coordinates[0] + delimiter + coordinates[1] + delimiter + 3;
                 }
             } else {
                 resultOfTurn += delimiter + 2;
