@@ -65,6 +65,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final String TEXT_MODE_VOLLEY_SHOOT = "<html><p align='center'>MODE:<br>VOLLEY SHOOT</p></html>";
     private final String TEXT_MODE_EXPLORATION = "<html><p align='center'>MODE:<br>EXPLORATION OF THE MAP</p></html>";
     private final String TEXT_MODE_STRAIGHT_SHOOTING = "<html><p align='center'>MODE:<br>SHOOTING ON STRAIGHT</p></html>";
+    private final String TEXT_BLOCK_MODE = "lost";
     private final String TEXT_RECHARGE1 = "recharge in ";
     private final String TEXT_RECHARGE2 = " turns";
 
@@ -89,8 +90,8 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
 
     private final Border BORDER_FOR_LOG_AND_CHAT = BorderFactory.createLineBorder(COLOR_FOR_BORDER_LOG, 20);
     private final Border BORDER_FOR_LABEL_MODE = BorderFactory.createLineBorder(COLOR_FOR_BORDER_MODE, 10);
-    private final Border BORDER_FOR_LABEL_RECHARGE = BorderFactory.createLineBorder(COLOR_FOR_NO_ACTIVE_MODE, 8);
-
+    private final Border BORDER_FOR_LABEL_RECHARGE_NO_ACTIVE = BorderFactory.createLineBorder(COLOR_FOR_NO_ACTIVE_MODE, 8);
+    private final Border BORDER_FOR_LABEL_RECHARGE_ACTIVE = BorderFactory.createLineBorder(COLOR_FOR_ACTIVE_MODE, 8);
 
     private final JPanel WRAPPER_FOR_MAP_OF_USER = new JPanel(new GridBagLayout());
     private final JPanel WRAPPER_FOR_MAP_OF_OPPONENT = new JPanel(new GridBagLayout());
@@ -200,9 +201,9 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         LABEL_RECHARGE_STRAIGHT.setHorizontalAlignment(SwingConstants.CENTER);
         LABEL_MODE.setForeground(COLOR_FOR_LABEL_MODE);
         LABEL_MODE.setBorder(BORDER_FOR_LABEL_MODE);
-        LABEL_RECHARGE_VOLLEY.setBorder(BORDER_FOR_LABEL_RECHARGE);
-        LABEL_RECHARGE_EXPLORATION.setBorder(BORDER_FOR_LABEL_RECHARGE);
-        LABEL_RECHARGE_STRAIGHT.setBorder(BORDER_FOR_LABEL_RECHARGE);
+        LABEL_RECHARGE_VOLLEY.setBorder(BORDER_FOR_LABEL_RECHARGE_NO_ACTIVE);
+        LABEL_RECHARGE_EXPLORATION.setBorder(BORDER_FOR_LABEL_RECHARGE_NO_ACTIVE);
+        LABEL_RECHARGE_STRAIGHT.setBorder(BORDER_FOR_LABEL_RECHARGE_NO_ACTIVE);
 
         BUTTON_SEND.setFont(FONT_OF_BUTTON_BOTTOM);
         BUTTON_INSTRUCTION.setFont(FONT_OF_BUTTON_INFO);
@@ -356,27 +357,27 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         }
         if (source == BUTTON_MODE_VOLLEY) {
             if (isActiveVolleyMode()) {
-                modeStatus=1;
+                modeStatus = 1;
                 LABEL_MODE.setText(TEXT_MODE_VOLLEY_SHOOT);
             }
             return;
         }
         if (source == BUTTON_MODE_EXPLORATION) {
             if (isActiveExplorationMode()) {
-                modeStatus=2;
+                modeStatus = 2;
                 LABEL_MODE.setText(TEXT_MODE_EXPLORATION);
             }
             return;
         }
         if (source == BUTTON_MODE_STRAIGHT) {
             if (isActiveShootingOnStraightMode()) {
-                modeStatus=3;
+                modeStatus = 3;
                 LABEL_MODE.setText(TEXT_MODE_STRAIGHT_SHOOTING);
             }
             return;
         }
         if (source == BUTTON_MODE_SIMPLE) {
-            modeStatus=0;
+            modeStatus = 0;
             LABEL_MODE.setText(TEXT_MODE_SIMPLE_SHOOT);
             return;
         }
@@ -464,63 +465,64 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     public void blockTurnsForVolley() {
         rechargeForVolley = 0;
         isNotBlockVolleyMode = false;
-        changeColorButtonModeVolley();
+        changeButtonModeVolley();
     }
 
     public void blockTurnsForExploration() {
         rechargeForExploration = 0;
         isNotBlockExplorationMode = false;
-        changeColorButtonModeExploration();
+        changeButtonModeExploration();
     }
 
     public void blockTurnsForShootingOnStraight() {
         rechargeForStraightShooting = 0;
         isNotBlockShootingOnStraightMode = false;
-        changeColorButtonModeShootingOnStraight();
+        changeButtonModeShootingOnStraight();
     }
 
     public void changeTurnsForExploration() {
         rechargeForExploration = turnsForExploration;
         turnsForExploration += 2;
-        changeColorButtonModeExploration();
+        changeButtonModeExploration();
     }
 
     public void changeTurnsForShootingOnStraight() {
         rechargeForStraightShooting = turnsForShootingOnStraight;
         turnsForShootingOnStraight++;
-        changeColorButtonModeShootingOnStraight();
+        changeButtonModeShootingOnStraight();
     }
 
     public void changeTurnsForAllShootingModes() {
         if (isNotBlockVolleyMode) {
             rechargeForVolley = turnsForVolley;
             turnsForVolley++;
-            changeColorButtonModeVolley();
+            changeButtonModeVolley();
         }
         if (isNotBlockExplorationMode) {
             rechargeForExploration = turnsForExploration;
             turnsForExploration++;
-            changeColorButtonModeExploration();
+            changeButtonModeExploration();
         }
         if (isNotBlockShootingOnStraightMode) {
             rechargeForStraightShooting = turnsForShootingOnStraight;
             turnsForShootingOnStraight++;
-            changeColorButtonModeShootingOnStraight();
+            changeButtonModeShootingOnStraight();
         }
     }
 
     public void increaseRechargingPoints() {
         if (isNotBlockVolleyMode) {
             rechargeForVolley++;
-            changeColorButtonModeVolley();
+            changeButtonModeVolley();
         }
         if (isNotBlockExplorationMode) {
             rechargeForExploration++;
-            changeColorButtonModeExploration();
+            changeButtonModeExploration();
         }
         if (isNotBlockShootingOnStraightMode) {
             rechargeForStraightShooting++;
-            changeColorButtonModeShootingOnStraight();
+            changeButtonModeShootingOnStraight();
+
         }
     }
 
@@ -539,18 +541,43 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         else return false;
     }
 
-    private void changeColorButtonModeVolley() {
-        if (isActiveVolleyMode()) BUTTON_MODE_VOLLEY.setBackground(COLOR_FOR_ACTIVE_MODE);
-        else BUTTON_MODE_VOLLEY.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
+    private void changeButtonModeVolley() {
+        if (isActiveVolleyMode()) {
+            BUTTON_MODE_VOLLEY.setBackground(COLOR_FOR_ACTIVE_MODE);
+            LABEL_RECHARGE_VOLLEY.setBorder(BORDER_FOR_LABEL_RECHARGE_ACTIVE);
+        } else {
+            BUTTON_MODE_VOLLEY.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
+            LABEL_RECHARGE_VOLLEY.setBorder(BORDER_FOR_LABEL_RECHARGE_NO_ACTIVE);
+        }
+        LABEL_RECHARGE_VOLLEY.setText(createTextAboutRecharge(rechargeForVolley,turnsForVolley));
     }
 
-    private void changeColorButtonModeExploration() {
-        if (isActiveExplorationMode()) BUTTON_MODE_EXPLORATION.setBackground(COLOR_FOR_ACTIVE_MODE);
-        else BUTTON_MODE_EXPLORATION.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
+    private void changeButtonModeExploration() {
+        if (isActiveExplorationMode()) {
+            BUTTON_MODE_EXPLORATION.setBackground(COLOR_FOR_ACTIVE_MODE);
+            LABEL_RECHARGE_VOLLEY.setBorder(BORDER_FOR_LABEL_RECHARGE_ACTIVE);
+        } else {
+            BUTTON_MODE_EXPLORATION.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
+            LABEL_RECHARGE_VOLLEY.setBorder(BORDER_FOR_LABEL_RECHARGE_NO_ACTIVE);
+        }
+        LABEL_RECHARGE_VOLLEY.setText(createTextAboutRecharge(rechargeForExploration,turnsForExploration));
     }
 
-    private void changeColorButtonModeShootingOnStraight() {
-        if (isActiveShootingOnStraightMode()) BUTTON_MODE_STRAIGHT.setBackground(COLOR_FOR_ACTIVE_MODE);
-        else BUTTON_MODE_STRAIGHT.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
+    private void changeButtonModeShootingOnStraight() {
+        if (isActiveShootingOnStraightMode()) {
+            BUTTON_MODE_STRAIGHT.setBackground(COLOR_FOR_ACTIVE_MODE);
+            LABEL_RECHARGE_VOLLEY.setBorder(BORDER_FOR_LABEL_RECHARGE_ACTIVE);
+        } else {
+            BUTTON_MODE_STRAIGHT.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
+            LABEL_RECHARGE_VOLLEY.setBorder(BORDER_FOR_LABEL_RECHARGE_NO_ACTIVE);
+        }
+        LABEL_RECHARGE_VOLLEY.setText(createTextAboutRecharge(rechargeForStraightShooting,turnsForShootingOnStraight));
+    }
+
+    private String createTextAboutRecharge(int rechargePoints, int turnsForActivated) {
+        int deltaGameTurns;
+        if (turnsForActivated - rechargePoints < 0) deltaGameTurns = 0;
+        else deltaGameTurns = turnsForActivated - rechargePoints;
+        return TEXT_RECHARGE1 + deltaGameTurns + TEXT_RECHARGE2;
     }
 }
