@@ -14,7 +14,7 @@ public class Cell extends JButton {
      * 4-preparing for posting ships
      * 5-known cell free
      * 6-known cell with ship*/
-    static String delimiter=MapBuilder.delimiter;
+    static String delimiter = MapBuilder.delimiter;
     private boolean isActive;
     private int status;
     private final int X;
@@ -59,47 +59,40 @@ public class Cell extends JButton {
         if (onlineGameWindow != null && isActive && onlineGameWindow.getTurnOfUser()) {
             onlineGameWindow.changeTurn();
             onlineGameWindow.changePastMode();
-            onlineGameWindow.setPastUsingCellForActionCoordinates(new int[]{X,Y});
+            onlineGameWindow.setPastUsingCellForActionCoordinates(new int[]{X, Y});
             /*Last symbol in codeOfGameTurn means:
-            * 0-shooting
-            * 1-exploration*/
-            String codeOfGameTurn="";
-            switch (onlineGameWindow.getModeStatus()){
-                case 0:
-                    codeOfGameTurn=X+delimiter+Y+delimiter+0;
-                    onlineGameWindow.sendCodeOfGameTurn(codeOfGameTurn);
-                    break;
-                case 1:
-
-                    break;
-                case 3:
-
-                    break;
-            }
-
+             * 0-shooting
+             * 1-exploration*/
+            /*mode:
+             *0-simple shoot
+             * 1-volley shoot
+             * 2-exploration of the map
+             * 3-shooting on straight*/
+            if (onlineGameWindow.getModeStatus() == 2) onlineGameWindow.createCodeCellsOfAction(X, Y, 1);
+            else onlineGameWindow.createCodeCellsOfAction(X, Y, 0);
         }
     }
 
-    public int[] getCoordinates(){
-        int[] coordinates=new int[2];
-        coordinates[0]=X;
-        coordinates[1]=Y;
+    public int[] getCoordinates() {
+        int[] coordinates = new int[2];
+        coordinates[0] = X;
+        coordinates[1] = Y;
         return coordinates;
     }
 
     public void setImage(int status) {
         switch (status) {
             case 1:
-                this.status=1;
+                this.status = 1;
                 setIcon(new ImageIcon(getClass().getResource("../img/seaUnknown.png")));
                 break;
             case 2:
-                this.status=2;
+                this.status = 2;
                 setIcon(null);
                 setBackground(Color.magenta);
                 break;
             case 3:
-                this.status=3;
+                this.status = 3;
                 setIcon(null);
                 setBackground(Color.BLACK);
                 break;
@@ -179,7 +172,8 @@ public class Cell extends JButton {
     public int getStatus() {
         return status;
     }
-    public void setNotActive(){
-        if(status!=6) isActive=false;
+
+    public void setNotActive() {
+        if (status != 6) isActive = false;
     }
 }

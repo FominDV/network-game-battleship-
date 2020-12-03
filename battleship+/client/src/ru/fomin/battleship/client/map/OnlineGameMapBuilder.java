@@ -75,7 +75,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
     }
 
     public void processDataOfResultTurn(String codeOfResultTurn) {
-        messageForLog = "";
+        messageForLog=onlineGameWindow.getMessageForLog();
         boolean isDamageOrDestroy = false;
         int[] lastUsingCellForActionCoordinates = onlineGameWindow.getPastUsingCellForActionCoordinates();
 
@@ -86,7 +86,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
         //convert to integer
         int[][] codeIntegerElements = new int[codeElements.length][];
         for (int i = 0; i < codeElements.length; i++) {
-            codeIntegerElements[i]=new int[codeElements[i].length];
+            codeIntegerElements[i] = new int[codeElements[i].length];
             for (int j = 0; j < codeElements[i].length; j++) {
                 codeIntegerElements[i][j] = Integer.parseInt(codeElements[i][j]);
             }
@@ -99,14 +99,15 @@ public class OnlineGameMapBuilder extends MapBuilder {
                 //decision effect of shooting
                 if (lastUsingCellForActionCoordinates[0] == codeIntegerElements[i][j] && lastUsingCellForActionCoordinates[1] == codeIntegerElements[i][j + 1] && (codeIntegerElements[i][j + 2] == 2 || codeIntegerElements[i][j + 2] == 3))
                     isDamageOrDestroy = true;
-                //decision "is it destroyed ship or something else"
-                if (isDecisionShipWasNotMade && isDestroyedShip(codeIntegerElements[i])) {
-                  messageForLog+=  createMessageAboutDestroyedShip(codeIntegerElements[i].length/3);
-                    //there must be method for images****************************************************************************
-                    isDecisionShipWasNotMade = false;
-                }
                 map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].setImage(codeIntegerElements[i][j + 2]);
                 map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].setNotActive();
+                //decision "is it destroyed ship or something else"
+                if (isDecisionShipWasNotMade && isDestroyedShip(codeIntegerElements[i])) {
+                    messageForLog += createMessageAboutDestroyedShip(codeIntegerElements[i].length / 3);
+                    //there must be method for images****************************************************************************
+                    showCellsAroundShip(codeIntegerElements[i]);
+                    isDecisionShipWasNotMade = false;
+                }
             }
         }
         //decision of next game turn
@@ -118,8 +119,52 @@ public class OnlineGameMapBuilder extends MapBuilder {
             onlineGameWindow.appendIntoLog(messageForLog, false);
         }
     }
-private String createMessageAboutDestroyedShip(int lengthOfShip){
-        switch (lengthOfShip){
+
+    private void showCellsAroundShip(int[] codeOfShip) {
+        switch (directionOfShip(codeOfShip[0], codeOfShip[1], 3, 3)) {
+            case 0:
+                showCellsAroundOneDeckShip(codeOfShip[0], codeOfShip[1]);
+                break;
+            case 1:
+                
+                break;
+            case -1:
+
+                break;
+        }
+    }
+
+    private void showCellsAroundOneDeckShip(int x, int y) {
+        for (int i = 0; i < 2; i++) {
+            if (x - i >= 0) {
+                if (y - 1 >= 0) {
+                    map[x - i][y - 1].setImage(5);
+                    map[x - i][y - 1].setNotActive();
+                }
+                if (y + 1 < map.length) {
+                    map[x - i][y + 1].setImage(5);
+                    map[x - i][y + 1].setNotActive();
+                }
+            }
+            if(y - i >= 0){
+                if (x - 1 >= 0) {
+                    map[x - 1][y - i].setImage(5);
+                    map[x - 1][y - i].setNotActive();
+                }
+                if (x + 1 < map.length) {
+                    map[x + 1][y - i].setImage(5);
+                    map[x + 1][y - i].setNotActive();
+                }
+            }
+        }
+        if (x + 1 < map.length && y + 1 < map.length) {
+            map[x + 1][y + 1].setImage(5);
+            map[x + 1][y + 1].setNotActive();
+        }
+    }
+
+    private String createMessageAboutDestroyedShip(int lengthOfShip) {
+        switch (lengthOfShip) {
             case 4:
                 return "*Four-deck ship was destroyed\n";
             case 3:
@@ -131,7 +176,8 @@ private String createMessageAboutDestroyedShip(int lengthOfShip){
             default:
                 return "";
         }
-}
+    }
+
     private boolean isDestroyedShip(int[] codeOfCells) {
         for (int i = 0; i < codeOfCells.length; i += 3) {
             if (codeOfCells[i + 2] != 3) return false;
@@ -175,5 +221,33 @@ private String createMessageAboutDestroyedShip(int lengthOfShip){
         }
         codeOfTurnResult = String.valueOf(stringBuffer);
         return codeOfTurnResult;
+    }
+
+    public void createCodeCellsOfAction(int x, int y, int mode, int actionType) {
+        messageForLog = "";
+        String code = "";
+        /*mode:
+         *0-simple shoot
+         * 1-volley shoot
+         * 2-exploration of the map
+         * 3-shooting on straight*/
+        //create message for log about actioned cells and first part of code
+        switch (mode) {
+            case 0:
+                code=x + delimiter + y;
+                break;
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+        }
+        //create and send code of cells
+        onlineGameWindow.setMessageForLog(messageForLog);
+        onlineGameWindow.sendCodeOfGameTurn(code+delimiter+actionType);
     }
 }

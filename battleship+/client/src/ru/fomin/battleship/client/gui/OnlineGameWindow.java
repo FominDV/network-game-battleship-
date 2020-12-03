@@ -33,6 +33,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private boolean isNotBlockExplorationMode = true;
     private boolean isNotBlockShootingOnStraightMode = true;
 
+    private String messageForLog;
     private final String INSTRUCTION = "<html>1)For win you should destroy all ships of opponent<br>" +
             "2)Before making any action, you should choose the mode of action<br>" +
             "3)You can select the action mode by pressing the buttons on the top panel<br>" +
@@ -283,7 +284,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     public void appendIntoLog(String message, boolean isActionAgain) {
-        message = NICK_NAME + ":\n*Used mode of " + createMessageAboutMode() + "\n" + message  + createMessageAboutNextTurn(isActionAgain);
+        message = NICK_NAME + ":\n*Used mode of " + createMessageAboutMode() +"\n" + message  + createMessageAboutNextTurn(isActionAgain);
         LOG.append(message + "\n");
         LOG.setCaretPosition(LOG.getDocument().getLength());
         listener.sendMessageToServer(LibraryOfPrefixes.getLogMessage(message));
@@ -293,7 +294,12 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         if (isActionAgain) return "*Can action again";
         else return "*End game turn";
     }
-
+public void setMessageForLog(String messageForLog){
+        this.messageForLog=messageForLog;
+}
+public String getMessageForLog(){
+        return messageForLog;
+}
     private String createMessageAboutMode() {
         switch (pastMode) {
             case 0:
@@ -587,5 +593,8 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         if (turnsForActivated - rechargePoints < 0) deltaGameTurns = 0;
         else deltaGameTurns = turnsForActivated - rechargePoints;
         return TEXT_RECHARGE1 + deltaGameTurns + TEXT_RECHARGE2;
+    }
+    public void createCodeCellsOfAction(int x, int y, int typeOfAction){
+        mapBuilderOfUser.createCodeCellsOfAction(x,y,modeStatus,typeOfAction);
     }
 }
