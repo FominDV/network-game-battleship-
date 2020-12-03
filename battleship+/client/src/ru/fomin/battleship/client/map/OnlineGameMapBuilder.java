@@ -9,6 +9,8 @@ public class OnlineGameMapBuilder extends MapBuilder {
     private String delimiterCombo = delimiterAboutDestroyed + delimiter;
     private OnlineGameWindow onlineGameWindow;
     private String messageForLog;
+    private final String TEXT_DAMAGE = "*Damage:";
+    private final String TEXT_MISS = "*Miss:";
 
     public OnlineGameMapBuilder(Cell[][] map, OnlineGameWindow onlineGameWindow) {
         this.map = map;
@@ -49,9 +51,9 @@ public class OnlineGameMapBuilder extends MapBuilder {
             if (countOfDamagedCells == cellsOfShip.size()) {
                 increaseTurnsForRecharge(cellsOfShip.size());
                 resultOfTurn = delimiterAboutDestroyed;
-                for (int i = 0; i < cellsOfShip.size(); i++) {
-                    cellsOfShip.get(i).setImage(3);
-                    int[] coordinates = cellsOfShip.get(i).getCoordinates();
+                for (Cell cell: cellsOfShip) {
+                    cell.setImage(3);
+                    int[] coordinates = cell.getCoordinates();
                     resultOfTurn += delimiter + coordinates[0] + delimiter + coordinates[1] + delimiter + 3;
                 }
                 resultOfTurn += delimiterAboutDestroyed;
@@ -75,7 +77,9 @@ public class OnlineGameMapBuilder extends MapBuilder {
     }
 
     public void processDataOfResultTurn(String codeOfResultTurn) {
-        messageForLog=onlineGameWindow.getMessageForLog();
+        String damagedCells = TEXT_DAMAGE;
+        String missCells = TEXT_MISS;
+        messageForLog = onlineGameWindow.getMessageForLog();
         boolean isDamageOrDestroy = false;
         int[] lastUsingCellForActionCoordinates = onlineGameWindow.getPastUsingCellForActionCoordinates();
 
@@ -92,24 +96,29 @@ public class OnlineGameMapBuilder extends MapBuilder {
             }
         }
         //set status for cells
-        boolean isDecisionShipWasNotMade;
         for (int i = 0; i < codeIntegerElements.length; i++) {
-            isDecisionShipWasNotMade = true;
             for (int j = 0; j < codeIntegerElements[i].length; j += 3) {
                 //decision effect of shooting
                 if (lastUsingCellForActionCoordinates[0] == codeIntegerElements[i][j] && lastUsingCellForActionCoordinates[1] == codeIntegerElements[i][j + 1] && (codeIntegerElements[i][j + 2] == 2 || codeIntegerElements[i][j + 2] == 3))
                     isDamageOrDestroy = true;
                 map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].setImage(codeIntegerElements[i][j + 2]);
                 map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].setNotActive();
+                //create message for log
+                if (onlineGameWindow.getPastMode() != 2 && map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].getStatus() == 5)
+                    missCells += String.format(" (%s;%s)", codeIntegerElements[i][j] + 1, codeIntegerElements[i][j + 1] + 1);
+                if (onlineGameWindow.getPastMode() != 2 && map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].getStatus() == 2)
+                    damagedCells += String.format(" (%s;%s)", codeIntegerElements[i][j] + 1, codeIntegerElements[i][j + 1] + 1);
                 //decision "is it destroyed ship or something else"
-                if (isDecisionShipWasNotMade && isDestroyedShip(codeIntegerElements[i])) {
+                if (j==codeIntegerElements[i].length-3&& isDestroyedShip(codeIntegerElements[i])) {
                     messageForLog += createMessageAboutDestroyedShip(codeIntegerElements[i].length / 3);
                     //there must be method for images****************************************************************************
                     showCellsAroundShip(codeIntegerElements[i]);
-                    isDecisionShipWasNotMade = false;
+
                 }
             }
         }
+        if (!missCells.equals(TEXT_MISS)) messageForLog += missCells + "\n";
+        if (!damagedCells.equals(TEXT_DAMAGE)) messageForLog += damagedCells + "\n";
         //decision of next game turn
         if (isDamageOrDestroy && onlineGameWindow.getPastMode() == 0) {
             onlineGameWindow.changeTurn();
@@ -121,12 +130,12 @@ public class OnlineGameMapBuilder extends MapBuilder {
     }
 
     private void showCellsAroundShip(int[] codeOfShip) {
-        switch (directionOfShip(codeOfShip[0], codeOfShip[1], 3, 3)) {
+        switch (directionOfShip(codeOfShip[0], codeOfShip[1], 3, 2)) {
             case 0:
                 showCellsAroundOneDeckShip(codeOfShip[0], codeOfShip[1]);
                 break;
             case 1:
-                
+                showCellsAroundHorizontalShip(codeOfShip);
                 break;
             case -1:
 
@@ -134,32 +143,45 @@ public class OnlineGameMapBuilder extends MapBuilder {
         }
     }
 
-    private void showCellsAroundOneDeckShip(int x, int y) {
-        for (int i = 0; i < 2; i++) {
-            if (x - i >= 0) {
-                if (y - 1 >= 0) {
-                    map[x - i][y - 1].setImage(5);
-                    map[x - i][y - 1].setNotActive();
-                }
-                if (y + 1 < map.length) {
-                    map[x - i][y + 1].setImage(5);
-                    map[x - i][y + 1].setNotActive();
-                }
+    private void showCellsAroundHorizontalShip(int[] codeOfShip) {
+        for (int i = -1; i < 2; i++) {
+            if (codeOfShip[1] - 1 >= 0 && codeOfShip[0] + i >= 0 && codeOfShip[0] + i < map.length) {
+                map[codeOfShip[0] + i][codeOfShip[1] - 1].setImage(5);
+                map[codeOfShip[0] + i][codeOfShip[1] - 1].setNotActive();
             }
-            if(y - i >= 0){
-                if (x - 1 >= 0) {
-                    map[x - 1][y - i].setImage(5);
-                    map[x - 1][y - i].setNotActive();
-                }
-                if (x + 1 < map.length) {
-                    map[x + 1][y - i].setImage(5);
-                    map[x + 1][y - i].setNotActive();
-                }
+            if (codeOfShip[codeOfShip.length - 2] + 1 < map.length && codeOfShip[codeOfShip.length - 3] + i >= 0 && codeOfShip[codeOfShip.length - 3] + i < map.length) {
+                map[codeOfShip[codeOfShip.length - 3] + i][codeOfShip[codeOfShip.length - 2] + 1].setImage(5);
+                map[codeOfShip[codeOfShip.length - 3] + i][codeOfShip[codeOfShip.length - 2] + 1].setNotActive();
             }
         }
-        if (x + 1 < map.length && y + 1 < map.length) {
-            map[x + 1][y + 1].setImage(5);
-            map[x + 1][y + 1].setNotActive();
+        for (int i = 0; i < codeOfShip.length; i += 3) {
+            if (codeOfShip[i] + 1 < map.length) {
+                map[codeOfShip[i] + 1][codeOfShip[i + 1]].setImage(5);
+                map[codeOfShip[i] + 1][codeOfShip[i + 1]].setNotActive();
+            }
+            if (codeOfShip[i] - 1 >= 0) {
+                map[codeOfShip[i] - 1][codeOfShip[i + 1]].setImage(5);
+                map[codeOfShip[i] - 1][codeOfShip[i + 1]].setNotActive();
+            }
+        }
+    }
+
+    private void showCellsAroundOneDeckShip(int x, int y) {
+        for (int i = -1; i < 2; i++) {
+            if (y + i < map.length && y + i >= 0) {
+                if (x + 1 < map.length) {
+                    map[x + 1][y + i].setImage(5);
+                    map[x + 1][y + i].setNotActive();
+                }
+                if (x - 1 >= 0) {
+                    map[x - 1][y + i].setImage(5);
+                    map[x - 1][y + i].setNotActive();
+                }
+                if (i != 0) {
+                    map[x][y + i].setImage(5);
+                    map[x][y + i].setNotActive();
+                }
+            }
         }
     }
 
@@ -234,7 +256,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
         //create message for log about actioned cells and first part of code
         switch (mode) {
             case 0:
-                code=x + delimiter + y;
+                code = x + delimiter + y;
                 break;
             case 1:
 
@@ -248,6 +270,6 @@ public class OnlineGameMapBuilder extends MapBuilder {
         }
         //create and send code of cells
         onlineGameWindow.setMessageForLog(messageForLog);
-        onlineGameWindow.sendCodeOfGameTurn(code+delimiter+actionType);
+        onlineGameWindow.sendCodeOfGameTurn(code + delimiter + actionType);
     }
 }

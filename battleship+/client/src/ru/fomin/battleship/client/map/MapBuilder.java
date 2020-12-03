@@ -284,7 +284,7 @@ public class MapBuilder {
             for (int i = 1; i <= map.length; i++) {
                 if (x - i >= 0 && (map[x - i][y].getStatus() == status1||map[x - i][y].getStatus() == status2)) bufferNumberOfCells++;  else break;
             }
-            for (int i = bufferNumberOfCells; i > 0; i--) cellsOfShip.add(map[x - i][y]);
+            for (int i = 1; i >=bufferNumberOfCells; i--) cellsOfShip.add(map[x - i][y]);
         }
         if (direction == 1) {
             bufferNumberOfCells = 0;
@@ -297,7 +297,7 @@ public class MapBuilder {
             for (int i = 1; i <= map.length; i++) {
                 if (y + i < map.length && (map[x][y + i].getStatus() == status1||map[x][y + i].getStatus() == status2)) bufferNumberOfCells++;  else break;
             }
-            for (int i = bufferNumberOfCells; i > 0; i--) cellsOfShip.add(map[x][y + i]);
+            for (int i = 1; i >=bufferNumberOfCells; i++) cellsOfShip.add(map[x][y + i]);
         }
         return cellsOfShip;
     }
