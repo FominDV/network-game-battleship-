@@ -144,7 +144,26 @@ public class OnlineGameMapBuilder extends MapBuilder {
     }
 
     private void showCellsAroundVerticalShip(int[] codeOfShip) {
-
+        for (int i = -1; i < 2; i++) {
+            if (codeOfShip[0] + 1 < map.length && codeOfShip[1] + i >= 0 && codeOfShip[1] + i < map.length) {
+                map[codeOfShip[0] + 1][codeOfShip[1] + i].setImage(5);
+                map[codeOfShip[0] + 1][codeOfShip[1] + i].setNotActive();
+            }
+            if (codeOfShip[codeOfShip.length - 3] - 1 >=0 && codeOfShip[codeOfShip.length - 2] + i >= 0 && codeOfShip[codeOfShip.length - 2] + i < map.length) {
+                map[codeOfShip[codeOfShip.length - 3] - 1][codeOfShip[codeOfShip.length - 2] + i].setImage(5);
+                map[codeOfShip[codeOfShip.length - 3] - 1][codeOfShip[codeOfShip.length - 2] + i].setNotActive();
+            }
+        }
+        for (int i = 0; i < codeOfShip.length; i += 3) {
+            if (codeOfShip[i+1] + 1 < map.length) {
+                map[codeOfShip[i]][codeOfShip[i + 1]+1].setImage(5);
+                map[codeOfShip[i]][codeOfShip[i + 1]+1].setNotActive();
+            }
+            if (codeOfShip[i+1] - 1 >= 0) {
+                map[codeOfShip[i]][codeOfShip[i + 1]-1].setImage(5);
+                map[codeOfShip[i]][codeOfShip[i + 1]-1].setNotActive();
+            }
+        }
     }
 
     private void showCellsAroundHorizontalShip(int[] codeOfShip) {
