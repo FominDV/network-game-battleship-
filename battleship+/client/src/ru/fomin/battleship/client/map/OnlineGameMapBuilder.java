@@ -7,6 +7,7 @@ import java.util.Vector;
 public class OnlineGameMapBuilder extends MapBuilder {
     private OnlineGameWindow onlineGameWindow;
     private String messageForLog;
+
     public OnlineGameMapBuilder(Cell[][] map, OnlineGameWindow onlineGameWindow) {
         this.map = map;
         this.onlineGameWindow = onlineGameWindow;
@@ -44,17 +45,20 @@ public class OnlineGameMapBuilder extends MapBuilder {
             int countOfDamagedCells = 0;
             for (Cell cell : cellsOfShip) if (cell.getStatus() == 2) countOfDamagedCells++;
             if (countOfDamagedCells == cellsOfShip.size()) {
-                resultOfTurn+=delimiter+3;
+                resultOfTurn += delimiter + 3;
                 for (Cell cell : cellsOfShip) {
                     cell.setImage(3);
-                    int[] coordinates=cell.getCoordinates();
-                    resultOfTurn+=delimiter+coordinates[0]+delimiter+coordinates[1]+delimiter+3;
+                    int[] coordinates = cell.getCoordinates();
+                    if(x!=coordinates[0]&&y!=coordinates[1])
+                    resultOfTurn += delimiter + coordinates[0] + delimiter + coordinates[1] + delimiter + 3;
                 }
-            }else{
+            } else {
                 resultOfTurn += delimiter + 2;
             }
         } else {
-            resultOfTurn += delimiter + map[x][y].getStatus();
+            if (map[x][y].getStatus() != 3 && map[x][y].getStatus() != 2)
+                resultOfTurn += delimiter + map[x][y].getStatus();
+            else resultOfTurn = "";
         }
         return resultOfTurn;
     }
@@ -68,23 +72,24 @@ public class OnlineGameMapBuilder extends MapBuilder {
     }
 
     public void processDataOfResultTurn(String codeOfResultTurn) {
-        messageForLog="";
+        messageForLog = "";
         boolean isDamageOrDestroy = false;
-        int[] lastUsingCellForActionCoordinates=onlineGameWindow.getPastUsingCellForActionCoordinates();
-        String[] codeElements=codeOfResultTurn.split(delimiter);
-        int[] codeIntegerElements=new int[codeElements.length];
-        for(int i =0;i<codeElements.length;i++){
-            codeIntegerElements[i]=Integer.parseInt(codeElements[i]);
+        int[] lastUsingCellForActionCoordinates = onlineGameWindow.getPastUsingCellForActionCoordinates();
+        String[] codeElements = codeOfResultTurn.split(delimiter);
+        int[] codeIntegerElements = new int[codeElements.length];
+        for (int i = 0; i < codeElements.length; i++) {
+            codeIntegerElements[i] = Integer.parseInt(codeElements[i]);
         }
-        for(int i=0; i<codeIntegerElements.length;i+=3){
-           if(lastUsingCellForActionCoordinates[0]==codeIntegerElements[i]&&lastUsingCellForActionCoordinates[1]==codeIntegerElements[i+1]&&(codeIntegerElements[i+2]==2||codeIntegerElements[i+2]==3))
-            isDamageOrDestroy=true;
-           map[codeIntegerElements[i]][codeIntegerElements[i+1]].setImage(codeIntegerElements[i+2]);
+        for (int i = 0; i < codeIntegerElements.length; i += 3) {
+            if (lastUsingCellForActionCoordinates[0] == codeIntegerElements[i] && lastUsingCellForActionCoordinates[1] == codeIntegerElements[i + 1] && (codeIntegerElements[i + 2] == 2 || codeIntegerElements[i + 2] == 3))
+                isDamageOrDestroy = true;
+            map[codeIntegerElements[i]][codeIntegerElements[i + 1]].setImage(codeIntegerElements[i + 2]);
+            map[codeIntegerElements[i]][codeIntegerElements[i + 1]].setNotActive();
         }
-        if(isDamageOrDestroy&&onlineGameWindow.getPastMode()==0){
+        if (isDamageOrDestroy && onlineGameWindow.getPastMode() == 0) {
             onlineGameWindow.changeTurn();
             onlineGameWindow.appendIntoLog(messageForLog, true);
-        }else{
+        } else {
             onlineGameWindow.sendMessageAboutChangeTurn();
             onlineGameWindow.appendIntoLog(messageForLog, false);
         }

@@ -274,13 +274,13 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     public void appendIntoLog(String message) {
-        LOG.append(message);
+        LOG.append(message+"\n");
         LOG.setCaretPosition(LOG.getDocument().getLength());
     }
 
     public void appendIntoLog(String message, boolean isActionAgain) {
-        message = NICK_NAME + ":\n*Used mode of " + createMessageAboutMode() + "\n" + message + "\n*" + createMessageAboutNextTurn(isActionAgain) + "\n";
-        LOG.append(message);
+        message = NICK_NAME + ":\n*Used mode of " + createMessageAboutMode() + "\n" + message + "\n*" + createMessageAboutNextTurn(isActionAgain);
+        LOG.append(message+"\n");
         LOG.setCaretPosition(LOG.getDocument().getLength());
         listener.sendMessageToServer(LibraryOfPrefixes.getLogMessage(message));
     }
@@ -383,12 +383,14 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
 
     public void setChatMessage(String message) {
         CHAT.append(message + "\n");
+        CHAT.setCaretPosition(LOG.getDocument().getLength());
     }
 
     private void sendMessageIntoChat(String message) {
         listener.sendMessageToServer(LibraryOfPrefixes.getChatMessage(message));
         Date date = new Date();
         CHAT.append(format("YOU(%tR):\n%s\n", date, message));
+        CHAT.setCaretPosition(LOG.getDocument().getLength());
         FIELD_FOR_CHAT_MESSAGE.setText("");
         FIELD_FOR_CHAT_MESSAGE.grabFocus();
     }

@@ -179,4 +179,7 @@ public class Cell extends JButton {
     public int getStatus() {
         return status;
     }
+    public void setNotActive(){
+        if(status!=6) isActive=false;
+    }
 }
