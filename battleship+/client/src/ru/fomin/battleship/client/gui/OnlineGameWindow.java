@@ -23,12 +23,15 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private int modeStatus = 0;
     private int pastMode;
     private int[] pastUsingCellForActionCoordinates = new int[2];
-    private final int TURNS_FOR_VOLLEY = 4;
-    private final int TURNS_FOR_EXPLORATION = 3;
-    private final int TURNS_FOR_STRAIGHT_SHOOTING = 2;
+    private int turnsForVolley = 4;
+    private int turnsForExploration = 3;
+    private int turnsForShootingOnStraight = 2;
     private int rechargeForVolley = 0;
     private int rechargeForExploration = 0;
     private int rechargeForStraightShooting = 0;
+    private boolean isNotBlockVolleyMode = true;
+    private boolean isNotBlockExplorationMode = true;
+    private boolean isNotBlockShootingOnStraightMode = true;
 
     private final String INSTRUCTION = "<html>1)For win you should destroy all ships of opponent<br>" +
             "2)Before making any action, you should choose the mode of action<br>" +
@@ -45,9 +48,9 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             "12)By using mode of volley shoot any random cells can be already shot before<br>" +
             "13)By using mode of shooting on straight if random straight have not two unknown cells," +
             " another straight will be selected. If two straights have not two unknown cells, only one or zero cells will be shot<br>" +
-            "14)For recharge of volley shoot " + TURNS_FOR_VOLLEY + " game turns is needed<br>" +
-            "15)For recharge of exploration of the map " + TURNS_FOR_EXPLORATION + " game turns is needed<br>" +
-            "16)For recharge of shooting on straight " + TURNS_FOR_STRAIGHT_SHOOTING + " game turns is needed<br>" +
+            "14)For recharge of volley shoot " + turnsForVolley + " game turns is needed<br>" +
+            "15)For recharge of exploration of the map " + turnsForExploration + " game turns is needed<br>" +
+            "16)For recharge of shooting on straight " + turnsForShootingOnStraight + " game turns is needed<br>" +
             "17)If you lose a four-deck ship, you can no longer use the mode of volley shoot<br>" +
             "18)If you lose a three-deck ship recharge of the mode of exploration of the map will be increased on two game turns<br>" +
             "19)If you lose all three-deck ships, you can no longer use the mode of exploration of the map<br>" +
@@ -109,9 +112,9 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
 
     private final JLabel LABEL_TURN = new JLabel(TEXT_TURN_OF_OPPONENT);
     private final JLabel LABEL_MODE = new JLabel(TEXT_MODE_SIMPLE_SHOOT);
-    private final JLabel LABEL_RECHARGE_VOLLEY = new JLabel(TEXT_RECHARGE1 + (TURNS_FOR_VOLLEY - rechargeForVolley) + TEXT_RECHARGE2);
-    private final JLabel LABEL_RECHARGE_EXPLORATION = new JLabel(TEXT_RECHARGE1 + (TURNS_FOR_EXPLORATION - rechargeForExploration) + TEXT_RECHARGE2);
-    private final JLabel LABEL_RECHARGE_STRAIGHT = new JLabel(TEXT_RECHARGE1 + (TURNS_FOR_STRAIGHT_SHOOTING - rechargeForStraightShooting) + TEXT_RECHARGE2);
+    private final JLabel LABEL_RECHARGE_VOLLEY = new JLabel(TEXT_RECHARGE1 + (turnsForVolley - rechargeForVolley) + TEXT_RECHARGE2);
+    private final JLabel LABEL_RECHARGE_EXPLORATION = new JLabel(TEXT_RECHARGE1 + (turnsForExploration - rechargeForExploration) + TEXT_RECHARGE2);
+    private final JLabel LABEL_RECHARGE_STRAIGHT = new JLabel(TEXT_RECHARGE1 + (turnsForShootingOnStraight - rechargeForStraightShooting) + TEXT_RECHARGE2);
 
     private final Font FONT_OF_TURN = new Font(Font.SERIF, Font.BOLD, 24);
     private final Font FONT_OF_MODE = new Font(Font.SERIF, Font.BOLD, 26);
@@ -274,13 +277,13 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     public void appendIntoLog(String message) {
-        LOG.append(message+"\n");
+        LOG.append(message + "\n");
         LOG.setCaretPosition(LOG.getDocument().getLength());
     }
 
     public void appendIntoLog(String message, boolean isActionAgain) {
         message = NICK_NAME + ":\n*Used mode of " + createMessageAboutMode() + "\n" + message + "\n*" + createMessageAboutNextTurn(isActionAgain);
-        LOG.append(message+"\n");
+        LOG.append(message + "\n");
         LOG.setCaretPosition(LOG.getDocument().getLength());
         listener.sendMessageToServer(LibraryOfPrefixes.getLogMessage(message));
     }
@@ -352,19 +355,29 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             return;
         }
         if (source == BUTTON_MODE_VOLLEY) {
-
+            if (isActiveVolleyMode()) {
+                modeStatus=1;
+                LABEL_MODE.setText(TEXT_MODE_VOLLEY_SHOOT);
+            }
             return;
         }
         if (source == BUTTON_MODE_EXPLORATION) {
-
+            if (isActiveExplorationMode()) {
+                modeStatus=2;
+                LABEL_MODE.setText(TEXT_MODE_EXPLORATION);
+            }
             return;
         }
         if (source == BUTTON_MODE_STRAIGHT) {
-
+            if (isActiveShootingOnStraightMode()) {
+                modeStatus=3;
+                LABEL_MODE.setText(TEXT_MODE_STRAIGHT_SHOOTING);
+            }
             return;
         }
         if (source == BUTTON_MODE_SIMPLE) {
-
+            modeStatus=0;
+            LABEL_MODE.setText(TEXT_MODE_SIMPLE_SHOOT);
             return;
         }
 
@@ -429,6 +442,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
 
     public void sendMessageAboutChangeTurn() {
         listener.sendMessageToServer(LibraryOfPrefixes.CHANGE_TURN);
+        increaseRechargingPoints();
     }
 
     public void sendCodeOfGameTurn(String codeOfGameTurn) {
@@ -445,5 +459,98 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
 
     public void processDataOfResultTurn(String codeOfResultTurn) {
         mapBuilderOfOpponent.processDataOfResultTurn(codeOfResultTurn);
+    }
+
+    public void blockTurnsForVolley() {
+        rechargeForVolley = 0;
+        isNotBlockVolleyMode = false;
+        changeColorButtonModeVolley();
+    }
+
+    public void blockTurnsForExploration() {
+        rechargeForExploration = 0;
+        isNotBlockExplorationMode = false;
+        changeColorButtonModeExploration();
+    }
+
+    public void blockTurnsForShootingOnStraight() {
+        rechargeForStraightShooting = 0;
+        isNotBlockShootingOnStraightMode = false;
+        changeColorButtonModeShootingOnStraight();
+    }
+
+    public void changeTurnsForExploration() {
+        rechargeForExploration = turnsForExploration;
+        turnsForExploration += 2;
+        changeColorButtonModeExploration();
+    }
+
+    public void changeTurnsForShootingOnStraight() {
+        rechargeForStraightShooting = turnsForShootingOnStraight;
+        turnsForShootingOnStraight++;
+        changeColorButtonModeShootingOnStraight();
+    }
+
+    public void changeTurnsForAllShootingModes() {
+        if (isNotBlockVolleyMode) {
+            rechargeForVolley = turnsForVolley;
+            turnsForVolley++;
+            changeColorButtonModeVolley();
+        }
+        if (isNotBlockExplorationMode) {
+            rechargeForExploration = turnsForExploration;
+            turnsForExploration++;
+            changeColorButtonModeExploration();
+        }
+        if (isNotBlockShootingOnStraightMode) {
+            rechargeForStraightShooting = turnsForShootingOnStraight;
+            turnsForShootingOnStraight++;
+            changeColorButtonModeShootingOnStraight();
+        }
+    }
+
+    public void increaseRechargingPoints() {
+        if (isNotBlockVolleyMode) {
+            rechargeForVolley++;
+            changeColorButtonModeVolley();
+        }
+        if (isNotBlockExplorationMode) {
+            rechargeForExploration++;
+            changeColorButtonModeExploration();
+        }
+        if (isNotBlockShootingOnStraightMode) {
+            rechargeForStraightShooting++;
+            changeColorButtonModeShootingOnStraight();
+        }
+    }
+
+    private boolean isActiveVolleyMode() {
+        if (turnsForVolley <= rechargeForVolley && isNotBlockVolleyMode) return true;
+        else return false;
+    }
+
+    private boolean isActiveExplorationMode() {
+        if (turnsForExploration <= rechargeForExploration && isNotBlockExplorationMode) return true;
+        else return false;
+    }
+
+    private boolean isActiveShootingOnStraightMode() {
+        if (turnsForShootingOnStraight <= rechargeForStraightShooting && isNotBlockShootingOnStraightMode) return true;
+        else return false;
+    }
+
+    private void changeColorButtonModeVolley() {
+        if (isActiveVolleyMode()) BUTTON_MODE_VOLLEY.setBackground(COLOR_FOR_ACTIVE_MODE);
+        else BUTTON_MODE_VOLLEY.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
+    }
+
+    private void changeColorButtonModeExploration() {
+        if (isActiveExplorationMode()) BUTTON_MODE_EXPLORATION.setBackground(COLOR_FOR_ACTIVE_MODE);
+        else BUTTON_MODE_EXPLORATION.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
+    }
+
+    private void changeColorButtonModeShootingOnStraight() {
+        if (isActiveShootingOnStraightMode()) BUTTON_MODE_STRAIGHT.setBackground(COLOR_FOR_ACTIVE_MODE);
+        else BUTTON_MODE_STRAIGHT.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
     }
 }
