@@ -5,6 +5,7 @@ import ru.fomin.battleship.client.gui.OnlineGameWindow;
 import java.util.Vector;
 
 public class OnlineGameMapBuilder extends MapBuilder {
+    private String delimiterAboutDestroyed = "d";
     private OnlineGameWindow onlineGameWindow;
     private String messageForLog;
 
@@ -31,17 +32,27 @@ public class OnlineGameMapBuilder extends MapBuilder {
     private String processShootingDataOfOpponentTurn(int[] codeElementsArray) {
         String codeOfTurnResult = determineStatusCellAfterShoot(codeElementsArray[0], codeElementsArray[1]);
         if (codeElementsArray.length != 2)
-        for (int i = 2; i < codeElementsArray.length; i += 2) {
-            codeOfTurnResult +=determineStatusCellAfterShoot(codeElementsArray[i], codeElementsArray[i + 1]);
+            for (int i = 2; i < codeElementsArray.length; i += 2) {
+                codeOfTurnResult += determineStatusCellAfterShoot(codeElementsArray[i], codeElementsArray[i + 1]);
+            }
+        int[] indexForRemoveSymbols = new int[3];
+        for (int i = 0; i < 3; i++) {
+            if (i == 0)
+                indexForRemoveSymbols[i] = codeOfTurnResult.indexOf(delimiterAboutDestroyed + delimiterAboutDestroyed,1);
+            else
+                indexForRemoveSymbols[i] = codeOfTurnResult.indexOf(delimiterAboutDestroyed + delimiterAboutDestroyed, indexForRemoveSymbols[i - 1]);
         }
         StringBuffer stringBuffer = new StringBuffer(codeOfTurnResult);
+        for(int i=0;i< indexForRemoveSymbols.length;i++){
+            if(indexForRemoveSymbols[i]!=-1) stringBuffer.deleteCharAt(indexForRemoveSymbols[i]);
+        }
         stringBuffer.deleteCharAt(0);
-        codeOfTurnResult= String.valueOf(stringBuffer);
+        codeOfTurnResult = String.valueOf(stringBuffer);
         return codeOfTurnResult;
     }
 
     private String determineStatusCellAfterShoot(int x, int y) {
-        String resultOfTurn =delimiter+ x + delimiter + y;
+        String resultOfTurn = delimiter + x + delimiter + y;
         if (map[x][y].getStatus() == 6) {
             map[x][y].setImage(2);
             Vector<Cell> cellsOfShip = getCellsOfShip(x, y, 6, 2);
