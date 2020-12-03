@@ -6,6 +6,7 @@ import java.util.Vector;
 
 public class OnlineGameMapBuilder extends MapBuilder {
     private String delimiterAboutDestroyed = "d";
+    private String delimiterCombo = delimiterAboutDestroyed + delimiter;
     private OnlineGameWindow onlineGameWindow;
     private String messageForLog;
 
@@ -35,18 +36,12 @@ public class OnlineGameMapBuilder extends MapBuilder {
             for (int i = 2; i < codeElementsArray.length; i += 2) {
                 codeOfTurnResult += determineStatusCellAfterShoot(codeElementsArray[i], codeElementsArray[i + 1]);
             }
-        int[] indexForRemoveSymbols = new int[3];
-        for (int i = 0; i < 3; i++) {
-            if (i == 0)
-                indexForRemoveSymbols[i] = codeOfTurnResult.indexOf(delimiterAboutDestroyed + delimiterAboutDestroyed,1);
-            else
-                indexForRemoveSymbols[i] = codeOfTurnResult.indexOf(delimiterAboutDestroyed + delimiterAboutDestroyed, indexForRemoveSymbols[i - 1]);
-        }
         StringBuffer stringBuffer = new StringBuffer(codeOfTurnResult);
-        for(int i=0;i< indexForRemoveSymbols.length;i++){
-            if(indexForRemoveSymbols[i]!=-1) stringBuffer.deleteCharAt(indexForRemoveSymbols[i]);
-        }
+        if (codeOfTurnResult.charAt(codeOfTurnResult.length() - 1) == delimiterAboutDestroyed.charAt(0))
+            stringBuffer.deleteCharAt(codeOfTurnResult.length() - 1);
         stringBuffer.deleteCharAt(0);
+        if (stringBuffer.charAt(0) == delimiter.charAt(0))
+            stringBuffer.deleteCharAt(0);
         codeOfTurnResult = String.valueOf(stringBuffer);
         return codeOfTurnResult;
     }
@@ -59,12 +54,14 @@ public class OnlineGameMapBuilder extends MapBuilder {
             int countOfDamagedCells = 0;
             for (Cell cell : cellsOfShip) if (cell.getStatus() == 2) countOfDamagedCells++;
             if (countOfDamagedCells == cellsOfShip.size()) {
-                resultOfTurn = "";
-                for (Cell cell : cellsOfShip) {
-                    cell.setImage(3);
-                    int[] coordinates = cell.getCoordinates();
-                    resultOfTurn += delimiter + coordinates[0] + delimiter + coordinates[1] + delimiter + 3;
+                increaseTurnsForRecharge(cellsOfShip.size());
+                resultOfTurn =  delimiterAboutDestroyed ;
+                for (int i = 0; i < cellsOfShip.size(); i++) {
+                    cellsOfShip.get(i).setImage(3);
+                    int[] coordinates = cellsOfShip.get(i).getCoordinates();
+                    resultOfTurn +=  delimiter + coordinates[0] + delimiter + coordinates[1] + delimiter + 3;
                 }
+                resultOfTurn += delimiterAboutDestroyed;
             } else {
                 resultOfTurn += delimiter + 2;
             }
@@ -107,5 +104,25 @@ public class OnlineGameMapBuilder extends MapBuilder {
             onlineGameWindow.appendIntoLog(messageForLog, false);
         }
     }
+  private void   increaseTurnsForRecharge(int lengthOfShip){
+        switch (lengthOfShip){
+            case 4:
+                count4Ship--;
+                onlineGameWindow.blockTurnsForVolley();
+                break;
+            case 3:
+                count3Ship--;
+                if(count3Ship==0) onlineGameWindow.blockTurnsForExploration(); else onlineGameWindow.changeTurnsForExploration();
+                break;
+            case 2:
+                count2Ship--;
+                if(count2Ship==0) onlineGameWindow.blockTurnsForShootingOnStraight(); else onlineGameWindow.changeTurnsForShootingOnStraight();
+                break;
+            case 1:
+                count1Ship--;
+                onlineGameWindow.changeTurnsForAllShootingModes();
+                break;
+        }
 
+  }
 }
