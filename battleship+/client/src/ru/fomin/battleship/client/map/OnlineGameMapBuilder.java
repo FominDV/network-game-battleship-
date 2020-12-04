@@ -105,7 +105,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
                 if (lastUsingCellForActionCoordinates[0] == codeIntegerElements[i][j] && lastUsingCellForActionCoordinates[1] == codeIntegerElements[i][j + 1] && (codeIntegerElements[i][j + 2] == 2 || codeIntegerElements[i][j + 2] == 3))
                     isDamageOrDestroy = true;
                 map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].setImage(codeIntegerElements[i][j + 2]);
-                if (onlineGameWindow.getPastMode() != 2)
+                if (onlineGameWindow.getPastMode() != 2 || map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].getStatus() == 5)
                     map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].setNotActive();
                 //create message for log
                 if (onlineGameWindow.getPastMode() != 2 && map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].getStatus() == 5)

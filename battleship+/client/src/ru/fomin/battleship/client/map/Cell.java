@@ -88,8 +88,7 @@ public class Cell extends JButton {
                 break;
             case 2:
                 this.status = 2;
-                setIcon(null);
-                setBackground(Color.magenta);
+                setIcon(new ImageIcon(getClass().getResource("../img/damage.png")));
                 break;
             case 3:
                 this.status = 3;
