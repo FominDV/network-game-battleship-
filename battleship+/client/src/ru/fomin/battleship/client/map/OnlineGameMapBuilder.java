@@ -122,10 +122,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
         //convert to integer
         int[][] codeIntegerElements = new int[codeElements.length][];
         for (int i = 0; i < codeElements.length; i++) {
-            codeIntegerElements[i] = new int[codeElements[i].length];
-            for (int j = 0; j < codeElements[i].length; j++) {
-                codeIntegerElements[i][j] = Integer.parseInt(codeElements[i][j]);
-            }
+            codeIntegerElements[i] = getConvertedStringArrayToIntegerArrayCode(codeElements[i]);
         }
         //set status for cells
         for (int i = 0; i < codeIntegerElements.length; i++) {
@@ -354,7 +351,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
         StringBuffer codeOfMap = new StringBuffer(100);
         int cellStatus;
         for (int i = 0; i < map.length; i++) {
-            for (int j = 1; j < map.length; j++) {
+            for (int j = 0; j < map.length; j++) {
                 cellStatus = map[i][j].getStatus();
                 if (cellStatus == 2 || cellStatus == 6)
                     codeOfMap.append(delimiter + i + delimiter + j + delimiter + cellStatus);
@@ -367,9 +364,31 @@ public class OnlineGameMapBuilder extends MapBuilder {
     public void openMapOfOpponent(String codeOfMap) {
         String[] stringCodeElements = codeOfMap.split(delimiter);
         int[] integerCodeOfElements = getConvertedStringArrayToIntegerArrayCode(stringCodeElements);
-
-
+        setAllStatusFromCode(integerCodeOfElements);
+        int x, y,direction;
+        Vector<Cell> cellsOfShip;
+        //Setting images on all alive ships and setting special status "0" for all cells where is status "6"
+        for (int i = 0; i < integerCodeOfElements.length; i += 3) {
+            x = integerCodeOfElements[i];
+            y = integerCodeOfElements[i + 1];
+            if (map[x][y].getStatus()!=0&&(integerCodeOfElements[i + 2] == 6||integerCodeOfElements[i + 2] == 2)) {
+                cellsOfShip = getCellsOfShip(x, y, 6, 2);
+               direction=getDirectionOfShip(x, y, 2, 6);
+                setImageForShip(cellsOfShip,direction , getImagesForShip(cellsOfShip.size()));
+                for (Cell cell : cellsOfShip) {
+                    if (cell.getStatus() == 2) {
+                        int[] coordinates=cell.getCoordinates();
+                        setImageToDamagedCell(coordinates[0],coordinates[1],cellsOfShip,direction);
+                    }
+                    cell.setImage(0);
+                }
+            }
+        }
         openSpaceCells();
+    }
+
+    private void setAllStatusFromCode(int[] integerCodeOfElements) {
+        for(int i=0;i< integerCodeOfElements.length;i+=3) map[integerCodeOfElements[i]][integerCodeOfElements[i+1]].setImage(integerCodeOfElements[i+2]);
     }
 
     public void openSpaceCells() {

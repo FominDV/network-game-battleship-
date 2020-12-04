@@ -408,7 +408,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
 
     public void setChatMessage(String message) {
         CHAT.append(message + "\n");
-        CHAT.setCaretPosition(LOG.getDocument().getLength());
+        CHAT.setCaretPosition(CHAT.getDocument().getLength());
     }
 
     private void sendMessageIntoChat(String message) {

@@ -213,7 +213,7 @@ public class MapBuilder {
         }
     }
 
-    private int[] getImagesForShip(int lengthOfShip) {
+    protected int[] getImagesForShip(int lengthOfShip) {
         switch (lengthOfShip) {
             case 2:
                 return IMAGES_OF_SHIP2;

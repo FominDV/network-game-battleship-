@@ -13,7 +13,8 @@ public class Cell extends JButton {
      * 3-dead
      * 4-preparing for posting ships
      * 5-known cell free
-     * 6-known cell with ship*/
+     * 6-known cell with ship
+     * 0-special status for to processing the code from opponent at the end of the game*/
     static String delimiter = MapBuilder.delimiter;
     private boolean isActive;
     private int status;
@@ -82,6 +83,9 @@ public class Cell extends JButton {
 
     public void setImage(int status) {
         switch (status) {
+            case 0:
+                this.status = 0;
+                break;
             case 1:
                 this.status = 1;
                 setIcon(new ImageIcon(getClass().getResource("../img/seaUnknown.png")));
@@ -92,8 +96,6 @@ public class Cell extends JButton {
                 break;
             case 3:
                 this.status = 3;
-                setIcon(null);
-                setBackground(Color.BLACK);
                 break;
             case 4:
                 this.status = 4;
