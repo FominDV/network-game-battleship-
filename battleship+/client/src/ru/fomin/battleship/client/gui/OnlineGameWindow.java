@@ -597,4 +597,16 @@ public String getMessageForLog(){
     public void createCodeCellsOfAction(int x, int y, int typeOfAction){
         mapBuilderOfUser.createCodeCellsOfAction(x,y,modeStatus,typeOfAction);
     }
+    public void gameIsLost(){
+
+        listener.sendMessageToServer(LibraryOfPrefixes.VICTORY);
+    }
+  public void  victory(){
+        mapBuilderOfOpponent.openSpaceCells();
+        listener.sendMessageToServer(LibraryOfPrefixes.getCodeOfMapAfterGameMessage(mapBuilderOfUser.getCodeOfMapAfterGame()));
+    }
+
+    public void openMapOfOpponent(String codeOfMap) {
+        mapBuilderOfOpponent.openMapOfOpponent(codeOfMap);
+    }
 }

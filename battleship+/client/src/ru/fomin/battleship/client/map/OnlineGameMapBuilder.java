@@ -26,9 +26,12 @@ public class OnlineGameMapBuilder extends MapBuilder {
         int[] codeElementsIntegerArray = new int[codeElementsArray.length - 1];
         for (int i = 0; i < codeElementsArray.length - 1; i++)
             codeElementsIntegerArray[i] = Integer.parseInt(codeElementsArray[i]);
-        if (codeElementsArray[codeElementsArray.length - 1].equals("0"))
+        if (codeElementsArray[codeElementsArray.length - 1].equals("0")) {
             onlineGameWindow.sendCodeResultOfGameTurn(processShootingDataOfOpponentTurn(codeElementsIntegerArray));
-        else onlineGameWindow.sendCodeResultOfGameTurn(processExplorationDataOfOpponentTurn(codeElementsIntegerArray));
+            verifyEndOfTheGame();
+        } else {
+            onlineGameWindow.sendCodeResultOfGameTurn(processExplorationDataOfOpponentTurn(codeElementsIntegerArray));
+        }
     }
 
 
@@ -102,7 +105,8 @@ public class OnlineGameMapBuilder extends MapBuilder {
                 if (lastUsingCellForActionCoordinates[0] == codeIntegerElements[i][j] && lastUsingCellForActionCoordinates[1] == codeIntegerElements[i][j + 1] && (codeIntegerElements[i][j + 2] == 2 || codeIntegerElements[i][j + 2] == 3))
                     isDamageOrDestroy = true;
                 map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].setImage(codeIntegerElements[i][j + 2]);
-                map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].setNotActive();
+                if (onlineGameWindow.getPastMode() != 2)
+                    map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].setNotActive();
                 //create message for log
                 if (onlineGameWindow.getPastMode() != 2 && map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].getStatus() == 5)
                     missCells += String.format(" (%s;%s)", codeIntegerElements[i][j] + 1, codeIntegerElements[i][j + 1] + 1);
@@ -149,19 +153,19 @@ public class OnlineGameMapBuilder extends MapBuilder {
                 map[codeOfShip[0] + 1][codeOfShip[1] + i].setImage(5);
                 map[codeOfShip[0] + 1][codeOfShip[1] + i].setNotActive();
             }
-            if (codeOfShip[codeOfShip.length - 3] - 1 >=0 && codeOfShip[codeOfShip.length - 2] + i >= 0 && codeOfShip[codeOfShip.length - 2] + i < map.length) {
+            if (codeOfShip[codeOfShip.length - 3] - 1 >= 0 && codeOfShip[codeOfShip.length - 2] + i >= 0 && codeOfShip[codeOfShip.length - 2] + i < map.length) {
                 map[codeOfShip[codeOfShip.length - 3] - 1][codeOfShip[codeOfShip.length - 2] + i].setImage(5);
                 map[codeOfShip[codeOfShip.length - 3] - 1][codeOfShip[codeOfShip.length - 2] + i].setNotActive();
             }
         }
         for (int i = 0; i < codeOfShip.length; i += 3) {
-            if (codeOfShip[i+1] + 1 < map.length) {
-                map[codeOfShip[i]][codeOfShip[i + 1]+1].setImage(5);
-                map[codeOfShip[i]][codeOfShip[i + 1]+1].setNotActive();
+            if (codeOfShip[i + 1] + 1 < map.length) {
+                map[codeOfShip[i]][codeOfShip[i + 1] + 1].setImage(5);
+                map[codeOfShip[i]][codeOfShip[i + 1] + 1].setNotActive();
             }
-            if (codeOfShip[i+1] - 1 >= 0) {
-                map[codeOfShip[i]][codeOfShip[i + 1]-1].setImage(5);
-                map[codeOfShip[i]][codeOfShip[i + 1]-1].setNotActive();
+            if (codeOfShip[i + 1] - 1 >= 0) {
+                map[codeOfShip[i]][codeOfShip[i + 1] - 1].setImage(5);
+                map[codeOfShip[i]][codeOfShip[i + 1] - 1].setNotActive();
             }
         }
     }
@@ -294,5 +298,40 @@ public class OnlineGameMapBuilder extends MapBuilder {
         //create and send code of cells
         onlineGameWindow.setMessageForLog(messageForLog);
         onlineGameWindow.sendCodeOfGameTurn(code + delimiter + actionType);
+    }
+
+    private void verifyEndOfTheGame() {
+        if (count1Ship + count2Ship + count3Ship + count4Ship == 0) {
+            onlineGameWindow.gameIsLost();
+        }
+    }
+
+    public String getCodeOfMapAfterGame() {
+        StringBuffer codeOfMap = new StringBuffer(100);
+        int cellStatus;
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 1; j < map.length; j++) {
+                cellStatus = map[i][j].getStatus();
+                if (cellStatus == 2 || cellStatus == 6)
+                    codeOfMap.append(delimiter + i + delimiter + j + delimiter + cellStatus);
+            }
+        }
+        codeOfMap.deleteCharAt(0);
+        return String.valueOf(codeOfMap);
+    }
+
+    public void openMapOfOpponent(String codeOfMap) {
+
+    }
+
+    public void openSpaceCells() {
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map.length; j++) {
+                if (map[i][j].getStatus() == 1) {
+                    map[i][j].setImage(5);
+                    map[i][j].setNotActive();
+                }
+            }
+        }
     }
 }

@@ -211,6 +211,12 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             case LibraryOfPrefixes.LOG_MESSAGE:
                 onlineGameWindow.appendIntoLog(arr[1]);
                 break;
+            case LibraryOfPrefixes.VICTORY:
+                onlineGameWindow.victory();
+                break;
+            case LibraryOfPrefixes.CODE_OF_MAP_AFTER_GAME:
+                onlineGameWindow.openMapOfOpponent(arr[1]);
+                break;
         }
     }
 

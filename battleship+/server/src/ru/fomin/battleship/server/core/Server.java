@@ -187,6 +187,13 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
                 sendMessageToOpponent(client,LibraryOfPrefixes.getLogMessage(arr[1]));
                 putLog(arr[1]);
                 break;
+            case LibraryOfPrefixes.VICTORY:
+                sendMessageToOpponent(client,LibraryOfPrefixes.VICTORY);
+                putLog(client.getNickname()+" lost the game\n"+client.getOpponentNickname()+" won the game");
+                break;
+            case LibraryOfPrefixes.CODE_OF_MAP_AFTER_GAME:
+                sendMessageToOpponent(client,LibraryOfPrefixes.getCodeOfMapAfterGameMessage(arr[1]));
+                break;
             default:
                 client.msgFormatError(msg);
         }
