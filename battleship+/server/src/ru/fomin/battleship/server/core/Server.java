@@ -194,6 +194,9 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
             case LibraryOfPrefixes.CODE_OF_MAP_AFTER_GAME:
                 sendMessageToOpponent(client,LibraryOfPrefixes.getCodeOfMapAfterGameMessage(arr[1]));
                 break;
+            case LibraryOfPrefixes.LOG_LAST_MESSAGE:
+                sendMessageToOpponent(client,LibraryOfPrefixes.getLogLastPartMessage(arr[1]));
+                break;
             default:
                 client.msgFormatError(msg);
         }

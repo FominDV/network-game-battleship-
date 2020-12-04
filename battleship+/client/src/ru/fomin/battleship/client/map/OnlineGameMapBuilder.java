@@ -68,7 +68,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
                 setImageForShip(cellsOfShip, getDirectionOfShip(coordinatesOfCell[0], coordinatesOfCell[1], 3, 3), getImagesOfDamagedShip(cellsOfShip.size()));
             } else {
                 resultOfTurn += delimiter + 2;
-                setImagesToDamagedCell(x, y, cellsOfShip, getDirectionOfShip(x, y, 2, 6));
+                setImageToDamagedCell(x, y, cellsOfShip, getDirectionOfShip(x, y, 2, 6));
             }
         } else {
             if (map[x][y].getStatus() != 3 && map[x][y].getStatus() != 2)
@@ -87,13 +87,13 @@ public class OnlineGameMapBuilder extends MapBuilder {
     }
 
     //Method for set image to damaged cell of the ship
-    private void setImagesToDamagedCell(int x, int y, Vector<Cell> cellsOfShip, int direction) {
+    private void setImageToDamagedCell(int x, int y, Vector<Cell> cellsOfShip, int direction) {
         int indexOfCellByShip;
         int[] coordinatesOfFirstCell = cellsOfShip.get(0).getCoordinates();
         if (direction == 1) {
             indexOfCellByShip = y - coordinatesOfFirstCell[1];
         } else {
-            indexOfCellByShip =coordinatesOfFirstCell[0]-x;
+            indexOfCellByShip = coordinatesOfFirstCell[0] - x;
         }
         int codeOfCell = getCodeOfImageForDamagedCell(cellsOfShip.size(), indexOfCellByShip, direction);
         map[x][y].setImage(codeOfCell);
@@ -107,12 +107,6 @@ public class OnlineGameMapBuilder extends MapBuilder {
         else return codesForImagesOfThisDamagedShip[indexOfCellByShip + lengthOfShip];
     }
 
-    //Method for set images to damaged ship
-    private void setImagesToDamagedShip(Vector<Cell> cellsOfShip, int direction) {
-        for (Cell cell : cellsOfShip) {
-
-        }
-    }
 
     public void processDataOfResultTurn(String codeOfResultTurn) {
         String damagedCells = TEXT_DAMAGE;
@@ -371,7 +365,11 @@ public class OnlineGameMapBuilder extends MapBuilder {
     }
 
     public void openMapOfOpponent(String codeOfMap) {
+        String[] stringCodeElements = codeOfMap.split(delimiter);
+        int[] integerCodeOfElements = getConvertedStringArrayToIntegerArrayCode(stringCodeElements);
 
+
+        openSpaceCells();
     }
 
     public void openSpaceCells() {
@@ -383,5 +381,12 @@ public class OnlineGameMapBuilder extends MapBuilder {
                 }
             }
         }
+    }
+
+    private int[] getConvertedStringArrayToIntegerArrayCode(String[] stringCodeElements) {
+        int[] integerCodeOfElements = new int[stringCodeElements.length];
+        for (int i = 0; i < stringCodeElements.length; i++)
+            integerCodeOfElements[i] = Integer.parseInt(stringCodeElements[i]);
+        return integerCodeOfElements;
     }
 }

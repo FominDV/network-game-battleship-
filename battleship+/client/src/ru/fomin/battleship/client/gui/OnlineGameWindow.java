@@ -34,6 +34,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private boolean isNotBlockShootingOnStraightMode = true;
 
     private String messageForLog;
+    private String lastPartOfMessageForLog="";
     private final String INSTRUCTION = "<html>1)For win you should destroy all ships of opponent<br>" +
             "2)Before making any action, you should choose the mode of action<br>" +
             "3)You can select the action mode by pressing the buttons on the top panel<br>" +
@@ -284,7 +285,8 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     public void appendIntoLog(String message, boolean isActionAgain) {
-        message = NICK_NAME + ":\n*Used mode of " + createMessageAboutMode() +"\n" + message  + createMessageAboutNextTurn(isActionAgain);
+        message = NICK_NAME + ":\n*Used mode of " + createMessageAboutMode() + "\n" + message +lastPartOfMessageForLog+ createMessageAboutNextTurn(isActionAgain);
+        lastPartOfMessageForLog="";
         LOG.append(message + "\n");
         LOG.setCaretPosition(LOG.getDocument().getLength());
         listener.sendMessageToServer(LibraryOfPrefixes.getLogMessage(message));
@@ -294,12 +296,15 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         if (isActionAgain) return "*Can action again";
         else return "*End game turn";
     }
-public void setMessageForLog(String messageForLog){
-        this.messageForLog=messageForLog;
-}
-public String getMessageForLog(){
+
+    public void setMessageForLog(String messageForLog) {
+        this.messageForLog = messageForLog;
+    }
+
+    public String getMessageForLog() {
         return messageForLog;
-}
+    }
+
     private String createMessageAboutMode() {
         switch (pastMode) {
             case 0:
@@ -468,11 +473,20 @@ public String getMessageForLog(){
         mapBuilderOfOpponent.processDataOfResultTurn(codeOfResultTurn);
     }
 
+    public void setLastPartOfMessageForLog(String message){
+        lastPartOfMessageForLog=message;
+    }
+    private void sendMessageAboutLostModeForLog(String modeName) {
+        String message = String.format("*%s lost mode of '%s'\n", NICK_NAME, modeName);
+        listener.sendMessageToServer(LibraryOfPrefixes.getLogLastPartMessage(message));
+    }
+
     public void blockTurnsForVolley() {
         rechargeForVolley = 0;
         isNotBlockVolleyMode = false;
         changeButtonModeVolley();
         LABEL_RECHARGE_VOLLEY.setText(TEXT_BLOCK_MODE);
+        sendMessageAboutLostModeForLog("volley shoot");
     }
 
     public void blockTurnsForExploration() {
@@ -480,6 +494,7 @@ public String getMessageForLog(){
         isNotBlockExplorationMode = false;
         changeButtonModeExploration();
         LABEL_RECHARGE_EXPLORATION.setText(TEXT_BLOCK_MODE);
+        sendMessageAboutLostModeForLog("exploration of the map");
     }
 
     public void blockTurnsForShootingOnStraight() {
@@ -487,38 +502,39 @@ public String getMessageForLog(){
         isNotBlockShootingOnStraightMode = false;
         changeButtonModeShootingOnStraight();
         LABEL_RECHARGE_STRAIGHT.setText(TEXT_BLOCK_MODE);
+        sendMessageAboutLostModeForLog("shooting on straight");
     }
 
     public void changeTurnsForExploration() {
-        if(rechargeForExploration>turnsForExploration)
-        rechargeForExploration = turnsForExploration;
+        if (rechargeForExploration > turnsForExploration)
+            rechargeForExploration = turnsForExploration;
         turnsForExploration += 2;
         changeButtonModeExploration();
     }
 
     public void changeTurnsForShootingOnStraight() {
-        if(rechargeForStraightShooting>turnsForShootingOnStraight)
-        rechargeForStraightShooting = turnsForShootingOnStraight;
+        if (rechargeForStraightShooting > turnsForShootingOnStraight)
+            rechargeForStraightShooting = turnsForShootingOnStraight;
         turnsForShootingOnStraight++;
         changeButtonModeShootingOnStraight();
     }
 
     public void changeTurnsForAllShootingModes() {
         if (isNotBlockVolleyMode) {
-            if(rechargeForVolley>turnsForVolley)
-            rechargeForVolley = turnsForVolley;
+            if (rechargeForVolley > turnsForVolley)
+                rechargeForVolley = turnsForVolley;
             turnsForVolley++;
             changeButtonModeVolley();
         }
         if (isNotBlockExplorationMode) {
-            if(rechargeForExploration>turnsForExploration)
-            rechargeForExploration = turnsForExploration;
+            if (rechargeForExploration > turnsForExploration)
+                rechargeForExploration = turnsForExploration;
             turnsForExploration++;
             changeButtonModeExploration();
         }
         if (isNotBlockShootingOnStraightMode) {
-            if(rechargeForStraightShooting>turnsForShootingOnStraight)
-            rechargeForStraightShooting = turnsForShootingOnStraight;
+            if (rechargeForStraightShooting > turnsForShootingOnStraight)
+                rechargeForStraightShooting = turnsForShootingOnStraight;
             turnsForShootingOnStraight++;
             changeButtonModeShootingOnStraight();
         }
@@ -563,7 +579,7 @@ public String getMessageForLog(){
             BUTTON_MODE_VOLLEY.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
             LABEL_RECHARGE_VOLLEY.setBorder(BORDER_FOR_LABEL_RECHARGE_NO_ACTIVE);
         }
-        LABEL_RECHARGE_VOLLEY.setText(createTextAboutRecharge(rechargeForVolley,turnsForVolley));
+        LABEL_RECHARGE_VOLLEY.setText(createTextAboutRecharge(rechargeForVolley, turnsForVolley));
     }
 
     private void changeButtonModeExploration() {
@@ -574,7 +590,7 @@ public String getMessageForLog(){
             BUTTON_MODE_EXPLORATION.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
             LABEL_RECHARGE_EXPLORATION.setBorder(BORDER_FOR_LABEL_RECHARGE_NO_ACTIVE);
         }
-        LABEL_RECHARGE_EXPLORATION.setText(createTextAboutRecharge(rechargeForExploration,turnsForExploration));
+        LABEL_RECHARGE_EXPLORATION.setText(createTextAboutRecharge(rechargeForExploration, turnsForExploration));
     }
 
     private void changeButtonModeShootingOnStraight() {
@@ -585,7 +601,7 @@ public String getMessageForLog(){
             BUTTON_MODE_STRAIGHT.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
             LABEL_RECHARGE_STRAIGHT.setBorder(BORDER_FOR_LABEL_RECHARGE_NO_ACTIVE);
         }
-        LABEL_RECHARGE_STRAIGHT.setText(createTextAboutRecharge(rechargeForStraightShooting,turnsForShootingOnStraight));
+        LABEL_RECHARGE_STRAIGHT.setText(createTextAboutRecharge(rechargeForStraightShooting, turnsForShootingOnStraight));
     }
 
     private String createTextAboutRecharge(int rechargePoints, int turnsForActivated) {
@@ -594,14 +610,17 @@ public String getMessageForLog(){
         else deltaGameTurns = turnsForActivated - rechargePoints;
         return TEXT_RECHARGE1 + deltaGameTurns + TEXT_RECHARGE2;
     }
-    public void createCodeCellsOfAction(int x, int y, int typeOfAction){
-        mapBuilderOfUser.createCodeCellsOfAction(x,y,modeStatus,typeOfAction);
+
+    public void createCodeCellsOfAction(int x, int y, int typeOfAction) {
+        mapBuilderOfUser.createCodeCellsOfAction(x, y, modeStatus, typeOfAction);
     }
-    public void gameIsLost(){
+
+    public void gameIsLost() {
 
         listener.sendMessageToServer(LibraryOfPrefixes.VICTORY);
     }
-  public void  victory(){
+
+    public void victory() {
         mapBuilderOfOpponent.openSpaceCells();
         listener.sendMessageToServer(LibraryOfPrefixes.getCodeOfMapAfterGameMessage(mapBuilderOfUser.getCodeOfMapAfterGame()));
     }
