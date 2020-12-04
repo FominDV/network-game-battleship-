@@ -16,10 +16,10 @@ public class MapBuilder {
     protected int count3Ship = 0;
     protected int count4Ship = 0;
     static String delimiter = "x";
-    private final int[] IMAGES_OF_SHIP1 = {11};
-    private final int[] IMAGES_OF_SHIP3 = {311, 312, 313, 321, 322, 323};
-    private final int[] IMAGES_OF_SHIP2 = {211, 212, 221, 222};
-    private final int[] IMAGES_OF_SHIP4 = {411, 412, 413, 414, 421, 422, 423, 424};
+    protected final int[] IMAGES_OF_SHIP1 = {11};
+    protected final int[] IMAGES_OF_SHIP3 = {311, 312, 313, 321, 322, 323};
+    protected final int[] IMAGES_OF_SHIP2 = {211, 212, 221, 222};
+    protected final int[] IMAGES_OF_SHIP4 = {411, 412, 413, 414, 421, 422, 423, 424};
 
     public MapBuilder(Cell[][] map, PreparingForGameFrame preparingForGameFrame) {
         this.map = map;
@@ -43,7 +43,7 @@ public class MapBuilder {
     private boolean validShipLength(int x, int y) {
         int maxLengthOfShip = maxLengthOfShip();
         int statusOfCell;
-        int direction = directionOfShip(x, y, 4, 4);
+        int direction = getDirectionOfShip(x, y, 4, 4);
         int nowLengthOfShip = nowLengthOfShip(x, y, 4);
         if (nowLengthOfShip >= maxLengthOfShip) return false;
         for (int i = 0; i < map.length; i++) {
@@ -58,7 +58,7 @@ public class MapBuilder {
     }
 
     protected int nowLengthOfShip(int x, int y, int status) {
-        int direction = directionOfShip(x, y, status, status);
+        int direction = getDirectionOfShip(x, y, status, status);
         if (direction == 0) return 0;
         int countCellOfShip = 0;
         if (direction == -1) {
@@ -92,7 +92,7 @@ public class MapBuilder {
     }
 
     private boolean validSpaces(int x, int y) {
-        int direction = directionOfShip(x, y, 4, 4);
+        int direction = getDirectionOfShip(x, y, 4, 4);
         if (y - 1 >= 0 && x - 1 >= 0) {
             if (direction == -1 && !((y + 1 >= map.length || (map[x][y + 1].getStatus() == 5 && map[x - 1][y + 1].getStatus() == 5)) && map[x][y - 1].getStatus() == 5 && ((x + 1 >= map.length || map[x + 1][y].getStatus() == 5 || map[x + 1][y].getStatus() == 4) || (map[x - 1][y].getStatus() == 5 || map[x - 1][y].getStatus() == 4)) && map[x - 1][y - 1].getStatus() == 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5) && (x + 1 >= map.length || map[x + 1][y - 1].getStatus() == 5)))
                 return false;
@@ -135,7 +135,7 @@ public class MapBuilder {
     /*1: horizontal
      * 0: no direction
      * -1: vertical*/
-    protected int directionOfShip(int x, int y, int status1, int status2) {
+    protected int getDirectionOfShip(int x, int y, int status1, int status2) {
         if (x - 1 >= 0) {
             if (x + 1 < map.length) {
                 if (map[x - 1][y].getStatus() == status1 || map[x + 1][y].getStatus() == status1 || map[x - 1][y].getStatus() == status2 || map[x + 1][y].getStatus() == status2)
@@ -184,7 +184,7 @@ public class MapBuilder {
             }
         }
         if (x == -1) return;
-        direction = directionOfShip(x, y, 4, 4);
+        direction = getDirectionOfShip(x, y, 4, 4);
         Vector<Cell> cellsForBuildingShip = getCellsOfShip(x, y, 4, 4);
         int lengthOfShip = cellsForBuildingShip.size();
         postTheShip(lengthOfShip, cellsForBuildingShip, direction);
@@ -251,7 +251,7 @@ public class MapBuilder {
     }
 
     protected Vector<Cell> getCellsOfShip(int x, int y, int status1, int status2) {
-        int direction = directionOfShip(x, y, status1, status2);
+        int direction = getDirectionOfShip(x, y, status1, status2);
         Vector<Cell> cellsOfShip = new Vector<>();
         int bufferNumberOfCells;
         if (direction == 0) cellsOfShip.add(map[x][y]);

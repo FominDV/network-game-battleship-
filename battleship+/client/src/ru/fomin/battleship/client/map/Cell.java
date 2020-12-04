@@ -107,6 +107,7 @@ public class Cell extends JButton {
             case 6:
                 this.status = 6;
                 break;
+                //Images for ships which are alive
             case 11:
                 setIcon(new ImageIcon(getClass().getResource("../img/ship1.png")));
                 break;
@@ -164,7 +165,64 @@ public class Cell extends JButton {
             case 424:
                 setIcon(new ImageIcon(getClass().getResource("../img/ship424.png")));
                 break;
-
+            //Images for destroyed ships
+            case 110:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage1.png")));
+                break;
+            case 2110:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage211.png")));
+                break;
+            case 2120:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage212.png")));
+                break;
+            case 2210:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage221.png")));
+                break;
+            case 2220:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage222.png")));
+                break;
+            case 3110:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage311.png")));
+                break;
+            case 3120:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage312.png")));
+                break;
+            case 3130:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage313.png")));
+                break;
+            case 3210:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage321.png")));
+                break;
+            case 3220:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage322.png")));
+                break;
+            case 3230:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage323.png")));
+                break;
+            case 4110:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage411.png")));
+                break;
+            case 4120:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage412.png")));
+                break;
+            case 4130:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage413.png")));
+                break;
+            case 4140:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage414.png")));
+                break;
+            case 4210:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage421.png")));
+                break;
+            case 4220:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage422.png")));
+                break;
+            case 4230:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage423.png")));
+                break;
+            case 4240:
+                setIcon(new ImageIcon(getClass().getResource("../img/damage424.png")));
+                break;
         }
     }
 
