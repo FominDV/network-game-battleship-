@@ -30,6 +30,7 @@ public class LibraryOfPrefixes {
     public static final String LOG_LAST_MESSAGE="/log_last_message";
     public static final String VICTORY = "/victory";
     public static final String CODE_OF_MAP_AFTER_GAME = "/map_after_game";
+    public static final String PLAY_AGAIN = "/play_again";
 
     public static String getAuthAccept(String nickname) {
         return AUTH_ACCEPT + DELIMITER + nickname;

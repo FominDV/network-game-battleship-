@@ -220,6 +220,9 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             case LibraryOfPrefixes.LOG_LAST_MESSAGE:
                 onlineGameWindow.setLastPartOfMessageForLog(arr[1]);
                 break;
+            case LibraryOfPrefixes.PLAY_AGAIN:
+                onlineGameWindow.playAgain();
+                break;
         }
     }
 
@@ -227,6 +230,11 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
         socketThread.close();
         onlineGameWindow.dispose();
         isValidAuthentication = false;
+        try {
+            preparingForGameFrame.dispose();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         try {
             login(ip, port, clientAuthenticationFrame, login);
         } catch (IOException e) {
@@ -269,4 +277,18 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
         this.onlineGameWindow = onlineGameWindow;
     }
 
+    @Override
+    public SocketThread getSocket() {
+        return socketThread;
+    }
+
+    @Override
+    public String getLogin() {
+        return login;
+    }
+
+    @Override
+    public void setPreparingForGameWindow(PreparingForGameFrame preparingForGameFrame) {
+        this.preparingForGameFrame = preparingForGameFrame;
+    }
 }

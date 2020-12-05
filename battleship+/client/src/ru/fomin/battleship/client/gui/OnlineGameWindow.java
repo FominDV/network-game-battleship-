@@ -34,7 +34,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private boolean isNotBlockShootingOnStraightMode = true;
 
     private String messageForLog;
-    private String lastPartOfMessageForLog="";
+    private String lastPartOfMessageForLog = "";
     private final String INSTRUCTION = "<html>1)For win you should destroy all ships of opponent<br>" +
             "2)Before making any action, you should choose the mode of action<br>" +
             "3)You can select the action mode by pressing the buttons on the top panel<br>" +
@@ -71,7 +71,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final String TEXT_RECHARGE1 = "recharge in ";
     private final String TEXT_RECHARGE2 = " turns";
 
-
+    private boolean isPlayAgain = false;
     private boolean isTurnOfUser = false;
     private final String opponentNickname;
     private final String NICK_NAME;
@@ -89,6 +89,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final Color COLOR_FOR_EXIT = new Color(241, 83, 83, 233);
     private final Color COLOR_FOR_LABEL_MODE = new Color(106, 4, 10, 191);
     private final Color COLOR_FOR_BORDER_MODE = new Color(1, 23, 95, 233);
+    private final Color COLOR_FOR_ENDING = new Color(187, 52, 0, 233);
 
     private final Border BORDER_FOR_LOG_AND_CHAT = BorderFactory.createLineBorder(COLOR_FOR_BORDER_LOG, 20);
     private final Border BORDER_FOR_LABEL_MODE = BorderFactory.createLineBorder(COLOR_FOR_BORDER_MODE, 10);
@@ -107,6 +108,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final JPanel PANEL_ACTION_MENU_TOP = new JPanel(new GridLayout(1, 5));
     private final JPanel[] PANEL_MODE_TOP = new JPanel[3];
     private final JPanel PANEL_BOTTOM = new JPanel(new BorderLayout());
+    private final JPanel PANEL_OF_ENDING = new JPanel(new GridLayout(2, 1));
 
 
     private final JTextArea LOG = new JTextArea();
@@ -118,6 +120,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final JLabel LABEL_RECHARGE_VOLLEY = new JLabel(TEXT_RECHARGE1 + (turnsForVolley - rechargeForVolley) + TEXT_RECHARGE2);
     private final JLabel LABEL_RECHARGE_EXPLORATION = new JLabel(TEXT_RECHARGE1 + (turnsForExploration - rechargeForExploration) + TEXT_RECHARGE2);
     private final JLabel LABEL_RECHARGE_STRAIGHT = new JLabel(TEXT_RECHARGE1 + (turnsForShootingOnStraight - rechargeForStraightShooting) + TEXT_RECHARGE2);
+    private final JLabel LABEL_OF_ENDING = new JLabel();
 
     private final Font FONT_OF_TURN = new Font(Font.SERIF, Font.BOLD, 24);
     private final Font FONT_OF_MODE = new Font(Font.SERIF, Font.BOLD, 26);
@@ -127,6 +130,8 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final Font FONT_OF_BUTTON_INFO = new Font(Font.SERIF, Font.BOLD, 19);
     private final Font FONT_OF_FIELD_FOR_CHAT_MESSAGE = new Font(Font.SERIF, Font.ITALIC, 20);
     private final Font FONT_OF_CHAT = new Font(Font.SERIF, Font.ITALIC, 16);
+    private final Font FONT_OF_BUTTON_PLAY_AGAIN = new Font(Font.SERIF, Font.BOLD, 26);
+    private final Font FONT_OF_LABEL_ENDING = new Font(Font.SERIF, Font.BOLD, 46);
 
     private final JButton BUTTON_SEND = new JButton("SEND MESSAGE");
     private final JButton BUTTON_INSTRUCTION = new JButton("INSTRUCTION MANUAL");
@@ -285,8 +290,8 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     public void appendIntoLog(String message, boolean isActionAgain) {
-        message = NICK_NAME + ":\n*Used mode of " + createMessageAboutMode() + "\n" + message +lastPartOfMessageForLog+ createMessageAboutNextTurn(isActionAgain);
-        lastPartOfMessageForLog="";
+        message = NICK_NAME + ":\n*Used mode of " + createMessageAboutMode() + "\n" + message + lastPartOfMessageForLog + createMessageAboutNextTurn(isActionAgain);
+        lastPartOfMessageForLog = "";
         LOG.append(message + "\n");
         LOG.setCaretPosition(LOG.getDocument().getLength());
         listener.sendMessageToServer(LibraryOfPrefixes.getLogMessage(message));
@@ -473,9 +478,10 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         mapBuilderOfOpponent.processDataOfResultTurn(codeOfResultTurn);
     }
 
-    public void setLastPartOfMessageForLog(String message){
-        lastPartOfMessageForLog=message;
+    public void setLastPartOfMessageForLog(String message) {
+        lastPartOfMessageForLog = message;
     }
+
     private void sendMessageAboutLostModeForLog(String modeName) {
         String message = String.format("*%s lost mode of '%s'\n", NICK_NAME, modeName);
         listener.sendMessageToServer(LibraryOfPrefixes.getLogLastPartMessage(message));
@@ -622,24 +628,70 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     public void victory() {
         mapBuilderOfOpponent.openSpaceCells();
         listener.sendMessageToServer(LibraryOfPrefixes.getCodeOfMapAfterGameMessage(mapBuilderOfUser.getCodeOfMapAfterGame()));
-        SwingUtilities.invokeLater(()->showEndOfTheGame(1));
+        SwingUtilities.invokeLater(() -> showEndOfTheGame(1));
     }
 
     public void openMapOfOpponent(String codeOfMap) {
         mapBuilderOfOpponent.openMapOfOpponent(codeOfMap);
-       SwingUtilities.invokeLater(()->showEndOfTheGame(0));
+        SwingUtilities.invokeLater(() -> showEndOfTheGame(0));
     }
+
     /*codeEndOfTheGame:
-    * 0-lost
-    * 1-victory*/
-    private void showEndOfTheGame(int codeEndOfTheGame){
-    PANEL_MAIN_TOP.setVisible(false);
-   JLabel labelStatusOfEnding = new JLabel();
-   LABEL_TURN.setText(" ");
-   if(codeEndOfTheGame==0) labelStatusOfEnding.setText("LOST"); else labelStatusOfEnding.setText("VICTORY");
-   add(labelStatusOfEnding,BorderLayout.NORTH);
+     * 0-lost
+     * 1-victory*/
+    private void showEndOfTheGame(int codeEndOfTheGame) {
+        PANEL_MAIN_TOP.setVisible(false);
 
+        JButton buttonPlayAgain = new JButton("play with \"" + opponentNickname + "\" again");
+        buttonPlayAgain.addActionListener(e -> {
+            SwingUtilities.invokeLater(() -> buttonPlayAgainAction());
+        });
+        LABEL_TURN.setText(" ");
+        LABEL_OF_ENDING.setHorizontalAlignment(SwingConstants.CENTER);
+        LABEL_OF_ENDING.setFont(FONT_OF_LABEL_ENDING);
+        buttonPlayAgain.setFont(FONT_OF_BUTTON_PLAY_AGAIN);
+        LABEL_OF_ENDING.setForeground(COLOR_FOR_ENDING);
+        if (codeEndOfTheGame == 0) {
+            LABEL_OF_ENDING.setText("YOU LOST THIS ROUND OF THE GAME");
+            sendMessageAboutVictoryForLog(opponentNickname);
+        } else {
+            LABEL_OF_ENDING.setText("YOU WON THIS ROUND OF THE GAME");
+            sendMessageAboutVictoryForLog(NICK_NAME);
+        }
+        PANEL_OF_ENDING.add(LABEL_OF_ENDING);
+        PANEL_OF_ENDING.add(buttonPlayAgain);
+        add(PANEL_OF_ENDING, BorderLayout.NORTH);
     }
 
+    private void buttonPlayAgainAction() {
+        if (!isPlayAgain) {
+            isPlayAgain = true;
+            PANEL_OF_ENDING.setVisible(false);
+            LABEL_OF_ENDING.setText("<html><br>PLEASE WAIT DECISION OF YOUR OPPONENT</html>");
+            add(LABEL_OF_ENDING, BorderLayout.NORTH);
+            listener.sendMessageToServer(LibraryOfPrefixes.PLAY_AGAIN);
+        }
+    }
 
+    private void sendMessageAboutVictoryForLog(String nickName) {
+        appendIntoLog(nickName + " won this round of the game");
+    }
+
+    public void playAgain() {
+        if (isPlayAgain) {
+            startNewGameWithPastOpponent();
+        } else {
+            if (isConfirmMessage(opponentNickname + " suggest you to play again\nDo you agree?")) {
+                isPlayAgain=true;
+                listener.sendMessageToServer(LibraryOfPrefixes.PLAY_AGAIN);
+                startNewGameWithPastOpponent();
+            } else {
+                exitToMapBuilder();
+            }
+        }
+    }
+  private void   startNewGameWithPastOpponent(){
+      listener.setPreparingForGameWindow(new PreparingForGameFrame(listener.getSocket(),NICK_NAME,opponentNickname,listener,listener.getLogin()));
+      this.dispose();
+    }
 }

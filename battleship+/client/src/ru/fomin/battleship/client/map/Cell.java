@@ -109,7 +109,7 @@ public class Cell extends JButton {
             case 6:
                 this.status = 6;
                 break;
-                //Image about miss for map of user
+                //Image about miss
             case 12:
                 setIcon(new ImageIcon(getClass().getResource("../img/miss.png")));
                 break;

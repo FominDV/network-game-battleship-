@@ -197,6 +197,10 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
             case LibraryOfPrefixes.LOG_LAST_MESSAGE:
                 sendMessageToOpponent(client,LibraryOfPrefixes.getLogLastPartMessage(arr[1]));
                 break;
+            case LibraryOfPrefixes.PLAY_AGAIN:
+                sendMessageToOpponent(client,LibraryOfPrefixes.PLAY_AGAIN);
+                putLog(client.getNickname()+" want to play again with "+client.getOpponentNickname());
+                break;
             default:
                 client.msgFormatError(msg);
         }

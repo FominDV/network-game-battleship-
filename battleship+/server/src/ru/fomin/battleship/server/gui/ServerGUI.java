@@ -39,7 +39,7 @@ public class ServerGUI extends JFrame implements ActionListener, Thread.Uncaught
         setSize( WIDTH, HEIGHT);
         setLocationRelativeTo(null);
         setResizable(false);
-        setTitle("Chat server");
+        setTitle("SERVER");
         HEADER_LABEL.setFont(TEXT_HEADER);
         HEADER_LABEL.setHorizontalAlignment(SwingConstants.CENTER);
         LOG.setEditable(false);

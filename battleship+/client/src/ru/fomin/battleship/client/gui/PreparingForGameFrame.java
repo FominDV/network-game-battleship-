@@ -89,7 +89,15 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         LOGIN = login;
         SwingUtilities.invokeLater(() -> initialization());
     }
-
+    public PreparingForGameFrame(SocketThread socketThread, String nickname,String opponentNickname, WorkingWithNetwork listener, String login) {
+        NICK_NAME = nickname;
+        this.opponentNickname=opponentNickname;
+        SOCKET_THREAD = socketThread;
+        this.listener = listener;
+        LOGIN = login;
+        updateDataMap();
+        SwingUtilities.invokeLater(() -> initialization());
+    }
     private void initialization() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(WIDTH, HEIGHT);
