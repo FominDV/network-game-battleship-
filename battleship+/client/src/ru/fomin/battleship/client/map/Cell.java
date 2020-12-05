@@ -109,6 +109,10 @@ public class Cell extends JButton {
             case 6:
                 this.status = 6;
                 break;
+                //Image about miss for map of user
+            case 12:
+                setIcon(new ImageIcon(getClass().getResource("../img/miss.png")));
+                break;
                 //Images for ships which are alive
             case 11:
                 setIcon(new ImageIcon(getClass().getResource("../img/ship1.png")));

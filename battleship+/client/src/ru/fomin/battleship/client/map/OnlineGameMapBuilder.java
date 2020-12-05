@@ -71,9 +71,10 @@ public class OnlineGameMapBuilder extends MapBuilder {
                 setImageToDamagedCell(x, y, cellsOfShip, getDirectionOfShip(x, y, 2, 6));
             }
         } else {
-            if (map[x][y].getStatus() != 3 && map[x][y].getStatus() != 2)
-                resultOfTurn += delimiter + map[x][y].getStatus();
-            else resultOfTurn = "";
+            if (map[x][y].getStatus() != 3 && map[x][y].getStatus() != 2) {
+                resultOfTurn += delimiter + 5;
+                map[x][y].setImage(12);
+            } else resultOfTurn = "";
         }
         return resultOfTurn;
     }
@@ -109,6 +110,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
 
 
     public void processDataOfResultTurn(String codeOfResultTurn) {
+        int x, y, status;
         String damagedCells = TEXT_DAMAGE;
         String missCells = TEXT_MISS;
         messageForLog = onlineGameWindow.getMessageForLog();
@@ -128,22 +130,27 @@ public class OnlineGameMapBuilder extends MapBuilder {
         for (int i = 0; i < codeIntegerElements.length; i++) {
             for (int j = 0; j < codeIntegerElements[i].length; j += 3) {
                 //decision effect of shooting
-                if (lastUsingCellForActionCoordinates[0] == codeIntegerElements[i][j] && lastUsingCellForActionCoordinates[1] == codeIntegerElements[i][j + 1] && (codeIntegerElements[i][j + 2] == 2 || codeIntegerElements[i][j + 2] == 3))
+                x = codeIntegerElements[i][j];
+                y = codeIntegerElements[i][j + 1];
+                status = codeIntegerElements[i][j + 2];
+                if (lastUsingCellForActionCoordinates[0] == x && lastUsingCellForActionCoordinates[1] == y && (status == 2 || status == 3))
                     isDamageOrDestroy = true;
-                map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].setImage(codeIntegerElements[i][j + 2]);
-                if (onlineGameWindow.getPastMode() != 2 || map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].getStatus() == 5)
-                    map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].setNotActive();
+                map[x][y].setImage(status);
+                if (onlineGameWindow.getPastMode() != 2 || map[x][y].getStatus() == 5)
+                    map[x][y].setNotActive();
                 //create message for log
-                if (onlineGameWindow.getPastMode() != 2 && map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].getStatus() == 5)
-                    missCells += String.format(" (%s;%s)", codeIntegerElements[i][j] + 1, codeIntegerElements[i][j + 1] + 1);
-                if (onlineGameWindow.getPastMode() != 2 && map[codeIntegerElements[i][j]][codeIntegerElements[i][j + 1]].getStatus() == 2)
-                    damagedCells += String.format(" (%s;%s)", codeIntegerElements[i][j] + 1, codeIntegerElements[i][j + 1] + 1);
+                if (onlineGameWindow.getPastMode() != 2 && map[x][y].getStatus() == 5) {
+                    map[x][y].setImage(12);
+                    missCells += String.format(" (%s;%s)", x + 1, y + 1);
+                }
+                if (onlineGameWindow.getPastMode() != 2 && map[x][y].getStatus() == 2)
+                    damagedCells += String.format(" (%s;%s)", x + 1, y + 1);
             }
             //decision "is it destroyed ship or something else"
             if (isDestroyedShip(codeIntegerElements[i])) {
                 messageForLog += createMessageAboutDestroyedShip(codeIntegerElements[i].length / 3);
-                int x = codeIntegerElements[i][0];
-                int y = codeIntegerElements[i][1];
+                x = codeIntegerElements[i][0];
+                y = codeIntegerElements[i][1];
                 int direction = getDirectionOfShip(x, y, 3, 3);
                 setImageForShip(getCellsOfShip(x, y, 3, 3), direction, getImagesOfDamagedShip(codeIntegerElements[i].length / 3));
                 showCellsAroundShip(codeIntegerElements[i]);
@@ -365,20 +372,20 @@ public class OnlineGameMapBuilder extends MapBuilder {
         String[] stringCodeElements = codeOfMap.split(delimiter);
         int[] integerCodeOfElements = getConvertedStringArrayToIntegerArrayCode(stringCodeElements);
         setAllStatusFromCode(integerCodeOfElements);
-        int x, y,direction;
+        int x, y, direction;
         Vector<Cell> cellsOfShip;
         //Setting images on all alive ships and setting special status "0" for all cells where is status "6"
         for (int i = 0; i < integerCodeOfElements.length; i += 3) {
             x = integerCodeOfElements[i];
             y = integerCodeOfElements[i + 1];
-            if (map[x][y].getStatus()!=0&&(integerCodeOfElements[i + 2] == 6||integerCodeOfElements[i + 2] == 2)) {
+            if (map[x][y].getStatus() != 0 && (integerCodeOfElements[i + 2] == 6 || integerCodeOfElements[i + 2] == 2)) {
                 cellsOfShip = getCellsOfShip(x, y, 6, 2);
-               direction=getDirectionOfShip(x, y, 2, 6);
-                setImageForShip(cellsOfShip,direction , getImagesForShip(cellsOfShip.size()));
+                direction = getDirectionOfShip(x, y, 2, 6);
+                setImageForShip(cellsOfShip, direction, getImagesForShip(cellsOfShip.size()));
                 for (Cell cell : cellsOfShip) {
                     if (cell.getStatus() == 2) {
-                        int[] coordinates=cell.getCoordinates();
-                        setImageToDamagedCell(coordinates[0],coordinates[1],cellsOfShip,direction);
+                        int[] coordinates = cell.getCoordinates();
+                        setImageToDamagedCell(coordinates[0], coordinates[1], cellsOfShip, direction);
                     }
                     cell.setImage(0);
                     //Set or not set "isActive=false" is not impotent for this realization and it was done for new modifications
@@ -390,7 +397,8 @@ public class OnlineGameMapBuilder extends MapBuilder {
     }
 
     private void setAllStatusFromCode(int[] integerCodeOfElements) {
-        for(int i=0;i< integerCodeOfElements.length;i+=3) map[integerCodeOfElements[i]][integerCodeOfElements[i+1]].setImage(integerCodeOfElements[i+2]);
+        for (int i = 0; i < integerCodeOfElements.length; i += 3)
+            map[integerCodeOfElements[i]][integerCodeOfElements[i + 1]].setImage(integerCodeOfElements[i + 2]);
     }
 
     public void openSpaceCells() {

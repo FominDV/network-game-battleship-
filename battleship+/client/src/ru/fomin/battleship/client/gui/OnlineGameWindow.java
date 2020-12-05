@@ -616,16 +616,30 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     public void gameIsLost() {
-
         listener.sendMessageToServer(LibraryOfPrefixes.VICTORY);
     }
 
     public void victory() {
         mapBuilderOfOpponent.openSpaceCells();
         listener.sendMessageToServer(LibraryOfPrefixes.getCodeOfMapAfterGameMessage(mapBuilderOfUser.getCodeOfMapAfterGame()));
+        SwingUtilities.invokeLater(()->showEndOfTheGame(1));
     }
 
     public void openMapOfOpponent(String codeOfMap) {
         mapBuilderOfOpponent.openMapOfOpponent(codeOfMap);
+       SwingUtilities.invokeLater(()->showEndOfTheGame(0));
     }
+    /*codeEndOfTheGame:
+    * 0-lost
+    * 1-victory*/
+    private void showEndOfTheGame(int codeEndOfTheGame){
+    PANEL_MAIN_TOP.setVisible(false);
+   JLabel labelStatusOfEnding = new JLabel();
+   LABEL_TURN.setText(" ");
+   if(codeEndOfTheGame==0) labelStatusOfEnding.setText("LOST"); else labelStatusOfEnding.setText("VICTORY");
+   add(labelStatusOfEnding,BorderLayout.NORTH);
+
+    }
+
+
 }
