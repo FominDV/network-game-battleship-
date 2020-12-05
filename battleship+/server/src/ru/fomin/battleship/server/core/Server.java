@@ -201,6 +201,14 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
                 sendMessageToOpponent(client,LibraryOfPrefixes.PLAY_AGAIN);
                 putLog(client.getNickname()+" want to play again with "+client.getOpponentNickname());
                 break;
+            case LibraryOfPrefixes.READY_PLAY_AGAIN:
+                sendMessageToOpponent(client,LibraryOfPrefixes.READY_PLAY_AGAIN);
+                putLog(client.getNickname()+" is ready to play again with "+client.getOpponentNickname());
+                break;
+            case LibraryOfPrefixes.START_PLAY_AGAIN:
+                sendMessageToOpponent(client,LibraryOfPrefixes.START_PLAY_AGAIN);
+                putLog(client.getNickname()+" start to play again with "+client.getOpponentNickname());
+                break;
             default:
                 client.msgFormatError(msg);
         }

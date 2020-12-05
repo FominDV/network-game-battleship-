@@ -223,6 +223,12 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             case LibraryOfPrefixes.PLAY_AGAIN:
                 onlineGameWindow.playAgain();
                 break;
+            case LibraryOfPrefixes.READY_PLAY_AGAIN:
+                preparingForGameFrame.verifyReadinessForPlayAgain();
+                break;
+            case LibraryOfPrefixes.START_PLAY_AGAIN:
+                preparingForGameFrame.startToPlayAgain();
+                break;
         }
     }
 

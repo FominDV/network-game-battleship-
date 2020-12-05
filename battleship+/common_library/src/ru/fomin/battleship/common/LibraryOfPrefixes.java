@@ -31,6 +31,8 @@ public class LibraryOfPrefixes {
     public static final String VICTORY = "/victory";
     public static final String CODE_OF_MAP_AFTER_GAME = "/map_after_game";
     public static final String PLAY_AGAIN = "/play_again";
+    public static final String READY_PLAY_AGAIN = "/ready_to_play_again";
+    public static final String START_PLAY_AGAIN = "/start_to_play_again";
 
     public static String getAuthAccept(String nickname) {
         return AUTH_ACCEPT + DELIMITER + nickname;

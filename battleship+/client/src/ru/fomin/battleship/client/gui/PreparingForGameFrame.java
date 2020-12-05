@@ -11,7 +11,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.Vector;
 
 public class PreparingForGameFrame extends JFrame implements ActionListener {
@@ -25,14 +24,20 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final String START = "START";
     private final String REMOVE_MODE = "REMOVE MODE";
     private final String POST_MODE = "POST MODE";
+    private final String TEXT_OPPONENT_NOT_READY = "THE OPPONENT PLACES THE SHIPS";
+    private final String TEXT_OPPONENT_READY = "THE OPPONENT IS ALREADY READY";
+    private final String WAIT = "PLEASE WAIT YOUR OPPONENT";
     private final int SIZE_OF_MAP = 10;
     private final int WIDTH = 855;
-    private final int HEIGHT = 700;
+    private int height = 700;
     private final String WINDOW_TITLE = "Map-Maker by ";
     private final SocketThread SOCKET_THREAD;
     private final String NICK_NAME;
     private final String LOGIN;
     private final WorkingWithNetwork listener;
+    private boolean isOpponentReady = false;
+    private boolean isPlayAgainMode = false;
+    private boolean isReadyToPlayAgain = false;
     private boolean isPost = true;
     private boolean isReady = false;
     private boolean isSavedMap = false;
@@ -45,17 +50,20 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final Color COLOR_OF_REMOVE_MODE = new Color(68, 4, 4);
     private final Color COLOR_OF_READY = new Color(46, 220, 5);
     private final Color COLOR_OF_PANEL_BACKGROUND = new Color(135, 170, 206);
+    private final Color COLOR_OF_LABEL_OPPONENT_PROGRESS = new Color(187, 52, 0, 233);
     private Vector<String[]> dataMapVector = new Vector<>();
     private SearchingOpponent searchingOpponent;
 
     private final Font FONT_FOR_BUTTONS = new Font(Font.SERIF, Font.BOLD, 16);
     private final Font FONT_FOR_LABEL_SHIPS = new Font(Font.SERIF, Font.BOLD, 24);
     private final Font FONT_FOR_MODE = new Font(Font.SERIF, Font.BOLD, 30);
+    private final Font FONT_FOR_LABEL_OPPONENT_PROGRESS = new Font(Font.SERIF, Font.BOLD, 18);
 
     private final JPanel PANEL_MAP = new JPanel(new GridLayout(SIZE_OF_MAP + 1, SIZE_OF_MAP + 1));
     private final JPanel WRAPPER_FOR_MAP = new JPanel(new GridBagLayout());
     private final JPanel PANEL_BOTTOM = new JPanel(new GridLayout(2, 3));
     private final JPanel PANEL_TOP = new JPanel(new GridLayout(1, 2));
+    private final JPanel PANEL_MAIN_TOP = new JPanel(new GridLayout(2, 1));
     private final JPanel PANEL_LEFT_MAIN = new JPanel(new GridLayout(5, 1));
     private final JPanel PANEL_LEFT_TOP = new JPanel(new GridLayout(1, 1));
     private final JPanel[] PANEL_LEFT_BOTTOM = new JPanel[4];
@@ -80,6 +88,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private JLabel labelCount3Ship = new JLabel();
     private JLabel labelCount2Ship = new JLabel();
     private JLabel labelCount1Ship = new JLabel();
+    private JLabel labelOfOpponentProgress = new JLabel(TEXT_OPPONENT_NOT_READY);
 
 
     public PreparingForGameFrame(SocketThread socketThread, String nickname, WorkingWithNetwork listener, String login) {
@@ -89,18 +98,33 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         LOGIN = login;
         SwingUtilities.invokeLater(() -> initialization());
     }
-    public PreparingForGameFrame(SocketThread socketThread, String nickname,String opponentNickname, WorkingWithNetwork listener, String login) {
+
+    public PreparingForGameFrame(SocketThread socketThread, String nickname, String opponentNickname, WorkingWithNetwork listener, String login) {
         NICK_NAME = nickname;
-        this.opponentNickname=opponentNickname;
+        this.opponentNickname = opponentNickname;
         SOCKET_THREAD = socketThread;
         this.listener = listener;
         LOGIN = login;
         updateDataMap();
+        height=800;
         SwingUtilities.invokeLater(() -> initialization());
+        SwingUtilities.invokeLater(() -> addLabelOfOpponentProgress());
     }
+
+    private void addLabelOfOpponentProgress() {
+        labelOfOpponentProgress.setHorizontalAlignment(SwingConstants.CENTER);
+        labelOfOpponentProgress.setBackground(COLOR_OF_PANEL_BACKGROUND);
+        labelOfOpponentProgress.setFont(FONT_FOR_LABEL_OPPONENT_PROGRESS);
+        labelOfOpponentProgress.setForeground(COLOR_OF_LABEL_OPPONENT_PROGRESS);
+        PANEL_MAIN_TOP.add(PANEL_LEFT_TOP);
+        PANEL_MAIN_TOP.add((labelOfOpponentProgress));
+        add(PANEL_MAIN_TOP, BorderLayout.NORTH);
+        isPlayAgainMode = true;
+    }
+
     private void initialization() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setSize(WIDTH, HEIGHT);
+        setSize(WIDTH, height);
         setLocationRelativeTo(null);
         setTitle(WINDOW_TITLE + NICK_NAME);
         setResizable(false);
@@ -265,10 +289,15 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             return;
         }
         if (source.equals(BUTTON_CANCEL)) {
-            mapBuilder.cancelStatus4();
+            if (isReadyToPlayAgain) {
+                listener.exitToMapBuilder();
+            } else {
+                mapBuilder.cancelStatus4();
+            }
             return;
         }
         if (source.equals(BUTTON_POST)) {
+            if (isReadyToPlayAgain) return;
             isPost = true;
             labelMode.setText(POST_MODE);
             labelMode.setForeground(COLOR_OF_POST_MODE);
@@ -276,6 +305,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             return;
         }
         if (source.equals(BUTTON_REMOVE)) {
+            if (isReadyToPlayAgain) return;
             isPost = false;
             labelMode.setText(REMOVE_MODE);
             labelMode.setForeground(COLOR_OF_REMOVE_MODE);
@@ -283,14 +313,27 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             return;
         }
         if (source.equals(BUTTON_START)) {
+            if (isReadyToPlayAgain) return;
             if (!isReady) {
                 JOptionPane.showMessageDialog(null, "To start the game you should post all the ships", "WARNING", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (isPlayAgainMode) {
+                if (isOpponentReady) {
+                    listener.sendMessageToServer(LibraryOfPrefixes.START_PLAY_AGAIN);
+                    startToPlayAgain();
+                } else {
+                    isReadyToPlayAgain = true;
+                    labelOfOpponentProgress.setText(WAIT);
+                    listener.sendMessageToServer(LibraryOfPrefixes.READY_PLAY_AGAIN);
+                }
                 return;
             }
             savingDialog();
             return;
         }
         if (source.equals(BUTTON_LOAD)) {
+            if (isReadyToPlayAgain) return;
             if (dataMapVector.size() != 0)
                 goToSavingMapWindow();
             else
@@ -298,6 +341,20 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             return;
         }
         throw new RuntimeException("Unknown source: " + source);
+    }
+
+    public void verifyReadinessForPlayAgain() {
+        if (isReadyToPlayAgain) {
+            listener.sendMessageToServer(LibraryOfPrefixes.START_PLAY_AGAIN);
+            startToPlayAgain();
+        } else {
+            isOpponentReady = true;
+            labelOfOpponentProgress.setText(TEXT_OPPONENT_READY);
+        }
+    }
+
+    public void startToPlayAgain() {
+        
     }
 
     private void goToSavingMapWindow() {
@@ -344,7 +401,8 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         if (!isSavedMap) {
             if (dataMapVector.size() == 5) {
                 if (isSavingConfirmMessageYesNo("<html>You should have less or equal 5 savings of map!<br>Do you want to delete some of your saves </html>"))
-                    goToSavingMapWindow(); else searchOpponent();
+                    goToSavingMapWindow();
+                else searchOpponent();
                 return;
             }
             if (isSavingConfirmMessageYesNo("Do you want to save the map?")) {
