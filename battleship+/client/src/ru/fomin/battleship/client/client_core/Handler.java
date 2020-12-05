@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.util.Vector;
 
 public class Handler implements SocketThreadListener, WorkingWithNetwork {
+    //This variable is needed for to prevent double re registration of the client who clicked on button "EXIT" from OnlineGameWindow
     private boolean isNotExitToMapBuilder = true;
     private String nickName;
     private boolean isRegistration = false;
@@ -135,12 +136,6 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
         JOptionPane.showMessageDialog(null, msg, "Exception", JOptionPane.ERROR_MESSAGE);
     }
 
-    @Override
-    public void exitToMapBuilder() {
-        sendMessageToServer(LibraryOfPrefixes.EXIT_TO_MAP_BUILDER);
-
-    }
-
     private void handleMessage(String msg) {
         String[] arr = msg.split(LibraryOfPrefixes.DELIMITER);
         String msgType = arr[0];
@@ -227,6 +222,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
                 preparingForGameFrame.verifyReadinessForPlayAgain();
                 break;
             case LibraryOfPrefixes.START_PLAY_AGAIN:
+                isNotExitToMapBuilder=true;
                 preparingForGameFrame.startToPlayAgain();
                 break;
         }
@@ -296,5 +292,9 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
     @Override
     public void setPreparingForGameWindow(PreparingForGameFrame preparingForGameFrame) {
         this.preparingForGameFrame = preparingForGameFrame;
+    }
+    @Override
+    public void exitToMapBuilder() {
+        sendMessageToServer(LibraryOfPrefixes.EXIT_TO_MAP_BUILDER);
     }
 }

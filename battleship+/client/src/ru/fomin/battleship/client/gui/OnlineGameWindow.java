@@ -425,9 +425,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         FIELD_FOR_CHAT_MESSAGE.grabFocus();
     }
 
-    private void showErrorMessage(String message) {
-        JOptionPane.showMessageDialog(null, message, "ERROR", JOptionPane.ERROR_MESSAGE);
-    }
+
 
     private void showInfoMessage(String message, String title) {
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);

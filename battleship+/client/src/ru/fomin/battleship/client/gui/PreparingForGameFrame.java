@@ -354,7 +354,9 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     }
 
     public void startToPlayAgain() {
-        
+        listener.setOnlineGameWindow(new OnlineGameWindow(opponentNickname, NICK_NAME, mapBuilder.getDataSaving(), listener, SIZE_OF_MAP));
+        listener.sendMessageToServer(LibraryOfPrefixes.GET_FIRST_TURN);
+        dispose();
     }
 
     private void goToSavingMapWindow() {

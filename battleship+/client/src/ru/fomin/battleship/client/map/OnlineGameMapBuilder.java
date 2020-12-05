@@ -140,6 +140,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
                     map[x][y].setNotActive();
                 //create message for log
                 if (onlineGameWindow.getPastMode() != 2 && map[x][y].getStatus() == 5) {
+                    map[x][y].setImage(5);
                     map[x][y].setImage(12);
                     missCells += String.format(" (%s;%s)", x + 1, y + 1);
                 }

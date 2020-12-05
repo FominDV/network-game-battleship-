@@ -33,6 +33,7 @@ public class LibraryOfPrefixes {
     public static final String PLAY_AGAIN = "/play_again";
     public static final String READY_PLAY_AGAIN = "/ready_to_play_again";
     public static final String START_PLAY_AGAIN = "/start_to_play_again";
+    public static final String GET_FIRST_TURN = "/get_first_turn";
 
     public static String getAuthAccept(String nickname) {
         return AUTH_ACCEPT + DELIMITER + nickname;

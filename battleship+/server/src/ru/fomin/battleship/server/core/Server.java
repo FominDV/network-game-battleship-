@@ -209,6 +209,9 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
                 sendMessageToOpponent(client,LibraryOfPrefixes.START_PLAY_AGAIN);
                 putLog(client.getNickname()+" start to play again with "+client.getOpponentNickname());
                 break;
+            case LibraryOfPrefixes.GET_FIRST_TURN:
+                setFirstTurnForGame(client,findClientByNickname(client.getOpponentNickname()));
+                break;
             default:
                 client.msgFormatError(msg);
         }
@@ -230,19 +233,22 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
                 client.sendMessage(LibraryOfPrefixes.getSearchOpponent(((ClientThread) searchingClient).getNickname()));
                 searchingClient.sendMessage((LibraryOfPrefixes.getSearchOpponent(client.getNickname())));
                 putLog(client.getNickname() + " connected with " + ((ClientThread) searchingClient).getNickname());
-                if (turnOfClient()) {
-                    client.sendMessage(LibraryOfPrefixes.getTurnMessage(1));
-                    searchingClient.sendMessage(LibraryOfPrefixes.getTurnMessage(0));
-                    putLog(client.getNickname() + " get the first turn");
-                } else {
-                    client.sendMessage(LibraryOfPrefixes.getTurnMessage(0));
-                    searchingClient.sendMessage(LibraryOfPrefixes.getTurnMessage(1));
-                    putLog(((ClientThread)searchingClient).getNickname() + " get the first turn");
-                }
+               setFirstTurnForGame(client,searchingClient);
             }
         }
     }
 
+    private void setFirstTurnForGame(ClientThread user1, SocketThread user2){
+        if (turnOfClient()) {
+            user1.sendMessage(LibraryOfPrefixes.getTurnMessage(1));
+            user2.sendMessage(LibraryOfPrefixes.getTurnMessage(0));
+            putLog(user1.getNickname() + " get the first turn");
+        } else {
+            user1.sendMessage(LibraryOfPrefixes.getTurnMessage(0));
+            user2.sendMessage(LibraryOfPrefixes.getTurnMessage(1));
+            putLog(((ClientThread)user2).getNickname() + " get the first turn");
+        }
+    }
     private boolean turnOfClient() {
 
         if (random()>0.5) return true;
