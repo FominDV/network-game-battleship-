@@ -381,6 +381,8 @@ public class OnlineGameMapBuilder extends MapBuilder {
                         setImageToDamagedCell(coordinates[0],coordinates[1],cellsOfShip,direction);
                     }
                     cell.setImage(0);
+                    //Set or not set "isActive=false" is not impotent for this realization and it was done for new modifications
+                    cell.setNotActive();
                 }
             }
         }
