@@ -229,6 +229,11 @@ public class Cell extends JButton {
             case 4240:
                 setIcon(new ImageIcon(getClass().getResource("../img/damage424.png")));
                 break;
+                //cell with ship after exploration
+            case 1111:
+                setIcon(null);
+                setBackground(Color.GREEN);
+                break;
         }
     }
 
