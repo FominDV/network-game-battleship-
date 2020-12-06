@@ -638,7 +638,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         }
     }
     public void createCodeCellsOfAction(int x, int y, int typeOfAction) {
-        mapBuilderOfUser.createCodeCellsOfAction(x, y, modeStatus, typeOfAction);
+        mapBuilderOfOpponent.createCodeCellsOfAction(x, y, modeStatus, typeOfAction);
         setModeSimpleShoot();
     }
 
