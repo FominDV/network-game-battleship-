@@ -108,9 +108,11 @@ public class OnlineGameMapBuilder extends MapBuilder {
         else return codesForImagesOfThisDamagedShip[indexOfCellByShip + lengthOfShip];
     }
 
-private boolean isThisCellKnown(int x, int y){
-    if(onlineGameWindow.getPastMode()==2&&map[x][y].getStatus()!=1) return true; else return false;
-}
+    private boolean isThisCellKnown(int x, int y) {
+        if (map[x][y].getStatus() != 1) return true;
+        else return false;
+    }
+
     public void processDataOfResultTurn(String codeOfResultTurn) {
         int x, y, status;
         String damagedCells = TEXT_DAMAGE;
@@ -134,8 +136,9 @@ private boolean isThisCellKnown(int x, int y){
                 x = codeIntegerElements[i][j];
                 y = codeIntegerElements[i][j + 1];
                 status = codeIntegerElements[i][j + 2];
-                if(isThisCellKnown(x,y)) continue;
-                if(onlineGameWindow.getPastMode()==2&&status==6) map[x][y].setImage(1111);
+                if(onlineGameWindow.getPastMode() == 2)
+                if (isThisCellKnown(x, y)&&onlineGameWindow.getPastMode() == 2) continue;
+                if (onlineGameWindow.getPastMode() == 2 && status == 6) map[x][y].setImage(1111);
                 //decision effect of shooting
                 if (lastUsingCellForActionCoordinates[0] == x && lastUsingCellForActionCoordinates[1] == y && (status == 2 || status == 3))
                     isDamageOrDestroy = true;
@@ -202,21 +205,21 @@ private boolean isThisCellKnown(int x, int y){
 
     private void showCellsAroundVerticalShip(int[] codeOfShip) {
         for (int i = -1; i < 2; i++) {
-            if (!isThisCellKnown(codeOfShip[0] + 1,codeOfShip[1] + i)&&codeOfShip[0] + 1 < map.length && codeOfShip[1] + i >= 0 && codeOfShip[1] + i < map.length) {
+            if (codeOfShip[0] + 1 < map.length && codeOfShip[1] + i >= 0 && codeOfShip[1] + i < map.length&&!isThisCellKnown(codeOfShip[0] + 1, codeOfShip[1] + i)) {
                 map[codeOfShip[0] + 1][codeOfShip[1] + i].setImage(5);
                 map[codeOfShip[0] + 1][codeOfShip[1] + i].setNotActive();
             }
-            if (!isThisCellKnown(codeOfShip[codeOfShip.length - 3] - 1,codeOfShip[codeOfShip.length - 2] + i)&&codeOfShip[codeOfShip.length - 3] - 1 >= 0 && codeOfShip[codeOfShip.length - 2] + i >= 0 && codeOfShip[codeOfShip.length - 2] + i < map.length) {
+            if ( codeOfShip[codeOfShip.length - 3] - 1 >= 0 && codeOfShip[codeOfShip.length - 2] + i >= 0 && codeOfShip[codeOfShip.length - 2] + i < map.length&&!isThisCellKnown(codeOfShip[codeOfShip.length - 3] - 1, codeOfShip[codeOfShip.length - 2] + i)) {
                 map[codeOfShip[codeOfShip.length - 3] - 1][codeOfShip[codeOfShip.length - 2] + i].setImage(5);
                 map[codeOfShip[codeOfShip.length - 3] - 1][codeOfShip[codeOfShip.length - 2] + i].setNotActive();
             }
         }
         for (int i = 0; i < codeOfShip.length; i += 3) {
-            if (!isThisCellKnown(codeOfShip[i],codeOfShip[i + 1] + 1)&&codeOfShip[i + 1] + 1 < map.length) {
+            if ( codeOfShip[i + 1] + 1 < map.length&&!isThisCellKnown(codeOfShip[i], codeOfShip[i + 1] + 1)) {
                 map[codeOfShip[i]][codeOfShip[i + 1] + 1].setImage(5);
                 map[codeOfShip[i]][codeOfShip[i + 1] + 1].setNotActive();
             }
-            if (!isThisCellKnown(codeOfShip[i],codeOfShip[i + 1] - 1)&&codeOfShip[i + 1] - 1 >= 0) {
+            if ( codeOfShip[i + 1] - 1 >= 0&&!isThisCellKnown(codeOfShip[i], codeOfShip[i + 1] - 1) ) {
                 map[codeOfShip[i]][codeOfShip[i + 1] - 1].setImage(5);
                 map[codeOfShip[i]][codeOfShip[i + 1] - 1].setNotActive();
             }
@@ -225,21 +228,21 @@ private boolean isThisCellKnown(int x, int y){
 
     private void showCellsAroundHorizontalShip(int[] codeOfShip) {
         for (int i = -1; i < 2; i++) {
-            if (codeOfShip[1] - 1 >= 0 && codeOfShip[0] + i >= 0 && codeOfShip[0] + i < map.length&&!isThisCellKnown(codeOfShip[0] + i,codeOfShip[1] - 1)) {
+            if (codeOfShip[1] - 1 >= 0 && codeOfShip[0] + i >= 0 && codeOfShip[0] + i < map.length && !isThisCellKnown(codeOfShip[0] + i, codeOfShip[1] - 1)) {
                 map[codeOfShip[0] + i][codeOfShip[1] - 1].setImage(5);
                 map[codeOfShip[0] + i][codeOfShip[1] - 1].setNotActive();
             }
-            if (!isThisCellKnown(codeOfShip[codeOfShip.length - 3] + i,codeOfShip[codeOfShip.length - 2] + 1)&&codeOfShip[codeOfShip.length - 2] + 1 < map.length && codeOfShip[codeOfShip.length - 3] + i >= 0 && codeOfShip[codeOfShip.length - 3] + i < map.length) {
+            if (  codeOfShip[codeOfShip.length - 2] + 1 < map.length && codeOfShip[codeOfShip.length - 3] + i >= 0 && codeOfShip[codeOfShip.length - 3] + i < map.length&&!isThisCellKnown(codeOfShip[codeOfShip.length - 3] + i, codeOfShip[codeOfShip.length - 2] + 1)) {
                 map[codeOfShip[codeOfShip.length - 3] + i][codeOfShip[codeOfShip.length - 2] + 1].setImage(5);
                 map[codeOfShip[codeOfShip.length - 3] + i][codeOfShip[codeOfShip.length - 2] + 1].setNotActive();
             }
         }
         for (int i = 0; i < codeOfShip.length; i += 3) {
-            if (!isThisCellKnown(codeOfShip[i] + 1,codeOfShip[i + 1])&&codeOfShip[i] + 1 < map.length) {
+            if (  codeOfShip[i] + 1 < map.length&&!isThisCellKnown(codeOfShip[i] + 1, codeOfShip[i + 1])) {
                 map[codeOfShip[i] + 1][codeOfShip[i + 1]].setImage(5);
                 map[codeOfShip[i] + 1][codeOfShip[i + 1]].setNotActive();
             }
-            if (!isThisCellKnown(codeOfShip[i] - 1,codeOfShip[i + 1])&&codeOfShip[i] - 1 >= 0) {
+            if (  codeOfShip[i] - 1 >= 0&&!isThisCellKnown(codeOfShip[i] - 1, codeOfShip[i + 1])) {
                 map[codeOfShip[i] - 1][codeOfShip[i + 1]].setImage(5);
                 map[codeOfShip[i] - 1][codeOfShip[i + 1]].setNotActive();
             }
@@ -249,15 +252,15 @@ private boolean isThisCellKnown(int x, int y){
     private void showCellsAroundOneDeckShip(int x, int y) {
         for (int i = -1; i < 2; i++) {
             if (y + i < map.length && y + i >= 0) {
-                if (x + 1 < map.length&&!isThisCellKnown(x+1,y+i)) {
+                if (x + 1 < map.length && !(isThisCellKnown(x + 1, y + i))) {
                     map[x + 1][y + i].setImage(5);
                     map[x + 1][y + i].setNotActive();
                 }
-                if (x - 1 >= 0&&!isThisCellKnown(x-1,y+i)) {
+                if (x - 1 >= 0 && !(isThisCellKnown(x - 1, y + i))) {
                     map[x - 1][y + i].setImage(5);
                     map[x - 1][y + i].setNotActive();
                 }
-                if (i != 0&&!isThisCellKnown(x,y+i)) {
+                if (i != 0 && !(isThisCellKnown(x, y + i))) {
                     map[x][y + i].setImage(5);
                     map[x][y + i].setNotActive();
                 }
@@ -351,33 +354,34 @@ private boolean isThisCellKnown(int x, int y){
     }
 
     private String getCodeByExploration(int x, int y) {
-        String message = "*Exploration: "+ getMessageAboutActionedCell(x,y);
+        String message = "*Exploration: " + getMessageAboutActionedCell(x, y);
         String code = "";
         for (int i = -1; i < 2; i++) {
             if (y + i < map.length && y + i >= 0) {
                 if (x - 1 >= 0) {
-                  code+=  getCodeForOneCellByAction(x - 1, y + i);
-                    message+= getMessageAboutActionedCell(x-1,y+i);
+                    code += getCodeForOneCellByAction(x - 1, y + i);
+                    message += getMessageAboutActionedCell(x - 1, y + i);
                 }
                 if (x + 1 < map.length) {
-                    code+=  getCodeForOneCellByAction(x + 1, y + i);
-                    message+= getMessageAboutActionedCell(x+1,y+i);
+                    code += getCodeForOneCellByAction(x + 1, y + i);
+                    message += getMessageAboutActionedCell(x + 1, y + i);
                 }
                 if (i != 0) {
-                    code+= getCodeForOneCellByAction(x, y + i);
-                    message+= getMessageAboutActionedCell(x,y+i);
+                    code += getCodeForOneCellByAction(x, y + i);
+                    message += getMessageAboutActionedCell(x, y + i);
                 }
             }
         }
-        messageForLog = message+"\n";
+        messageForLog = message + "\n";
         return code;
     }
 
     private String getCodeForOneCellByAction(int x, int y) {
         return delimiter + x + delimiter + y;
     }
+
     private String getMessageAboutActionedCell(int x, int y) {
-        return "(" + (x+1) +";" + (y+1)+") ";
+        return "(" + (x + 1) + ";" + (y + 1) + ") ";
     }
 
     private void verifyEndOfTheGame() {
