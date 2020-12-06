@@ -347,21 +347,21 @@ public class OnlineGameMapBuilder extends MapBuilder {
     }
 
     private String getCodeByExploration(int x, int y) {
-        String message = "*Exploration: ";
+        String message = "*Exploration: "+ getMessageAboutActionedCell(x,y);
         String code = "";
         for (int i = -1; i < 2; i++) {
             if (y + i < map.length && y + i >= 0) {
                 if (x - 1 >= 0) {
                   code+=  getCodeForOneCellByAction(x - 1, y + i);
-                    message+=getMessageAboutActionedCells(x-1,y+i);
+                    message+= getMessageAboutActionedCell(x-1,y+i);
                 }
                 if (x + 1 < map.length) {
                     code+=  getCodeForOneCellByAction(x + 1, y + i);
-                    message+=getMessageAboutActionedCells(x+1,y+i);
+                    message+= getMessageAboutActionedCell(x+1,y+i);
                 }
                 if (i != 0) {
                     code+= getCodeForOneCellByAction(x, y + i);
-                    message+=getMessageAboutActionedCells(x,y+i);
+                    message+= getMessageAboutActionedCell(x,y+i);
                 }
             }
         }
@@ -372,8 +372,8 @@ public class OnlineGameMapBuilder extends MapBuilder {
     private String getCodeForOneCellByAction(int x, int y) {
         return delimiter + x + delimiter + y;
     }
-    private String getMessageAboutActionedCells(int x, int y) {
-        return "(" + x +";" + y+") ";
+    private String getMessageAboutActionedCell(int x, int y) {
+        return "(" + (x+1) +";" + (y+1)+") ";
     }
 
     private void verifyEndOfTheGame() {

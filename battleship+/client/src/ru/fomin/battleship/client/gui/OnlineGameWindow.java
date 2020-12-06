@@ -394,12 +394,15 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             return;
         }
         if (source == BUTTON_MODE_SIMPLE) {
-            modeStatus = 0;
-            LABEL_MODE.setText(TEXT_MODE_SIMPLE_SHOOT);
+            setModeSimpleShoot();
             return;
         }
 
         throw new RuntimeException("Unknown source: " + source);
+    }
+    private void setModeSimpleShoot(){
+        modeStatus = 0;
+        LABEL_MODE.setText(TEXT_MODE_SIMPLE_SHOOT);
     }
 
     private void exitToMapBuilder() {
@@ -425,7 +428,6 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         FIELD_FOR_CHAT_MESSAGE.setText("");
         FIELD_FOR_CHAT_MESSAGE.grabFocus();
     }
-
 
 
     private void showInfoMessage(String message, String title) {
@@ -617,7 +619,22 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     public void createCodeCellsOfAction(int x, int y, int typeOfAction) {
+        //set "-1" because after turn of this user all shooting modes will be increased by "1"
+        switch (modeStatus) {
+            case 1:
+                rechargeForVolley = -1;
+                changeButtonModeVolley();
+                break;
+            case 2:
+                rechargeForExploration = -1;
+                changeButtonModeExploration();
+                break;
+            case 3:
+                rechargeForStraightShooting = -1;
+                changeButtonModeShootingOnStraight();
+        }
         mapBuilderOfUser.createCodeCellsOfAction(x, y, modeStatus, typeOfAction);
+        setModeSimpleShoot();
     }
 
     public void gameIsLost() {
@@ -681,7 +698,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             startNewGameWithPastOpponent();
         } else {
             if (isConfirmMessage(opponentNickname + " suggest you to play again\nDo you agree?")) {
-                isPlayAgain=true;
+                isPlayAgain = true;
                 listener.sendMessageToServer(LibraryOfPrefixes.PLAY_AGAIN);
                 startNewGameWithPastOpponent();
             } else {
@@ -689,8 +706,9 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             }
         }
     }
-  private void   startNewGameWithPastOpponent(){
-      listener.setPreparingForGameWindow(new PreparingForGameFrame(listener.getSocket(),NICK_NAME,opponentNickname,listener,listener.getLogin()));
-      this.dispose();
+
+    private void startNewGameWithPastOpponent() {
+        listener.setPreparingForGameWindow(new PreparingForGameFrame(listener.getSocket(), NICK_NAME, opponentNickname, listener, listener.getLogin()));
+        this.dispose();
     }
 }
