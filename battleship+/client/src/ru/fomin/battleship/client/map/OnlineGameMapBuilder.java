@@ -351,6 +351,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
         //create and send code of cells
         onlineGameWindow.setMessageForLog(messageForLog);
         onlineGameWindow.sendCodeOfGameTurn(code + delimiter + actionType);
+onlineGameWindow.changeAllButtonsAfterAction();
     }
 
     private String getCodeByExploration(int x, int y) {

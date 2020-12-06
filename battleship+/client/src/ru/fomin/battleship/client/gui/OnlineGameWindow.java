@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.util.Date;
 
 import static java.lang.String.format;
-import static java.lang.Thread.sleep;
 
 public class OnlineGameWindow extends JFrame implements ActionListener {
     /*0-simple shoot
@@ -400,7 +399,8 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
 
         throw new RuntimeException("Unknown source: " + source);
     }
-    private void setModeSimpleShoot(){
+
+    private void setModeSimpleShoot() {
         modeStatus = 0;
         LABEL_MODE.setText(TEXT_MODE_SIMPLE_SHOOT);
     }
@@ -583,6 +583,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             BUTTON_MODE_VOLLEY.setBackground(COLOR_FOR_ACTIVE_MODE);
             LABEL_RECHARGE_VOLLEY.setBorder(BORDER_FOR_LABEL_RECHARGE_ACTIVE);
         } else {
+            if (modeStatus == 1) setModeSimpleShoot();
             BUTTON_MODE_VOLLEY.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
             LABEL_RECHARGE_VOLLEY.setBorder(BORDER_FOR_LABEL_RECHARGE_NO_ACTIVE);
         }
@@ -594,6 +595,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             BUTTON_MODE_EXPLORATION.setBackground(COLOR_FOR_ACTIVE_MODE);
             LABEL_RECHARGE_EXPLORATION.setBorder(BORDER_FOR_LABEL_RECHARGE_ACTIVE);
         } else {
+            if (modeStatus == 2) setModeSimpleShoot();
             BUTTON_MODE_EXPLORATION.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
             LABEL_RECHARGE_EXPLORATION.setBorder(BORDER_FOR_LABEL_RECHARGE_NO_ACTIVE);
         }
@@ -605,6 +607,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             BUTTON_MODE_STRAIGHT.setBackground(COLOR_FOR_ACTIVE_MODE);
             LABEL_RECHARGE_STRAIGHT.setBorder(BORDER_FOR_LABEL_RECHARGE_ACTIVE);
         } else {
+            if (modeStatus == 3) setModeSimpleShoot();
             BUTTON_MODE_STRAIGHT.setBackground(COLOR_FOR_NO_ACTIVE_MODE);
             LABEL_RECHARGE_STRAIGHT.setBorder(BORDER_FOR_LABEL_RECHARGE_NO_ACTIVE);
         }
@@ -618,7 +621,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         return TEXT_RECHARGE1 + deltaGameTurns + TEXT_RECHARGE2;
     }
 
-    public void createCodeCellsOfAction(int x, int y, int typeOfAction) {
+    public void changeAllButtonsAfterAction(){
         //set "-1" because after turn of this user all shooting modes will be increased by "1"
         switch (modeStatus) {
             case 1:
@@ -633,6 +636,8 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
                 rechargeForStraightShooting = -1;
                 changeButtonModeShootingOnStraight();
         }
+    }
+    public void createCodeCellsOfAction(int x, int y, int typeOfAction) {
         mapBuilderOfUser.createCodeCellsOfAction(x, y, modeStatus, typeOfAction);
         setModeSimpleShoot();
     }
