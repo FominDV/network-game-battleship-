@@ -404,7 +404,7 @@ private void actionOfButtonStartForPlayAgainMode(){
             if (dataMapVector.size() == 5) {
                 if (isSavingConfirmMessageYesNo("<html>You should have less or equal 5 savings of map!<br>Do you want to delete some of your saves </html>"))
                     goToSavingMapWindow();
-                else if(!isPlayAgainMode){ searchOpponent();}else{actionOfButtonStartForPlayAgainMode();}
+                else startGameWithNewOrPastOpponent();
                 return;
             }
             if (isSavingConfirmMessageYesNo("Do you want to save the map?")) {
@@ -421,11 +421,13 @@ private void actionOfButtonStartForPlayAgainMode(){
                 }
                 listener.sendMessageToServer(LibraryOfPrefixes.getSavingMapMessage(LOGIN, nameData, mapBuilder.getDataSaving()));
             } else {
-                if(!isPlayAgainMode) searchOpponent(); else actionOfButtonStartForPlayAgainMode();
+                startGameWithNewOrPastOpponent();
             }
 
     }
-
+private void startGameWithNewOrPastOpponent(){
+    if(!isPlayAgainMode){ searchOpponent();}else{actionOfButtonStartForPlayAgainMode();}
+}
     public void updateDataMap() {
         dataMapVector = listener.getDataMap();
     }
@@ -442,7 +444,7 @@ private void actionOfButtonStartForPlayAgainMode(){
     public void successfulSave() {
         JOptionPane.showMessageDialog(null, "Saving map is successful");
         isSavedMap = true;
-        if(!isPlayAgainMode) searchOpponent(); else actionOfButtonStartForPlayAgainMode();
+        startGameWithNewOrPastOpponent();
     }
 
     protected boolean isSavingConfirmMessageYesNo(String message) {
