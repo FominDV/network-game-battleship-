@@ -354,6 +354,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             String message = FIELD_FOR_CHAT_MESSAGE.getText();
             if (!message.equals("")) {
                 sendMessageIntoChat(message);
+                FIELD_FOR_CHAT_MESSAGE.setText("");
             }
             return;
         }
@@ -420,7 +421,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         listener.sendMessageToServer(LibraryOfPrefixes.getChatMessage(message));
         Date date = new Date();
         CHAT.append(format("YOU(%tR):\n%s\n", date, message));
-        CHAT.setCaretPosition(LOG.getDocument().getLength());
+        CHAT.setCaretPosition(CHAT.getDocument().getLength());
         FIELD_FOR_CHAT_MESSAGE.setText("");
         FIELD_FOR_CHAT_MESSAGE.grabFocus();
     }
