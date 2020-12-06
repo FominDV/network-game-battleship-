@@ -318,18 +318,8 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "To start the game you should post all the ships", "WARNING", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            if (isPlayAgainMode) {
-                if (isOpponentReady) {
-                    listener.sendMessageToServer(LibraryOfPrefixes.START_PLAY_AGAIN);
-                    startToPlayAgain();
-                } else {
-                    isReadyToPlayAgain = true;
-                    labelOfOpponentProgress.setText(WAIT);
-                    listener.sendMessageToServer(LibraryOfPrefixes.READY_PLAY_AGAIN);
-                }
-                return;
-            }
-            savingDialog();
+          if(isSavedMap){ if(!isPlayAgainMode) searchOpponent(); } else {  savingDialog();return;}
+            actionOfButtonStartForPlayAgainMode();
             return;
         }
         if (source.equals(BUTTON_LOAD)) {
@@ -342,7 +332,18 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         }
         throw new RuntimeException("Unknown source: " + source);
     }
+private void actionOfButtonStartForPlayAgainMode(){
+    if (!isPlayAgainMode) return;
+        if (isOpponentReady) {
+            listener.sendMessageToServer(LibraryOfPrefixes.START_PLAY_AGAIN);
+            startToPlayAgain();
+        } else {
+            isReadyToPlayAgain = true;
+            labelOfOpponentProgress.setText(WAIT);
+            listener.sendMessageToServer(LibraryOfPrefixes.READY_PLAY_AGAIN);
+        }
 
+}
     public void verifyReadinessForPlayAgain() {
         if (isReadyToPlayAgain) {
             listener.sendMessageToServer(LibraryOfPrefixes.START_PLAY_AGAIN);
@@ -400,11 +401,10 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     }
 
     private void savingDialog() {
-        if (!isSavedMap) {
             if (dataMapVector.size() == 5) {
                 if (isSavingConfirmMessageYesNo("<html>You should have less or equal 5 savings of map!<br>Do you want to delete some of your saves </html>"))
                     goToSavingMapWindow();
-                else searchOpponent();
+                else if(!isPlayAgainMode){ searchOpponent();}else{actionOfButtonStartForPlayAgainMode();}
                 return;
             }
             if (isSavingConfirmMessageYesNo("Do you want to save the map?")) {
@@ -421,11 +421,9 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
                 }
                 listener.sendMessageToServer(LibraryOfPrefixes.getSavingMapMessage(LOGIN, nameData, mapBuilder.getDataSaving()));
             } else {
-                searchOpponent();
+                if(!isPlayAgainMode) searchOpponent(); else actionOfButtonStartForPlayAgainMode();
             }
-        } else {
-            searchOpponent();
-        }
+
     }
 
     public void updateDataMap() {
@@ -444,7 +442,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     public void successfulSave() {
         JOptionPane.showMessageDialog(null, "Saving map is successful");
         isSavedMap = true;
-        searchOpponent();
+        if(!isPlayAgainMode) searchOpponent(); else actionOfButtonStartForPlayAgainMode();
     }
 
     protected boolean isSavingConfirmMessageYesNo(String message) {
