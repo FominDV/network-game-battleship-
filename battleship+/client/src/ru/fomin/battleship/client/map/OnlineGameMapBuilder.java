@@ -323,7 +323,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
 
     public void createCodeCellsOfAction(int x, int y, int mode, int actionType) {
         messageForLog = "";
-        String code = "";
+        String code = x + delimiter + y;
         /*mode:
          *0-simple shoot
          * 1-volley shoot
@@ -331,22 +331,49 @@ public class OnlineGameMapBuilder extends MapBuilder {
          * 3-shooting on straight*/
         //create message for log about actioned cells and first part of code
         switch (mode) {
-            case 0:
-                code = x + delimiter + y;
-                break;
             case 1:
 
                 break;
             case 2:
-
+                code += getCodeByExploration(x, y);
                 break;
             case 3:
 
-                break;
+
         }
         //create and send code of cells
         onlineGameWindow.setMessageForLog(messageForLog);
         onlineGameWindow.sendCodeOfGameTurn(code + delimiter + actionType);
+    }
+
+    private String getCodeByExploration(int x, int y) {
+        String message = "*Exploration: ";
+        String code = "";
+        for (int i = -1; i < 2; i++) {
+            if (y + i < map.length && y + i >= 0) {
+                if (x - 1 >= 0) {
+                  code+=  getCodeForOneCellByAction(x - 1, y + i);
+                    message+=getMessageAboutActionedCells(x-1,y+i);
+                }
+                if (x + 1 < map.length) {
+                    code+=  getCodeForOneCellByAction(x + 1, y + i);
+                    message+=getMessageAboutActionedCells(x+1,y+i);
+                }
+                if (i != 0) {
+                    code+= getCodeForOneCellByAction(x, y + i);
+                    message+=getMessageAboutActionedCells(x,y+i);
+                }
+            }
+        }
+        messageForLog = message+"\n";
+        return code;
+    }
+
+    private String getCodeForOneCellByAction(int x, int y) {
+        return delimiter + x + delimiter + y;
+    }
+    private String getMessageAboutActionedCells(int x, int y) {
+        return "(" + x +";" + y+") ";
     }
 
     private void verifyEndOfTheGame() {
