@@ -19,7 +19,7 @@ import static java.lang.Math.random;
 import static java.lang.String.format;
 
 public class Server implements ServerSocketThreadListener, SocketThreadListener {
-    private final Random RANDOM = new Random();
+    private Random random;
     private final DateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss: ");
     private final ServerListener listener;
     private ServerSocketThread thread;
@@ -250,7 +250,7 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
         }
     }
     private boolean turnOfClient() {
-
+        random = new Random(System.currentTimeMillis());
         if (random()>0.5) return true;
         else return false;
     }
