@@ -5,10 +5,10 @@ import ru.fomin.battleship.client.gui.OnlineGameWindow;
 import java.util.Random;
 import java.util.Vector;
 
-import static java.lang.Math.random;
+
 
 public class OnlineGameMapBuilder extends MapBuilder {
-    private Random random = new Random();
+    private Random random;
     private String delimiterAboutDestroyed = "d";
     private String delimiterCombo = delimiterAboutDestroyed + delimiter;
     private OnlineGameWindow onlineGameWindow;
@@ -342,7 +342,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
          * 3-shooting on straight*/
         //create message for log about actioned cells and first part of code
         switch (mode) {
-            case 0:
+            case 1:
                 break;
             case 2:
                 code += getCodeByExploration(x, y);
@@ -383,13 +383,16 @@ public class OnlineGameMapBuilder extends MapBuilder {
          * 20-vertical with only one unknown cell*/
         int directionOfLineForShooting = choseLineForShooting(countOfUnknownCellsByHorizontal, countOfUnknownCellsByVertical, 2);
         switch (directionOfLineForShooting) {
+            case 0:
+                messageForLog+="\n";
+                return code;
             case 10:
                 code += delimiter + coordinatesOfUnknownCellByHorizontal[0] + delimiter + coordinatesOfUnknownCellByHorizontal[1];
-                messageForLog+=getMessageAboutActionedCell(coordinatesOfUnknownCellByHorizontal[0],coordinatesOfUnknownCellByHorizontal[1]);
+                messageForLog+=getMessageAboutActionedCell(coordinatesOfUnknownCellByHorizontal[0],coordinatesOfUnknownCellByHorizontal[1])+"\n";
                 break;
             case 20:
                 code += delimiter + coordinatesOfUnknownCellByVertical[0] + delimiter + coordinatesOfUnknownCellByVertical[1];
-                messageForLog+=getMessageAboutActionedCell(coordinatesOfUnknownCellByVertical[0],coordinatesOfUnknownCellByVertical[1]);
+                messageForLog+=getMessageAboutActionedCell(coordinatesOfUnknownCellByVertical[0],coordinatesOfUnknownCellByVertical[1])+"\n";
                 break;
             default:
                 code += randomCellForShootingOnStraight(x, y, directionOfLineForShooting);
@@ -398,19 +401,20 @@ public class OnlineGameMapBuilder extends MapBuilder {
     }
 
     private String randomCellForShootingOnStraight(int x, int y, int directionOfLineForShooting) {
+        random = new Random(System.currentTimeMillis());
         String code = "";
         int bufferCoordinate = -1;
         int randomCoordinate;
         for (int i = 0; i < 2; i++) {
             while (true) {
                 randomCoordinate = random.nextInt(10);
-                if (directionOfLineForShooting == 1 && y != bufferCoordinate && y != randomCoordinate && !isThisCellKnown(x, randomCoordinate)) {
+                if (directionOfLineForShooting == 1 && randomCoordinate != bufferCoordinate && y != randomCoordinate && !isThisCellKnown(x, randomCoordinate)) {
                     bufferCoordinate = randomCoordinate;
                     code += delimiter + x + delimiter + randomCoordinate;
                     messageForLog+=getMessageAboutActionedCell(x,randomCoordinate);
                     break;
                 } else {
-                    if (directionOfLineForShooting == 2 && x != bufferCoordinate && x != randomCoordinate && !isThisCellKnown(randomCoordinate, y)) {
+                    if (directionOfLineForShooting == 2 && randomCoordinate != bufferCoordinate && x != randomCoordinate && !isThisCellKnown(randomCoordinate, y)) {
                         bufferCoordinate = randomCoordinate;
                         code += delimiter + randomCoordinate + delimiter + y;
                         messageForLog+=getMessageAboutActionedCell(randomCoordinate,y);
@@ -423,6 +427,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
         return code;
     }
     private int choseLineForShooting(int countOfUnknownCellsByHorizontal, int countOfUnknownCellsByVertical, int minCountOfUnknownCells) {
+        random = new Random(System.currentTimeMillis());
         int multiplier = 1;
         if (minCountOfUnknownCells == 1) multiplier = 10;
         if (countOfUnknownCellsByHorizontal >= minCountOfUnknownCells) {
