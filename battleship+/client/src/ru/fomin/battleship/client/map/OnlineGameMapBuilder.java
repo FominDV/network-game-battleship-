@@ -345,13 +345,28 @@ public class OnlineGameMapBuilder extends MapBuilder {
                 code += getCodeByExploration(x, y);
                 break;
             case 3:
-
-
+                code+=getCodeByShootingOnStraight(x,y);
         }
         //create and send code of cells
         onlineGameWindow.setMessageForLog(messageForLog);
         onlineGameWindow.sendCodeOfGameTurn(code + delimiter + actionType);
 onlineGameWindow.changeAllButtonsAfterAction();
+    }
+
+    private String getCodeByShootingOnStraight(int x, int y) {
+        String message = "*Shot cells: " + getMessageAboutActionedCell(x, y);
+        String code = "";
+        int countOfUnknownCellsByHorizontal=0;
+        int countOfUnknownCellsByVertical=0;
+        int[] coordinatesOfUnknownCellByHorizontal=new int[2];
+        int[] coordinatesOfUnknownCellByVertical=new int[2];
+        for(int i=0;i<2;i++){
+            for(int j=0;j<map.length;j++){
+                if(!isThisCellKnown(x,y)){
+
+                }
+            }
+        }
     }
 
     private String getCodeByExploration(int x, int y) {
