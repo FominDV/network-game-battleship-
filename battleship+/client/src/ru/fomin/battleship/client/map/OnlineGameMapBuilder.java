@@ -2,9 +2,13 @@ package ru.fomin.battleship.client.map;
 
 import ru.fomin.battleship.client.gui.OnlineGameWindow;
 
+import java.util.Random;
 import java.util.Vector;
 
+import static java.lang.Math.random;
+
 public class OnlineGameMapBuilder extends MapBuilder {
+    private Random random = new Random();
     private String delimiterAboutDestroyed = "d";
     private String delimiterCombo = delimiterAboutDestroyed + delimiter;
     private OnlineGameWindow onlineGameWindow;
@@ -136,8 +140,8 @@ public class OnlineGameMapBuilder extends MapBuilder {
                 x = codeIntegerElements[i][j];
                 y = codeIntegerElements[i][j + 1];
                 status = codeIntegerElements[i][j + 2];
-                if(onlineGameWindow.getPastMode() == 2)
-                if (isThisCellKnown(x, y)&&onlineGameWindow.getPastMode() == 2) continue;
+                if (onlineGameWindow.getPastMode() == 2)
+                    if (isThisCellKnown(x, y) && onlineGameWindow.getPastMode() == 2) continue;
                 if (onlineGameWindow.getPastMode() == 2 && status == 6) map[x][y].setImage(1111);
                 //decision effect of shooting
                 if (lastUsingCellForActionCoordinates[0] == x && lastUsingCellForActionCoordinates[1] == y && (status == 2 || status == 3))
@@ -205,21 +209,21 @@ public class OnlineGameMapBuilder extends MapBuilder {
 
     private void showCellsAroundVerticalShip(int[] codeOfShip) {
         for (int i = -1; i < 2; i++) {
-            if (codeOfShip[0] + 1 < map.length && codeOfShip[1] + i >= 0 && codeOfShip[1] + i < map.length&&!isThisCellKnown(codeOfShip[0] + 1, codeOfShip[1] + i)) {
+            if (codeOfShip[0] + 1 < map.length && codeOfShip[1] + i >= 0 && codeOfShip[1] + i < map.length && !isThisCellKnown(codeOfShip[0] + 1, codeOfShip[1] + i)) {
                 map[codeOfShip[0] + 1][codeOfShip[1] + i].setImage(5);
                 map[codeOfShip[0] + 1][codeOfShip[1] + i].setNotActive();
             }
-            if ( codeOfShip[codeOfShip.length - 3] - 1 >= 0 && codeOfShip[codeOfShip.length - 2] + i >= 0 && codeOfShip[codeOfShip.length - 2] + i < map.length&&!isThisCellKnown(codeOfShip[codeOfShip.length - 3] - 1, codeOfShip[codeOfShip.length - 2] + i)) {
+            if (codeOfShip[codeOfShip.length - 3] - 1 >= 0 && codeOfShip[codeOfShip.length - 2] + i >= 0 && codeOfShip[codeOfShip.length - 2] + i < map.length && !isThisCellKnown(codeOfShip[codeOfShip.length - 3] - 1, codeOfShip[codeOfShip.length - 2] + i)) {
                 map[codeOfShip[codeOfShip.length - 3] - 1][codeOfShip[codeOfShip.length - 2] + i].setImage(5);
                 map[codeOfShip[codeOfShip.length - 3] - 1][codeOfShip[codeOfShip.length - 2] + i].setNotActive();
             }
         }
         for (int i = 0; i < codeOfShip.length; i += 3) {
-            if ( codeOfShip[i + 1] + 1 < map.length&&!isThisCellKnown(codeOfShip[i], codeOfShip[i + 1] + 1)) {
+            if (codeOfShip[i + 1] + 1 < map.length && !isThisCellKnown(codeOfShip[i], codeOfShip[i + 1] + 1)) {
                 map[codeOfShip[i]][codeOfShip[i + 1] + 1].setImage(5);
                 map[codeOfShip[i]][codeOfShip[i + 1] + 1].setNotActive();
             }
-            if ( codeOfShip[i + 1] - 1 >= 0&&!isThisCellKnown(codeOfShip[i], codeOfShip[i + 1] - 1) ) {
+            if (codeOfShip[i + 1] - 1 >= 0 && !isThisCellKnown(codeOfShip[i], codeOfShip[i + 1] - 1)) {
                 map[codeOfShip[i]][codeOfShip[i + 1] - 1].setImage(5);
                 map[codeOfShip[i]][codeOfShip[i + 1] - 1].setNotActive();
             }
@@ -232,17 +236,17 @@ public class OnlineGameMapBuilder extends MapBuilder {
                 map[codeOfShip[0] + i][codeOfShip[1] - 1].setImage(5);
                 map[codeOfShip[0] + i][codeOfShip[1] - 1].setNotActive();
             }
-            if (  codeOfShip[codeOfShip.length - 2] + 1 < map.length && codeOfShip[codeOfShip.length - 3] + i >= 0 && codeOfShip[codeOfShip.length - 3] + i < map.length&&!isThisCellKnown(codeOfShip[codeOfShip.length - 3] + i, codeOfShip[codeOfShip.length - 2] + 1)) {
+            if (codeOfShip[codeOfShip.length - 2] + 1 < map.length && codeOfShip[codeOfShip.length - 3] + i >= 0 && codeOfShip[codeOfShip.length - 3] + i < map.length && !isThisCellKnown(codeOfShip[codeOfShip.length - 3] + i, codeOfShip[codeOfShip.length - 2] + 1)) {
                 map[codeOfShip[codeOfShip.length - 3] + i][codeOfShip[codeOfShip.length - 2] + 1].setImage(5);
                 map[codeOfShip[codeOfShip.length - 3] + i][codeOfShip[codeOfShip.length - 2] + 1].setNotActive();
             }
         }
         for (int i = 0; i < codeOfShip.length; i += 3) {
-            if (  codeOfShip[i] + 1 < map.length&&!isThisCellKnown(codeOfShip[i] + 1, codeOfShip[i + 1])) {
+            if (codeOfShip[i] + 1 < map.length && !isThisCellKnown(codeOfShip[i] + 1, codeOfShip[i + 1])) {
                 map[codeOfShip[i] + 1][codeOfShip[i + 1]].setImage(5);
                 map[codeOfShip[i] + 1][codeOfShip[i + 1]].setNotActive();
             }
-            if (  codeOfShip[i] - 1 >= 0&&!isThisCellKnown(codeOfShip[i] - 1, codeOfShip[i + 1])) {
+            if (codeOfShip[i] - 1 >= 0 && !isThisCellKnown(codeOfShip[i] - 1, codeOfShip[i + 1])) {
                 map[codeOfShip[i] - 1][codeOfShip[i + 1]].setImage(5);
                 map[codeOfShip[i] - 1][codeOfShip[i + 1]].setNotActive();
             }
@@ -338,33 +342,101 @@ public class OnlineGameMapBuilder extends MapBuilder {
          * 3-shooting on straight*/
         //create message for log about actioned cells and first part of code
         switch (mode) {
-            case 1:
-
+            case 0:
                 break;
             case 2:
                 code += getCodeByExploration(x, y);
                 break;
             case 3:
-                code+=getCodeByShootingOnStraight(x,y);
+                code += getCodeByShootingOnStraight(x, y);
         }
         //create and send code of cells
         onlineGameWindow.setMessageForLog(messageForLog);
         onlineGameWindow.sendCodeOfGameTurn(code + delimiter + actionType);
-onlineGameWindow.changeAllButtonsAfterAction();
+        onlineGameWindow.changeAllButtonsAfterAction();
     }
 
     private String getCodeByShootingOnStraight(int x, int y) {
-        String message = "*Shot cells: " + getMessageAboutActionedCell(x, y);
+        messageForLog = "*Shot cells: " + getMessageAboutActionedCell(x, y);
         String code = "";
-        int countOfUnknownCellsByHorizontal=0;
-        int countOfUnknownCellsByVertical=0;
-        int[] coordinatesOfUnknownCellByHorizontal=new int[2];
-        int[] coordinatesOfUnknownCellByVertical=new int[2];
-        for(int i=0;i<2;i++){
-            for(int j=0;j<map.length;j++){
-                if(!isThisCellKnown(x,y)){
+        int countOfUnknownCellsByHorizontal = 0;
+        int countOfUnknownCellsByVertical = 0;
+        int[] coordinatesOfUnknownCellByHorizontal = new int[2];
+        int[] coordinatesOfUnknownCellByVertical = new int[2];
+        for (int j = 0; j < map.length; j++) {
+            if (y != j && !isThisCellKnown(x, j)) {
+                coordinatesOfUnknownCellByHorizontal[0] = x;
+                coordinatesOfUnknownCellByHorizontal[1] = j;
+                countOfUnknownCellsByHorizontal++;
+            }
+            if (x != j && !isThisCellKnown(j, y)) {
+                coordinatesOfUnknownCellByVertical[0] = j;
+                coordinatesOfUnknownCellByVertical[1] = y;
+                countOfUnknownCellsByVertical++;
+            }
+        }
+        /*direction:
+         * 1-horizontal
+         * 0-not searched
+         * 2-vertical
+         * 10-horizontal with only one unknown cell
+         * 20-vertical with only one unknown cell*/
+        int directionOfLineForShooting = choseLineForShooting(countOfUnknownCellsByHorizontal, countOfUnknownCellsByVertical, 2);
+        switch (directionOfLineForShooting) {
+            case 10:
+                code += delimiter + coordinatesOfUnknownCellByHorizontal[0] + delimiter + coordinatesOfUnknownCellByHorizontal[1];
+                messageForLog+=getMessageAboutActionedCell(coordinatesOfUnknownCellByHorizontal[0],coordinatesOfUnknownCellByHorizontal[1]);
+                break;
+            case 20:
+                code += delimiter + coordinatesOfUnknownCellByVertical[0] + delimiter + coordinatesOfUnknownCellByVertical[1];
+                messageForLog+=getMessageAboutActionedCell(coordinatesOfUnknownCellByVertical[0],coordinatesOfUnknownCellByVertical[1]);
+                break;
+            default:
+                code += randomCellForShootingOnStraight(x, y, directionOfLineForShooting);
+        }
+        return code;
+    }
 
+    private String randomCellForShootingOnStraight(int x, int y, int directionOfLineForShooting) {
+        String code = "";
+        int bufferCoordinate = -1;
+        int randomCoordinate;
+        for (int i = 0; i < 2; i++) {
+            while (true) {
+                randomCoordinate = random.nextInt(10);
+                if (directionOfLineForShooting == 1 && y != bufferCoordinate && y != randomCoordinate && !isThisCellKnown(x, randomCoordinate)) {
+                    bufferCoordinate = randomCoordinate;
+                    code += delimiter + x + delimiter + randomCoordinate;
+                    messageForLog+=getMessageAboutActionedCell(x,randomCoordinate);
+                    break;
+                } else {
+                    if (directionOfLineForShooting == 2 && x != bufferCoordinate && x != randomCoordinate && !isThisCellKnown(randomCoordinate, y)) {
+                        bufferCoordinate = randomCoordinate;
+                        code += delimiter + randomCoordinate + delimiter + y;
+                        messageForLog+=getMessageAboutActionedCell(randomCoordinate,y);
+                        break;
+                    }
                 }
+            }
+        }
+        messageForLog+="\n";
+        return code;
+    }
+    private int choseLineForShooting(int countOfUnknownCellsByHorizontal, int countOfUnknownCellsByVertical, int minCountOfUnknownCells) {
+        int multiplier = 1;
+        if (minCountOfUnknownCells == 1) multiplier = 10;
+        if (countOfUnknownCellsByHorizontal >= minCountOfUnknownCells) {
+            if (countOfUnknownCellsByVertical >= minCountOfUnknownCells) {
+                if (minCountOfUnknownCells != 0) return (random.nextInt(2) + 1) * multiplier;
+                else return 0;
+            } else {
+                return multiplier;
+            }
+        } else {
+            if (countOfUnknownCellsByVertical >= minCountOfUnknownCells) {
+                return 2 * multiplier;
+            } else {
+                return choseLineForShooting(countOfUnknownCellsByHorizontal, countOfUnknownCellsByVertical, minCountOfUnknownCells - 1);
             }
         }
     }
