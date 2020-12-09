@@ -366,7 +366,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
             while (true) {
                 randomX = x + random.nextInt(3)-1;
                 randomY = y + random.nextInt(3)-1;
-                if ((randomX!=x||randomY!=y)&&(isNotChosenCell(randomX, randomY, coordinatesOfRandomShotCells, i))) {
+                if ((randomX!=x||randomY!=y)&&isValidCoordinates(randomX,randomY)&&(isNotChosenCell(randomX, randomY, coordinatesOfRandomShotCells, i)||isLastRandomCellForCornerShotCell(x,y,i))) {
                     messageForLog+=getMessageAboutActionedCell(randomX,randomY);
                     code+=getCodeForOneCellByAction(randomX,randomY);
                     coordinatesOfRandomShotCells[i][0]=randomX;
@@ -379,8 +379,16 @@ public class OnlineGameMapBuilder extends MapBuilder {
         return code;
     }
 
+    private boolean isValidCoordinates(int randomX, int randomY) {
+        if(randomX>=map.length||randomX<0||randomY>=map.length||randomY<0) return false; else return true;
+    }
+
+    private boolean isLastRandomCellForCornerShotCell(int x, int y, int i) {
+        if(i==3&&((x==0||x==map.length-1)&&(x==0||x== map.length-1)))return true; else return false;
+    }
+
     private boolean isNotChosenCell(int randomX, int randomY, int[][] coordinatesOfRandomShotCells, int i) {
-        if(randomX>=map.length||randomX<0||randomY>=map.length||randomY<0) return false;
+
         for (int j = 0; j < i; j++) {
             if (coordinatesOfRandomShotCells[j][0] == randomX && coordinatesOfRandomShotCells[j][1] == randomY)
                 return false;
