@@ -6,7 +6,6 @@ import java.util.Random;
 import java.util.Vector;
 
 
-
 public class OnlineGameMapBuilder extends MapBuilder {
     private Random random;
     private String delimiterAboutDestroyed = "d";
@@ -343,6 +342,7 @@ public class OnlineGameMapBuilder extends MapBuilder {
         //create message for log about actioned cells and first part of code
         switch (mode) {
             case 1:
+                code += getCodeOfVolley(x, y);
                 break;
             case 2:
                 code += getCodeByExploration(x, y);
@@ -354,6 +354,38 @@ public class OnlineGameMapBuilder extends MapBuilder {
         onlineGameWindow.setMessageForLog(messageForLog);
         onlineGameWindow.sendCodeOfGameTurn(code + delimiter + actionType);
         onlineGameWindow.changeAllButtonsAfterAction();
+    }
+
+    private String getCodeOfVolley(int x, int y) {
+        messageForLog = "*Shot cells: " + getMessageAboutActionedCell(x, y);
+        String code = "";
+        int randomX, randomY;
+        random = new Random(System.currentTimeMillis());
+        int[][] coordinatesOfRandomShotCells = new int[4][2];
+        for (int i = 0; i < 4; i++) {
+            while (true) {
+                randomX = x + random.nextInt(3)-1;
+                randomY = y + random.nextInt(3)-1;
+                if ((randomX!=x||randomY!=y)&&(isNotChosenCell(randomX, randomY, coordinatesOfRandomShotCells, i))) {
+                    messageForLog+=getMessageAboutActionedCell(randomX,randomY);
+                    code+=getCodeForOneCellByAction(randomX,randomY);
+                    coordinatesOfRandomShotCells[i][0]=randomX;
+                    coordinatesOfRandomShotCells[i][1]=randomY;
+                    break;
+                }
+            }
+        }
+        messageForLog += "\n";
+        return code;
+    }
+
+    private boolean isNotChosenCell(int randomX, int randomY, int[][] coordinatesOfRandomShotCells, int i) {
+        if(randomX>=map.length||randomX<0||randomY>=map.length||randomY<0) return false;
+        for (int j = 0; j < i; j++) {
+            if (coordinatesOfRandomShotCells[j][0] == randomX && coordinatesOfRandomShotCells[j][1] == randomY)
+                return false;
+        }
+        return true;
     }
 
     private String getCodeByShootingOnStraight(int x, int y) {
@@ -384,15 +416,15 @@ public class OnlineGameMapBuilder extends MapBuilder {
         int directionOfLineForShooting = choseLineForShooting(countOfUnknownCellsByHorizontal, countOfUnknownCellsByVertical, 2);
         switch (directionOfLineForShooting) {
             case 0:
-                messageForLog+="\n";
+                messageForLog += "\n";
                 return code;
             case 10:
                 code += delimiter + coordinatesOfUnknownCellByHorizontal[0] + delimiter + coordinatesOfUnknownCellByHorizontal[1];
-                messageForLog+=getMessageAboutActionedCell(coordinatesOfUnknownCellByHorizontal[0],coordinatesOfUnknownCellByHorizontal[1])+"\n";
+                messageForLog += getMessageAboutActionedCell(coordinatesOfUnknownCellByHorizontal[0], coordinatesOfUnknownCellByHorizontal[1]) + "\n";
                 break;
             case 20:
                 code += delimiter + coordinatesOfUnknownCellByVertical[0] + delimiter + coordinatesOfUnknownCellByVertical[1];
-                messageForLog+=getMessageAboutActionedCell(coordinatesOfUnknownCellByVertical[0],coordinatesOfUnknownCellByVertical[1])+"\n";
+                messageForLog += getMessageAboutActionedCell(coordinatesOfUnknownCellByVertical[0], coordinatesOfUnknownCellByVertical[1]) + "\n";
                 break;
             default:
                 code += randomCellForShootingOnStraight(x, y, directionOfLineForShooting);
@@ -411,21 +443,22 @@ public class OnlineGameMapBuilder extends MapBuilder {
                 if (directionOfLineForShooting == 1 && randomCoordinate != bufferCoordinate && y != randomCoordinate && !isThisCellKnown(x, randomCoordinate)) {
                     bufferCoordinate = randomCoordinate;
                     code += delimiter + x + delimiter + randomCoordinate;
-                    messageForLog+=getMessageAboutActionedCell(x,randomCoordinate);
+                    messageForLog += getMessageAboutActionedCell(x, randomCoordinate);
                     break;
                 } else {
                     if (directionOfLineForShooting == 2 && randomCoordinate != bufferCoordinate && x != randomCoordinate && !isThisCellKnown(randomCoordinate, y)) {
                         bufferCoordinate = randomCoordinate;
                         code += delimiter + randomCoordinate + delimiter + y;
-                        messageForLog+=getMessageAboutActionedCell(randomCoordinate,y);
+                        messageForLog += getMessageAboutActionedCell(randomCoordinate, y);
                         break;
                     }
                 }
             }
         }
-        messageForLog+="\n";
+        messageForLog += "\n";
         return code;
     }
+
     private int choseLineForShooting(int countOfUnknownCellsByHorizontal, int countOfUnknownCellsByVertical, int minCountOfUnknownCells) {
         random = new Random(System.currentTimeMillis());
         int multiplier = 1;
