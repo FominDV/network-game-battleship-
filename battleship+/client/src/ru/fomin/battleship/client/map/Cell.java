@@ -88,11 +88,11 @@ public class Cell extends JButton {
                 break;
             case 1:
                 this.status = 1;
-                setIcon(new ImageIcon(getClass().getResource("../img/seaUnknown.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/seaUnknown.png")));
                 break;
             case 2:
                 this.status = 2;
-                setIcon(new ImageIcon(getClass().getResource("../img/damage.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage.png")));
                 break;
             case 3:
                 this.status = 3;
@@ -104,134 +104,134 @@ public class Cell extends JButton {
                 break;
             case 5:
                 this.status = 5;
-                setIcon(new ImageIcon(getClass().getResource("../img/sea.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/sea.png")));
                 break;
             case 6:
                 this.status = 6;
                 break;
                 //Image about miss
             case 12:
-                setIcon(new ImageIcon(getClass().getResource("../img/miss.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/miss.png")));
                 break;
                 //Images for ships which are alive
             case 11:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship1.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship1.png")));
                 break;
             case 211:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship211.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship211.png")));
                 break;
             case 212:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship212.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship212.png")));
                 break;
             case 221:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship221.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship221.png")));
                 break;
             case 222:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship222.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship222.png")));
                 break;
             case 311:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship311.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship311.png")));
                 break;
             case 312:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship312.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship312.png")));
                 break;
             case 313:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship313.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship313.png")));
                 break;
             case 321:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship321.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship321.png")));
                 break;
             case 322:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship322.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship322.png")));
                 break;
             case 323:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship323.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship323.png")));
                 break;
             case 411:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship411.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship411.png")));
                 break;
             case 412:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship412.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship412.png")));
                 break;
             case 413:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship413.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship413.png")));
                 break;
             case 414:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship414.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship414.png")));
                 break;
             case 421:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship421.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship421.png")));
                 break;
             case 422:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship422.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship422.png")));
                 break;
             case 423:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship423.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship423.png")));
                 break;
             case 424:
-                setIcon(new ImageIcon(getClass().getResource("../img/ship424.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship424.png")));
                 break;
             //Images for destroyed ships
             case 110:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage1.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage1.png")));
                 break;
             case 2110:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage211.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage211.png")));
                 break;
             case 2120:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage212.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage212.png")));
                 break;
             case 2210:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage221.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage221.png")));
                 break;
             case 2220:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage222.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage222.png")));
                 break;
             case 3110:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage311.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage311.png")));
                 break;
             case 3120:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage312.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage312.png")));
                 break;
             case 3130:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage313.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage313.png")));
                 break;
             case 3210:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage321.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage321.png")));
                 break;
             case 3220:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage322.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage322.png")));
                 break;
             case 3230:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage323.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage323.png")));
                 break;
             case 4110:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage411.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage411.png")));
                 break;
             case 4120:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage412.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage412.png")));
                 break;
             case 4130:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage413.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage413.png")));
                 break;
             case 4140:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage414.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage414.png")));
                 break;
             case 4210:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage421.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage421.png")));
                 break;
             case 4220:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage422.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage422.png")));
                 break;
             case 4230:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage423.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage423.png")));
                 break;
             case 4240:
-                setIcon(new ImageIcon(getClass().getResource("../img/damage424.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/damage424.png")));
                 break;
                 //cell with ship after exploration
             case 1111:
-                setIcon(new ImageIcon(getClass().getResource("../img/watched.png")));
+                setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/watched.png")));
                 break;
         }
     }

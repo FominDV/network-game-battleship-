@@ -153,13 +153,13 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         labelMode.setForeground(COLOR_OF_POST_MODE);
         labelMode.setHorizontalAlignment(SwingConstants.CENTER);
         mapBuilder.setCountOfShips();
-        LABEL_SHIP_4_IMAGE.setIcon(new ImageIcon(getClass().getResource("../img/ship4.png")));
+        LABEL_SHIP_4_IMAGE.setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship4.png")));
         LABEL_SHIP_4_IMAGE.setHorizontalAlignment(SwingConstants.CENTER);
-        LABEL_SHIP_3_IMAGE.setIcon(new ImageIcon(getClass().getResource("../img/ship3.png")));
+        LABEL_SHIP_3_IMAGE.setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship3.png")));
         LABEL_SHIP_3_IMAGE.setHorizontalAlignment(SwingConstants.CENTER);
-        LABEL_SHIP_2_IMAGE.setIcon(new ImageIcon(getClass().getResource("../img/ship2.png")));
+        LABEL_SHIP_2_IMAGE.setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship2.png")));
         LABEL_SHIP_2_IMAGE.setHorizontalAlignment(SwingConstants.CENTER);
-        LABEL_SHIP_1_IMAGE.setIcon(new ImageIcon(getClass().getResource("../img/ship1.png")));
+        LABEL_SHIP_1_IMAGE.setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship1.png")));
         LABEL_SHIP_1_IMAGE.setHorizontalAlignment(SwingConstants.CENTER);
 
 
