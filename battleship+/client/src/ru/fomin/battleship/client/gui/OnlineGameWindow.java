@@ -2,7 +2,7 @@ package ru.fomin.battleship.client.gui;
 
 import ru.fomin.battleship.client.client_core.WorkingWithNetwork;
 import ru.fomin.battleship.client.map.Cell;
-import ru.fomin.battleship.client.map.OnlineGameMapBuilder;
+import ru.fomin.battleship.client.map.OnlineGamePreparingForGameMapBuilder;
 import ru.fomin.battleship.common.LibraryOfPrefixes;
 
 import javax.swing.*;
@@ -77,8 +77,8 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private String mapCodeOfUser;
     private final int SIZE_OF_MAP;
     private WorkingWithNetwork listener;
-    private OnlineGameMapBuilder mapBuilderOfUser;
-    private OnlineGameMapBuilder mapBuilderOfOpponent;
+    private OnlineGamePreparingForGameMapBuilder mapBuilderOfUser;
+    private OnlineGamePreparingForGameMapBuilder mapBuilderOfOpponent;
     private final int WIDTH = 1440;
     private final int HEIGHT = 750;
 
@@ -164,8 +164,8 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         int sizeOfPanelMap = SIZE_OF_MAP + 1;
         panelMapOfUser = new JPanel(new GridLayout(sizeOfPanelMap, sizeOfPanelMap));
         panelMapOfOpponent = new JPanel(new GridLayout(sizeOfPanelMap, sizeOfPanelMap));
-        mapBuilderOfUser = new OnlineGameMapBuilder(fillMap(panelMapOfUser), this);
-        mapBuilderOfOpponent = new OnlineGameMapBuilder(fillMap(panelMapOfOpponent), this);
+        mapBuilderOfUser = new OnlineGamePreparingForGameMapBuilder(fillMap(panelMapOfUser), this);
+        mapBuilderOfOpponent = new OnlineGamePreparingForGameMapBuilder(fillMap(panelMapOfOpponent), this);
         mapBuilderOfUser.loadMap(mapCodeOfUser);
         WRAPPER_FOR_MAP_OF_USER.add(panelMapOfUser);
         WRAPPER_FOR_MAP_OF_OPPONENT.add(panelMapOfOpponent);

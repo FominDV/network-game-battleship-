@@ -15,7 +15,7 @@ public class Cell extends JButton {
      * 5-known cell free
      * 6-known cell with ship
      * 0-special status for to processing the code from opponent at the end of the game*/
-    static String delimiter = MapBuilder.delimiter;
+    static String delimiter = PreparingForGameMapBuilder.delimiter;
     private boolean isActive;
     private int status;
     private final int X;

@@ -3,7 +3,7 @@ package ru.fomin.battleship.client.gui;
 import ru.fomin.battleship.client.map.Cell;
 import ru.fomin.battleship.client.client_core.SearchOpponentThread;
 import ru.fomin.battleship.client.client_core.WorkingWithNetwork;
-import ru.fomin.battleship.client.map.MapBuilder;
+import ru.fomin.battleship.client.map.PreparingForGameMapBuilder;
 import ru.fomin.battleship.common.LibraryOfPrefixes;
 import ru.fomin.network.SocketThread;
 
@@ -43,7 +43,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private boolean isSavedMap = false;
     private String opponentNickname = "empty";
     private SearchOpponentThread searchOpponentThread = null;
-    private MapBuilder mapBuilder;
+    private PreparingForGameMapBuilder preparingForGameMapBuilder;
     private final Color COLOR_OF_BACKGROUND = new Color(99, 234, 234);
     private final Color COLOR_OF_START = new Color(215, 99, 99);
     private final Color COLOR_OF_POST_MODE = new Color(50, 104, 1);
@@ -152,7 +152,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         labelMode.setFont(FONT_FOR_MODE);
         labelMode.setForeground(COLOR_OF_POST_MODE);
         labelMode.setHorizontalAlignment(SwingConstants.CENTER);
-        mapBuilder.setCountOfShips();
+        preparingForGameMapBuilder.setCountOfShips();
         LABEL_SHIP_4_IMAGE.setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship4.png")));
         LABEL_SHIP_4_IMAGE.setHorizontalAlignment(SwingConstants.CENTER);
         LABEL_SHIP_3_IMAGE.setIcon(new ImageIcon(getClass().getResource("/ru/fomin/battleship/client/img/ship3.png")));
@@ -235,7 +235,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
                 PANEL_MAP.add(map[i][j]);
             }
         }
-        mapBuilder = new MapBuilder(map, this);
+        preparingForGameMapBuilder = new PreparingForGameMapBuilder(map, this);
     }
 
     private void searchOpponent() {
@@ -292,7 +292,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             if (isReadyToPlayAgain) {
                 listener.exitToMapBuilder();
             } else {
-                mapBuilder.cancelStatus4();
+                preparingForGameMapBuilder.cancelStatus4();
             }
             return;
         }
@@ -301,7 +301,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             isPost = true;
             labelMode.setText(POST_MODE);
             labelMode.setForeground(COLOR_OF_POST_MODE);
-            mapBuilder.post();
+            preparingForGameMapBuilder.post();
             return;
         }
         if (source.equals(BUTTON_REMOVE)) {
@@ -309,7 +309,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
             isPost = false;
             labelMode.setText(REMOVE_MODE);
             labelMode.setForeground(COLOR_OF_REMOVE_MODE);
-            mapBuilder.cancelStatus4();
+            preparingForGameMapBuilder.cancelStatus4();
             return;
         }
         if (source.equals(BUTTON_START)) {
@@ -355,7 +355,7 @@ private void actionOfButtonStartForPlayAgainMode(){
     }
 
     public void startToPlayAgain() {
-        listener.setOnlineGameWindow(new OnlineGameWindow(opponentNickname, NICK_NAME, mapBuilder.getDataSaving(), listener, SIZE_OF_MAP));
+        listener.setOnlineGameWindow(new OnlineGameWindow(opponentNickname, NICK_NAME, preparingForGameMapBuilder.getDataSaving(), listener, SIZE_OF_MAP));
         listener.sendMessageToServer(LibraryOfPrefixes.GET_FIRST_TURN);
         dispose();
     }
@@ -389,11 +389,11 @@ private void actionOfButtonStartForPlayAgainMode(){
     }
 
     public boolean validCellForPreparingPost(int x, int y) {
-        return mapBuilder.validCellForPreparingPost(isPost, x, y);
+        return preparingForGameMapBuilder.validCellForPreparingPost(isPost, x, y);
     }
 
     public void remove(int x, int y) {
-        mapBuilder.remove(x, y);
+        preparingForGameMapBuilder.remove(x, y);
     }
 
     public boolean getMode() {
@@ -419,7 +419,7 @@ private void actionOfButtonStartForPlayAgainMode(){
                         break;
                     }
                 }
-                listener.sendMessageToServer(LibraryOfPrefixes.getSavingMapMessage(LOGIN, nameData, mapBuilder.getDataSaving()));
+                listener.sendMessageToServer(LibraryOfPrefixes.getSavingMapMessage(LOGIN, nameData, preparingForGameMapBuilder.getDataSaving()));
             } else {
                 startGameWithNewOrPastOpponent();
             }
@@ -433,7 +433,7 @@ private void startGameWithNewOrPastOpponent(){
     }
 
     public void startOnlineGame() {
-        listener.setOnlineGameWindow(new OnlineGameWindow(opponentNickname, NICK_NAME, mapBuilder.getDataSaving(), listener, SIZE_OF_MAP));
+        listener.setOnlineGameWindow(new OnlineGameWindow(opponentNickname, NICK_NAME, preparingForGameMapBuilder.getDataSaving(), listener, SIZE_OF_MAP));
         dispose();
     }
 
@@ -466,7 +466,7 @@ private void startGameWithNewOrPastOpponent(){
         for (String[] data : dataMapVector) {
             if (data[0].equals(selectedName)) dataMap = data[1];
         }
-        mapBuilder.loadMap(dataMap);
+        preparingForGameMapBuilder.loadMap(dataMap);
         isSavedMap = true;
     }
 

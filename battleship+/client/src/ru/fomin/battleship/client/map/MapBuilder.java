@@ -6,7 +6,6 @@ import java.util.Vector;
 
 public class MapBuilder {
     protected Cell[][] map;
-    private PreparingForGameFrame preparingForGameFrame;
     protected final int MAX_OF_SHIP4 = 1;
     protected final int MAX_OF_SHIP3 = 2;
     protected final int MAX_OF_SHIP2 = 3;
@@ -16,46 +15,11 @@ public class MapBuilder {
     protected int count3Ship = 0;
     protected int count4Ship = 0;
     static String delimiter = "x";
+    protected PreparingForGameFrame preparingForGameFrame;
     protected final int[] IMAGES_OF_SHIP1 = {11};
     protected final int[] IMAGES_OF_SHIP3 = {311, 312, 313, 321, 322, 323};
     protected final int[] IMAGES_OF_SHIP2 = {211, 212, 221, 222};
     protected final int[] IMAGES_OF_SHIP4 = {411, 412, 413, 414, 421, 422, 423, 424};
-
-    public MapBuilder(Cell[][] map, PreparingForGameFrame preparingForGameFrame) {
-        this.map = map;
-        this.preparingForGameFrame = preparingForGameFrame;
-    }
-
-    public MapBuilder() {
-    }
-
-    public void setCountOfShips() {
-        if (preparingForGameFrame != null)
-            preparingForGameFrame.setCountOfShips(count1Ship, count2Ship, count3Ship, count4Ship);
-    }
-
-
-    public boolean validCellForPreparingPost(boolean isPostMode, int x, int y) {
-        if (isPostMode && map[x][y].getStatus() == 5 && validSpaces(x, y) && validShipLength(x, y)) return true;
-        else return false;
-    }
-
-    private boolean validShipLength(int x, int y) {
-        int maxLengthOfShip = maxLengthOfShip();
-        int statusOfCell;
-        int direction = getDirectionOfShip(x, y, 4, 4);
-        int nowLengthOfShip = nowLengthOfShip(x, y, 4);
-        if (nowLengthOfShip >= maxLengthOfShip) return false;
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map.length; j++) {
-                statusOfCell = map[i][j].getStatus();
-                if (direction == -1 && statusOfCell == 4 && (i != x - 1 || i != x + 1) && j != y) return false;
-                if (direction == 1 && statusOfCell == 4 && (i != y - 1 || i != y + 1) && i != x) return false;
-                if (direction == 0 && statusOfCell == 4) return false;
-            }
-        }
-        return true;
-    }
 
     protected int nowLengthOfShip(int x, int y, int status) {
         int direction = getDirectionOfShip(x, y, status, status);
@@ -82,55 +46,6 @@ public class MapBuilder {
         }
         return countCellOfShip;
     }
-
-    private int maxLengthOfShip() {
-        if (count4Ship < MAX_OF_SHIP4) return 4;
-        if (count3Ship < MAX_OF_SHIP3) return 3;
-        if (count2Ship < MAX_OF_SHIP2) return 2;
-        if (count1Ship < MAX_OF_SHIP1) return 1;
-        return 0;
-    }
-
-    private boolean validSpaces(int x, int y) {
-        int direction = getDirectionOfShip(x, y, 4, 4);
-        if (y - 1 >= 0 && x - 1 >= 0) {
-            if (direction == -1 && !((y + 1 >= map.length || (map[x][y + 1].getStatus() == 5 && map[x - 1][y + 1].getStatus() == 5)) && map[x][y - 1].getStatus() == 5 && ((x + 1 >= map.length || map[x + 1][y].getStatus() == 5 || map[x + 1][y].getStatus() == 4) || (map[x - 1][y].getStatus() == 5 || map[x - 1][y].getStatus() == 4)) && map[x - 1][y - 1].getStatus() == 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5) && (x + 1 >= map.length || map[x + 1][y - 1].getStatus() == 5)))
-                return false;
-            if (direction == 1 && !((x + 1 >= map.length || (map[x + 1][y].getStatus() == 5 && map[x + 1][y - 1].getStatus() == 5)) && map[x - 1][y].getStatus() == 5 && ((y + 1 >= map.length || ((map[x][y + 1].getStatus() == 5 || map[x][y + 1].getStatus() == 4) && map[x - 1][y + 1].getStatus() == 5))) && (map[x][y - 1].getStatus() == 5 || map[x][y - 1].getStatus() == 4) && map[x - 1][y - 1].getStatus() == 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5)))
-                return false;
-            if (direction == 0 && !((y + 1 >= map.length || (map[x][y + 1].getStatus() == 5 && map[x - 1][y + 1].getStatus() == 5)) && map[x][y - 1].getStatus() == 5 && (x + 1 >= map.length || (map[x + 1][y].getStatus() == 5 && map[x + 1][y - 1].getStatus() == 5)) && map[x - 1][y].getStatus() == 5 && map[x - 1][y - 1].getStatus() == 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5)))
-                return false;
-        } else {
-            if (y - 1 >= 0 && x - 1 < 0) {
-                if (direction == -1 && !((y + 1 >= map.length || map[x][y + 1].getStatus() == 5) && map[x][y - 1].getStatus() == 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5) && (x + 1 >= map.length || (map[x + 1][y - 1].getStatus() == 5 && (map[x + 1][y].getStatus() == 5 || map[x + 1][y].getStatus() == 4)))))
-                    return false;
-                if (direction == 1 && !(((y + 1 >= map.length || map[x][y + 1].getStatus() == 5 || map[x][y + 1].getStatus() == 4) || (map[x][y - 1].getStatus() == 5 || map[x][y - 1].getStatus() == 4)) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5) && (x + 1 >= map.length || (map[x + 1][y - 1].getStatus() == 5 && map[x + 1][y].getStatus() == 5))))
-                    return false;
-                if (direction == 0 && !((y + 1 >= map.length || map[x][y + 1].getStatus() == 5) && map[x][y - 1].getStatus() == 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5) && (x + 1 >= map.length || (map[x + 1][y - 1].getStatus() == 5 && map[x + 1][y].getStatus() == 5))))
-                    return false;
-            } else {
-                if (y - 1 < 0 && x - 1 < 0) {
-                    if (direction == -1 && !((y + 1 >= map.length || map[x][y + 1].getStatus() == 5) && (x + 1 >= map.length || map[x + 1][y].getStatus() == 5 || map[x + 1][y].getStatus() == 4) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5)))
-                        return false;
-                    if (direction == 1 && !((x + 1 >= map.length || map[x + 1][y].getStatus() == 5) && (y + 1 >= map.length || map[x][y + 1].getStatus() == 5 || map[x][y + 1].getStatus() == 4) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5)))
-                        return false;
-                    if (direction == 0 && !((y + 1 >= map.length || map[x][y + 1].getStatus() == 5) && (x + 1 >= map.length || map[x + 1][y].getStatus() == 5) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5)))
-                        return false;
-                } else {
-                    if (y - 1 < 0 && x - 1 >= 0) {
-                        if (direction == -1 && !((y + 1 >= map.length || (map[x][y + 1].getStatus() == 5 && map[x - 1][y + 1].getStatus() == 5)) && ((x + 1 >= map.length || map[x + 1][y].getStatus() == 5 || map[x + 1][y].getStatus() == 4) || (map[x - 1][y].getStatus() == 5 || map[x - 1][y].getStatus() == 4)) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5)))
-                            return false;
-                        if (direction == 1 && !((x + 1 >= map.length || map[x + 1][y].getStatus() == 5) && map[x - 1][y].getStatus() == 5 && (y + 1 >= map.length || ((map[x][y + 1].getStatus() == 5 || map[x][y + 1].getStatus() == 4) && map[x - 1][y + 1].getStatus() == 5)) && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5)))
-                            return false;
-                        if (direction == 0 && !((y + 1 >= map.length || (map[x][y + 1].getStatus() == 5 && map[x - 1][y + 1].getStatus() == 5)) && (x + 1 >= map.length || map[x + 1][y].getStatus() == 5) && map[x - 1][y].getStatus() == 5 && (x + 1 >= map.length || y + 1 >= map.length || map[x + 1][y + 1].getStatus() == 5)))
-                            return false;
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
 
     /*1: horizontal
      * 0: no direction
@@ -164,12 +79,25 @@ public class MapBuilder {
         return 0;
     }
 
-    public void cancelStatus4() {
+    public void loadMap(String dataMap) {
+        int x, y;
+        String[] coordinates = dataMap.split(delimiter);
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map.length; j++) {
-                if (map[i][j].getStatus() == 4) map[i][j].setImage(5);
+                map[i][j].setImage(5);
             }
         }
+        for (int i = 0; i < coordinates.length; i += 2) {
+            x = Integer.parseInt(coordinates[i]);
+            y = Integer.parseInt(coordinates[i + 1]);
+            map[x][y].setImage(4);
+        }
+        count1Ship = 0;
+        count2Ship = 0;
+        count3Ship = 0;
+        count4Ship = 0;
+        for (int i = 0; i < 10; i++) post();
+        setCountOfShips();
     }
 
     public void post() {
@@ -190,14 +118,13 @@ public class MapBuilder {
         postTheShip(lengthOfShip, cellsForBuildingShip, direction);
     }
 
-    public void postTheShip(int lengthOfShip, Vector<Cell> cellsOfShip, int direction) {
+    private void postTheShip(int lengthOfShip, Vector<Cell> cellsOfShip, int direction) {
         if (!isSetNewCountOfShips(lengthOfShip)) return;
         for (Cell cell : cellsOfShip) {
             cell.setImage(6);
         }
         setImageForShip(cellsOfShip, direction, getImagesForShip(cellsOfShip.size()));
     }
-
 
     protected void setImageForShip(Vector<Cell> cellsOfShip, int direction, int[] imagesForShip) {
         if (direction == 0) {
@@ -225,7 +152,6 @@ public class MapBuilder {
                 return IMAGES_OF_SHIP1;
         }
     }
-
 
     private boolean isSetNewCountOfShips(int lengthOfShip) {
         switch (lengthOfShip) {
@@ -294,64 +220,8 @@ public class MapBuilder {
         return cellsOfShip;
     }
 
-    public void remove(int x, int y) {
-        if (map[x][y].getStatus() != 6) return;
-        Vector<Cell> cellsOfShip = getCellsOfShip(x, y, 6, 6);
-        for (Cell cell : cellsOfShip) {
-            cell.setImage(5);
-        }
-        reduceCountOfShips(cellsOfShip.size());
-        setCountOfShips();
+    public void setCountOfShips() {
+        if (preparingForGameFrame != null)
+            preparingForGameFrame.setCountOfShips(count1Ship, count2Ship, count3Ship, count4Ship);
     }
-
-    private void reduceCountOfShips(int lengthOfShip) {
-        switch (lengthOfShip) {
-            case 4:
-                count4Ship--;
-                break;
-            case 3:
-                count3Ship--;
-                break;
-            case 2:
-                count2Ship--;
-                break;
-            case 1:
-                count1Ship--;
-                break;
-        }
-    }
-
-    public String getDataSaving() {
-        String dataSaving = "";
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map.length; j++) {
-                if (map[i][j].getStatus() == 6) if (dataSaving.equals("")) dataSaving += i + delimiter + j;
-                else dataSaving += delimiter + i + delimiter + j;
-            }
-        }
-        return dataSaving;
-    }
-
-    public void loadMap(String dataMap) {
-        int x, y;
-        String[] coordinates = dataMap.split(delimiter);
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map.length; j++) {
-                map[i][j].setImage(5);
-            }
-        }
-        for (int i = 0; i < coordinates.length; i += 2) {
-            x = Integer.parseInt(coordinates[i]);
-            y = Integer.parseInt(coordinates[i + 1]);
-            map[x][y].setImage(4);
-        }
-        count1Ship = 0;
-        count2Ship = 0;
-        count3Ship = 0;
-        count4Ship = 0;
-        for (int i = 0; i < 10; i++) post();
-        setCountOfShips();
-    }
-
-
 }
