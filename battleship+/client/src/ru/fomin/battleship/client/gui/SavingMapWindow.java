@@ -1,7 +1,6 @@
 package ru.fomin.battleship.client.gui;
 
-import ru.fomin.battleship.client.client_core.WorkingWithNetwork;
-import ru.fomin.battleship.common.LibraryOfPrefixes;
+import ru.fomin.battleship.client.client_core.WorkingWithHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +10,7 @@ import java.util.Vector;
 
 public class SavingMapWindow extends JFrame implements ActionListener {
     private PreparingForGameFrame preparingForGameFrame;
-    private WorkingWithNetwork listener;
+    private WorkingWithHandler listener;
     private Vector<String[]> dataMapVector = new Vector<>();
     private final String TITLE = "Saving map menu";
     private final int WIDTH = 400;
@@ -29,7 +28,7 @@ public class SavingMapWindow extends JFrame implements ActionListener {
     private final JPanel PANEL_RIGHT = new JPanel(new GridLayout(3, 1));
     private final Color COLOR_OF_HEAD_TEXT = new Color(24, 104, 153);
 
-    public SavingMapWindow(PreparingForGameFrame preparingForGameFrame, WorkingWithNetwork listener, Vector<String[]> dataMapVector) {
+    public SavingMapWindow(PreparingForGameFrame preparingForGameFrame, WorkingWithHandler listener, Vector<String[]> dataMapVector) {
         this.preparingForGameFrame = preparingForGameFrame;
         this.listener = listener;
         this.dataMapVector = dataMapVector;

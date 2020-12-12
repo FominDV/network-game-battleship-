@@ -1,8 +1,8 @@
 package ru.fomin.battleship.client.gui;
 
+import ru.fomin.battleship.client.client_core.WorkingWithHandler;
 import ru.fomin.battleship.client.map.Cell;
 import ru.fomin.battleship.client.client_core.SearchOpponentThread;
-import ru.fomin.battleship.client.client_core.WorkingWithNetwork;
 import ru.fomin.battleship.client.map.PreparingForGameMapBuilder;
 import ru.fomin.battleship.common.LibraryOfPrefixes;
 import ru.fomin.network.SocketThread;
@@ -34,7 +34,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private final SocketThread SOCKET_THREAD;
     private final String NICK_NAME;
     private final String LOGIN;
-    private final WorkingWithNetwork listener;
+    private final WorkingWithHandler listener;
     private boolean isOpponentReady = false;
     private boolean isPlayAgainMode = false;
     private boolean isReadyToPlayAgain = false;
@@ -91,7 +91,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     private JLabel labelOfOpponentProgress = new JLabel(TEXT_OPPONENT_NOT_READY);
 
 
-    public PreparingForGameFrame(SocketThread socketThread, String nickname, WorkingWithNetwork listener, String login) {
+    public PreparingForGameFrame(SocketThread socketThread, String nickname, WorkingWithHandler listener, String login) {
         NICK_NAME = nickname;
         SOCKET_THREAD = socketThread;
         this.listener = listener;
@@ -99,7 +99,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         SwingUtilities.invokeLater(() -> initialization());
     }
 
-    public PreparingForGameFrame(SocketThread socketThread, String nickname, String opponentNickname, WorkingWithNetwork listener, String login) {
+    public PreparingForGameFrame(SocketThread socketThread, String nickname, String opponentNickname, WorkingWithHandler listener, String login) {
         NICK_NAME = nickname;
         this.opponentNickname = opponentNickname;
         SOCKET_THREAD = socketThread;

@@ -1,6 +1,6 @@
 package ru.fomin.battleship.client.gui;
 
-import ru.fomin.battleship.client.client_core.WorkingWithNetwork;
+import ru.fomin.battleship.client.client_core.WorkingWithHandler;
 import ru.fomin.battleship.client.map.Cell;
 import ru.fomin.battleship.client.map.OnlineGamePreparingForGameMapBuilder;
 import ru.fomin.battleship.common.LibraryOfPrefixes;
@@ -76,7 +76,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final String NICK_NAME;
     private String mapCodeOfUser;
     private final int SIZE_OF_MAP;
-    private WorkingWithNetwork listener;
+    private WorkingWithHandler listener;
     private OnlineGamePreparingForGameMapBuilder mapBuilderOfUser;
     private OnlineGamePreparingForGameMapBuilder mapBuilderOfOpponent;
     private final int WIDTH = 1440;
@@ -142,7 +142,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     private final JButton BUTTON_EXIT = new JButton("EXIT");
 
 
-    public OnlineGameWindow(String opponentNickname, String nickName, String mapCodeOfUser, WorkingWithNetwork listener, int sizeOfMap) {
+    public OnlineGameWindow(String opponentNickname, String nickName, String mapCodeOfUser, WorkingWithHandler listener, int sizeOfMap) {
         this.opponentNickname = opponentNickname;
         NICK_NAME = nickName;
         this.mapCodeOfUser = mapCodeOfUser;

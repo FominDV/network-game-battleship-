@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Vector;
 
-public class Handler implements SocketThreadListener, WorkingWithNetwork {
+public class Handler implements SocketThreadListener, WorkingWithHandler {
     //This variable is needed for to prevent double re registration of the client who clicked on button "EXIT" from OnlineGameWindow
     private boolean isNotExitToMapBuilder = true;
     private String nickName;
@@ -95,7 +95,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
     public void showConnectError() {
         JOptionPane.showMessageDialog(null, "The connection was lost", "Connection error", JOptionPane.ERROR_MESSAGE);
     }
-
+//send data to server about authentication or registration
     @Override
     public void onSocketReady(SocketThread thread, Socket socket) {
         if (isRegistration) {
@@ -123,19 +123,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
         onSocketStop(thread);
         if (preparingForGameFrame != null) preparingForGameFrame.stopSearching();
     }
-
-    private void showException(Thread t, Throwable e) {
-        String msg;
-        StackTraceElement[] ste = e.getStackTrace();
-        if (ste.length == 0)
-            msg = "Empty Stacktrace";
-        else {
-            msg = String.format("Exception in \"%s\" %s: %s\n\tat %s",
-                    t.getName(), e.getClass().getCanonicalName(), e.getMessage(), ste[0]);
-        }
-        JOptionPane.showMessageDialog(null, msg, "Exception", JOptionPane.ERROR_MESSAGE);
-    }
-
+//This method for working with messages from server
     private void handleMessage(String msg) {
         String[] arr = msg.split(LibraryOfPrefixes.DELIMITER);
         String msgType = arr[0];
@@ -243,7 +231,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             e.printStackTrace();
         }
     }
-
+//This method for send dta of saving to PreparingForGameFrame
     private void writeDataIntoTheList(String[] dataMapArray) {
         dataMapVector.clear();
         for (int i = 1; i < dataMapArray.length; i += 2) {
@@ -253,7 +241,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
             dataMapVector.add(dataRow);
         }
     }
-
+//Implement methods by WorkingWithHandler
     @Override
     public void sendMessageToServer(String message) {
         socketThread.sendMessage(message);
@@ -293,6 +281,7 @@ public class Handler implements SocketThreadListener, WorkingWithNetwork {
     public void setPreparingForGameWindow(PreparingForGameFrame preparingForGameFrame) {
         this.preparingForGameFrame = preparingForGameFrame;
     }
+    //this message for sending yourself and calling method 'reRegistration'
     @Override
     public void exitToMapBuilder() {
         sendMessageToServer(LibraryOfPrefixes.EXIT_TO_MAP_BUILDER);

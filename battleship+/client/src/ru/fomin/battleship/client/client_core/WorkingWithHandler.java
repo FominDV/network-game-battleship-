@@ -8,7 +8,7 @@ import ru.fomin.network.SocketThread;
 
 import java.util.Vector;
 
-public interface WorkingWithNetwork {
+public interface WorkingWithHandler {
     void sendMessageToServer(String message);
     Vector<String[]> getDataMap();
     void setSavingMapWindow(SavingMapWindow savingMapWindow);

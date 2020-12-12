@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-
+/*This class is needed for authentication and creating Handler. From this frame user can go to RegistrationFrame*/
 public class ClientAuthenticationFrame extends JFrame implements ActionListener {
     private final String INVALID_IP = "Invalid ip: ";
     private final String INVALID_PORT = "Invalid port: ";
@@ -25,8 +25,8 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
     private final JButton BTN_EDIT_PORT = new JButton("Edit port");
     private final JLabel LABEL_LOGIN = new JLabel("Login: ");
     private final JLabel LABEL_PASSWORD = new JLabel("Password: ");
-    private final JPasswordField PASSWORD_FIELD = new JPasswordField("test");
-    private final JTextField LOGIN_FIELD = new JTextField("test");
+    private final JPasswordField PASSWORD_FIELD = new JPasswordField();
+    private final JTextField LOGIN_FIELD = new JTextField();
     private final JLabel LABEL_IP = new JLabel();
     private final JLabel LABEL_PORT = new JLabel();
     private final String LABEL_IP_TEXT = "ip: ";
@@ -82,7 +82,7 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
         add(MAIN_PANEL);
         setVisible(true);
     }
-
+//set actions for buttons
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
@@ -150,7 +150,7 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
             }
         }
     }
-
+//This method checks ip
     private boolean isValidIP(String ip) {
         String[] octets = ip.split("\\.");
         if (octets.length != 4) return false;
@@ -164,7 +164,7 @@ public class ClientAuthenticationFrame extends JFrame implements ActionListener 
         if (isOctetsValueZero) return false;
         return true;
     }
-
+//this method checks port
     private boolean isValidPort(int port) {
         if (port > 0 && port <= 65536) return true;
         return false;
