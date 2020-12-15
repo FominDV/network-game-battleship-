@@ -3,7 +3,7 @@ package ru.fomin.battleship.client.map;
 import ru.fomin.battleship.client.gui.PreparingForGameFrame;
 
 import java.util.Vector;
-
+/*This is parent class for working with map*/
 public class MapBuilder {
     protected Cell[][] map;
     protected final int MAX_OF_SHIP4 = 1;
