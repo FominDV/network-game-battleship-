@@ -4,7 +4,7 @@ import ru.fomin.battleship.client.client_core.WorkingWithHandler;
 import ru.fomin.battleship.client.map.Cell;
 import ru.fomin.battleship.client.client_core.SearchOpponentThread;
 import ru.fomin.battleship.client.map.PreparingForGameMapBuilder;
-import ru.fomin.battleship.common.LibraryOfPrefixes;
+import static ru.fomin.battleship.common.LibraryOfPrefixes.*;
 import ru.fomin.network.SocketThread;
 
 import javax.swing.*;
@@ -240,7 +240,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
 
     private void searchOpponent() {
         if (searchOpponentThread == null || !(searchOpponentThread.isAlive())) {
-            listener.sendMessageToServer(LibraryOfPrefixes.MESSAGE_ABOUT_START_SEARCHING);
+            listener.sendMessageToServer(MESSAGE_ABOUT_START_SEARCHING);
             searchingOpponent = new SearchingOpponent(this);
             listener.setSearchingOpponent(searchingOpponent);
             searchOpponentThread = new SearchOpponentThread(this, searchingOpponent);
@@ -261,7 +261,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
     }
 
     public void sendMessageForSearching() {
-        listener.sendMessageToServer(LibraryOfPrefixes.getSearchOpponent(NICK_NAME));
+        listener.sendMessageToServer(getSearchOpponent(NICK_NAME));
     }
 
 
@@ -269,7 +269,7 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
         searchOpponentThread.interrupt();
         searchOpponentThread.stop();
         searchingOpponent.dispose();
-        listener.sendMessageToServer(LibraryOfPrefixes.STOP_SEARCHING);
+        listener.sendMessageToServer(STOP_SEARCHING);
     }
 
     @Override
@@ -335,18 +335,18 @@ public class PreparingForGameFrame extends JFrame implements ActionListener {
 private void actionOfButtonStartForPlayAgainMode(){
     if (!isPlayAgainMode) return;
         if (isOpponentReady) {
-            listener.sendMessageToServer(LibraryOfPrefixes.START_PLAY_AGAIN);
+            listener.sendMessageToServer(START_PLAY_AGAIN);
             startToPlayAgain();
         } else {
             isReadyToPlayAgain = true;
             labelOfOpponentProgress.setText(WAIT);
-            listener.sendMessageToServer(LibraryOfPrefixes.READY_PLAY_AGAIN);
+            listener.sendMessageToServer(READY_PLAY_AGAIN);
         }
 
 }
     public void verifyReadinessForPlayAgain() {
         if (isReadyToPlayAgain) {
-            listener.sendMessageToServer(LibraryOfPrefixes.START_PLAY_AGAIN);
+            listener.sendMessageToServer(START_PLAY_AGAIN);
             startToPlayAgain();
         } else {
             isOpponentReady = true;
@@ -356,7 +356,7 @@ private void actionOfButtonStartForPlayAgainMode(){
 
     public void startToPlayAgain() {
         listener.setOnlineGameWindow(new OnlineGameWindow(opponentNickname, NICK_NAME, preparingForGameMapBuilder.getDataSaving(), listener, SIZE_OF_MAP));
-        listener.sendMessageToServer(LibraryOfPrefixes.GET_FIRST_TURN);
+        listener.sendMessageToServer(GET_FIRST_TURN);
         dispose();
     }
 
@@ -419,7 +419,7 @@ private void actionOfButtonStartForPlayAgainMode(){
                         break;
                     }
                 }
-                listener.sendMessageToServer(LibraryOfPrefixes.getSavingMapMessage(LOGIN, nameData, preparingForGameMapBuilder.getDataSaving()));
+                listener.sendMessageToServer(getSavingMapMessage(LOGIN, nameData, preparingForGameMapBuilder.getDataSaving()));
             } else {
                 startGameWithNewOrPastOpponent();
             }
@@ -458,7 +458,7 @@ private void startGameWithNewOrPastOpponent(){
     }
 
     public void removeData(String selectedName) {
-        listener.sendMessageToServer(LibraryOfPrefixes.getRemoveDataMessage(LOGIN, selectedName));
+        listener.sendMessageToServer(getRemoveDataMessage(LOGIN, selectedName));
     }
 
     public void loadMap(String selectedName) {

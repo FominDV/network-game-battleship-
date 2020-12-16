@@ -1,6 +1,6 @@
 package ru.fomin.battleship.server.core;
 
-import ru.fomin.battleship.common.LibraryOfPrefixes;
+import static ru.fomin.battleship.common.LibraryOfPrefixes.*;
 import ru.fomin.network.ServerSocketThread;
 import ru.fomin.network.ServerSocketThreadListener;
 import ru.fomin.network.SocketThread;
@@ -102,7 +102,7 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
         CLIENTS.remove(thread);
         client.close();
         if (otherClient != null) {
-            otherClient.sendMessage(LibraryOfPrefixes.DISCONNECT_OPPONENT);
+            otherClient.sendMessage(DISCONNECT_OPPONENT);
             otherClient.setStopSearchingOpponent();
             putLog("Connection with " + client.getNickname() + " was lost");
             putLog(client.getNickname() + " was disconnected with " + otherClient.getNickname());
@@ -131,85 +131,85 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
     }
 
     private void handleAuthMessage(ClientThread client, String msg) {
-        String[] arr = msg.split(LibraryOfPrefixes.DELIMITER);
+        String[] arr = msg.split(DELIMITER);
         String msgType = arr[0];
         switch (msgType) {
-            case LibraryOfPrefixes.MESSAGE_ABOUT_START_SEARCHING:
+            case MESSAGE_ABOUT_START_SEARCHING:
                 putLog(client.getNickname() + " started searching opponent");
                 break;
-            case LibraryOfPrefixes.SEARCH_OPPONENT:
+            case SEARCH_OPPONENT:
                 searchingOpponent(client);
                 break;
-            case LibraryOfPrefixes.STOP_SEARCHING:
+            case STOP_SEARCHING:
                 client.setStopSearchingOpponent();
                 putLog(client.getNickname() + " stopped searching opponent");
                 break;
-            case LibraryOfPrefixes.DATA_SAVING:
+            case DATA_SAVING:
                 if (!SQLClient.isValidNameForSave(arr[2], arr[1])) {
-                    client.sendMessage(LibraryOfPrefixes.DUPLICATE_NAME);
+                    client.sendMessage(DUPLICATE_NAME);
                     break;
                 }
                 if (SQLClient.setNewDataMap(arr)) {
                     putLog(client.getNickname() + " saved the map");
-                    client.sendMessage(LibraryOfPrefixes.SUCCESSFUL_SAVE);
+                    client.sendMessage(SUCCESSFUL_SAVE);
                 } else {
                     putLog(client.getNickname() + "saving the map failed");
-                    client.sendMessage(LibraryOfPrefixes.FAIL_SAVE);
+                    client.sendMessage(FAIL_SAVE);
                     break;
                 }
                 client.updateDataMap(SQLClient.getDataMap(client.getLogin()));
                 break;
-            case LibraryOfPrefixes.REMOVE_DATA:
+            case REMOVE_DATA:
                 SQLClient.removeData(arr[1], arr[2]);
                 client.updateDataMap(SQLClient.getDataMap(client.getLogin()));
                 putLog(client.getNickname() + " removed the \"" + arr[2] + "\" data");
                 break;
-            case LibraryOfPrefixes.CHAT_MESSAGE:
-                sendMessageToOpponent(client,LibraryOfPrefixes.getChatMessage(editChatMessage(arr[1], client.getNickname())));
+            case CHAT_MESSAGE:
+                sendMessageToOpponent(client,getChatMessage(editChatMessage(arr[1], client.getNickname())));
                 putLog(client.getNickname() + " send message to " + client.getOpponentNickname());
                 break;
-            case LibraryOfPrefixes.CHANGE_TURN:
-                sendMessageToOpponent(client,LibraryOfPrefixes.CHANGE_TURN);
+            case CHANGE_TURN:
+                sendMessageToOpponent(client,CHANGE_TURN);
                 putLog("Now the turn of " + client.getOpponentNickname());
                 break;
-            case LibraryOfPrefixes.EXIT_TO_MAP_BUILDER:
-                client.sendMessage(LibraryOfPrefixes.EXIT_TO_MAP_BUILDER);
+            case EXIT_TO_MAP_BUILDER:
+                client.sendMessage(EXIT_TO_MAP_BUILDER);
                 putLog(client.getOpponentNickname()+" left the game VS "+client.getOpponentNickname());
                 break;
-            case LibraryOfPrefixes.CODE_OF_GAME_TURN:
-                sendMessageToOpponent(client,LibraryOfPrefixes.getCodeOfGameTurnMessage(arr[1]));
+            case CODE_OF_GAME_TURN:
+                sendMessageToOpponent(client,getCodeOfGameTurnMessage(arr[1]));
                 putLog(client.getNickname()+" made game turn");
                 break;
-            case LibraryOfPrefixes.CODE_OF_RESULT_TURN:
-                sendMessageToOpponent(client,LibraryOfPrefixes.getCodeResultOfTurn(arr[1]));
+            case CODE_OF_RESULT_TURN:
+                sendMessageToOpponent(client,getCodeResultOfTurn(arr[1]));
                 break;
-            case LibraryOfPrefixes.LOG_MESSAGE:
-                sendMessageToOpponent(client,LibraryOfPrefixes.getLogMessage(arr[1]));
+            case LOG_MESSAGE:
+                sendMessageToOpponent(client,getLogMessage(arr[1]));
                 putLog(arr[1]);
                 break;
-            case LibraryOfPrefixes.VICTORY:
-                sendMessageToOpponent(client,LibraryOfPrefixes.VICTORY);
+            case VICTORY:
+                sendMessageToOpponent(client,VICTORY);
                 putLog(client.getNickname()+" lost the game\n"+client.getOpponentNickname()+" won the game");
                 break;
-            case LibraryOfPrefixes.CODE_OF_MAP_AFTER_GAME:
-                sendMessageToOpponent(client,LibraryOfPrefixes.getCodeOfMapAfterGameMessage(arr[1]));
+            case CODE_OF_MAP_AFTER_GAME:
+                sendMessageToOpponent(client,getCodeOfMapAfterGameMessage(arr[1]));
                 break;
-            case LibraryOfPrefixes.LOG_LAST_MESSAGE:
-                sendMessageToOpponent(client,LibraryOfPrefixes.getLogLastPartMessage(arr[1]));
+            case LOG_LAST_MESSAGE:
+                sendMessageToOpponent(client,getLogLastPartMessage(arr[1]));
                 break;
-            case LibraryOfPrefixes.PLAY_AGAIN:
-                sendMessageToOpponent(client,LibraryOfPrefixes.PLAY_AGAIN);
+            case PLAY_AGAIN:
+                sendMessageToOpponent(client,PLAY_AGAIN);
                 putLog(client.getNickname()+" want to play again with "+client.getOpponentNickname());
                 break;
-            case LibraryOfPrefixes.READY_PLAY_AGAIN:
-                sendMessageToOpponent(client,LibraryOfPrefixes.READY_PLAY_AGAIN);
+            case READY_PLAY_AGAIN:
+                sendMessageToOpponent(client,READY_PLAY_AGAIN);
                 putLog(client.getNickname()+" is ready to play again with "+client.getOpponentNickname());
                 break;
-            case LibraryOfPrefixes.START_PLAY_AGAIN:
-                sendMessageToOpponent(client,LibraryOfPrefixes.START_PLAY_AGAIN);
+            case START_PLAY_AGAIN:
+                sendMessageToOpponent(client,START_PLAY_AGAIN);
                 putLog(client.getNickname()+" start to play again with "+client.getOpponentNickname());
                 break;
-            case LibraryOfPrefixes.GET_FIRST_TURN:
+            case GET_FIRST_TURN:
                 setFirstTurnForGame(client,findClientByNickname(client.getOpponentNickname()));
                 break;
             default:
@@ -230,8 +230,8 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
             if (((ClientThread) searchingClient).getOpponentNickname().equals("empty") && ((ClientThread) searchingClient).getSearchingOpponentStatus() && !(client.getNickname().equals(((ClientThread) searchingClient).getNickname())) && ((ClientThread) searchingClient).getNickname() != null) {
                 client.setOpponentNickname(((ClientThread) searchingClient).getNickname());
                 ((ClientThread) searchingClient).setOpponentNickname(client.getNickname());
-                client.sendMessage(LibraryOfPrefixes.getSearchOpponent(((ClientThread) searchingClient).getNickname()));
-                searchingClient.sendMessage((LibraryOfPrefixes.getSearchOpponent(client.getNickname())));
+                client.sendMessage(getSearchOpponent(((ClientThread) searchingClient).getNickname()));
+                searchingClient.sendMessage((getSearchOpponent(client.getNickname())));
                 putLog(client.getNickname() + " connected with " + ((ClientThread) searchingClient).getNickname());
                setFirstTurnForGame(client,searchingClient);
             }
@@ -240,12 +240,12 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
 
     private void setFirstTurnForGame(ClientThread user1, SocketThread user2){
         if (turnOfClient()) {
-            user1.sendMessage(LibraryOfPrefixes.getTurnMessage(1));
-            user2.sendMessage(LibraryOfPrefixes.getTurnMessage(0));
+            user1.sendMessage(getTurnMessage(1));
+            user2.sendMessage(getTurnMessage(0));
             putLog(user1.getNickname() + " get the first turn");
         } else {
-            user1.sendMessage(LibraryOfPrefixes.getTurnMessage(0));
-            user2.sendMessage(LibraryOfPrefixes.getTurnMessage(1));
+            user1.sendMessage(getTurnMessage(0));
+            user2.sendMessage(getTurnMessage(1));
             putLog(((ClientThread)user2).getNickname() + " get the first turn");
         }
     }
@@ -256,14 +256,14 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
     }
 
     private void handleNonAuthMessage(ClientThread client, String msg) {
-        String[] arr = msg.split(LibraryOfPrefixes.DELIMITER);
-        if (arr.length == 4 && arr[0].equals(LibraryOfPrefixes.REGISTRATION)) {
+        String[] arr = msg.split(DELIMITER);
+        if (arr.length == 4 && arr[0].equals(REGISTRATION)) {
             try {
                 if (SQLClient.setClientData(arr[1], arr[2], arr[3])) {
-                    client.sendMessage(LibraryOfPrefixes.getRegistrationAnswer("true"));
+                    client.sendMessage(getRegistrationAnswer("true"));
                     putLog(String.format("New client '%s' with nickname '%s' was created into database.", arr[1], arr[3]));
                 } else {
-                    client.sendMessage(LibraryOfPrefixes.getRegistrationAnswer("false"));
+                    client.sendMessage(getRegistrationAnswer("false"));
                     putLog(String.format("Error of creating new client. Client '%s' is already registered.", arr[1]));
                 }
             } catch (SQLException e) {
@@ -271,7 +271,7 @@ public class Server implements ServerSocketThreadListener, SocketThreadListener 
             }
             return;
         }
-        if (arr.length != 3 || !arr[0].equals(LibraryOfPrefixes.AUTH_REQUEST)) {
+        if (arr.length != 3 || !arr[0].equals(AUTH_REQUEST)) {
             client.msgFormatError(msg);
             return;
         }

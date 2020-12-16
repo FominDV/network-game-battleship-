@@ -1,7 +1,7 @@
 package ru.fomin.battleship.client.client_core;
 
 import ru.fomin.battleship.client.gui.*;
-import ru.fomin.battleship.common.LibraryOfPrefixes;
+import static ru.fomin.battleship.common.LibraryOfPrefixes.*;
 import ru.fomin.network.SocketThread;
 import ru.fomin.network.SocketThreadListener;
 
@@ -102,14 +102,14 @@ public class Handler implements SocketThreadListener, WorkingWithHandler {
             String nickName = registrationFrame.getNickName();
             String login = registrationFrame.getLogin();
             String password = new String(registrationFrame.getPassword());
-            thread.sendMessage(LibraryOfPrefixes.getRegistrationRequest(login, password, nickName));
+            thread.sendMessage(getRegistrationRequest(login, password, nickName));
             isRegistration = false;
         } else {
             String login = clientAuthenticationFrame.getLogin();
             if (login.equals("")) login = "Invalid_login";
             String password = new String(clientAuthenticationFrame.getPassword());
             if (password.equals("")) password = "Invalid_password";
-            thread.sendMessage(LibraryOfPrefixes.getAuthRequest(login, password));
+            thread.sendMessage(getAuthRequest(login, password));
         }
     }
 
@@ -125,23 +125,23 @@ public class Handler implements SocketThreadListener, WorkingWithHandler {
     }
 //This method for working with messages from server
     private void handleMessage(String msg) {
-        String[] arr = msg.split(LibraryOfPrefixes.DELIMITER);
+        String[] arr = msg.split(DELIMITER);
         String msgType = arr[0];
         switch (msgType) {
-            case LibraryOfPrefixes.AUTH_ACCEPT:
+            case AUTH_ACCEPT:
                 isValidAuthentication = true;
                 clientAuthenticationFrame.dispose();
                 nickName = arr[1];
                 preparingForGameFrame = new PreparingForGameFrame(socketThread, arr[1], this, login);
                 break;
-            case LibraryOfPrefixes.AUTH_DENIED:
+            case AUTH_DENIED:
                 showAuthenticationError();
                 clientAuthenticationFrame.clearFields();
                 break;
-            case LibraryOfPrefixes.MSG_FORMAT_ERROR:
+            case MSG_FORMAT_ERROR:
                 socketThread.close();
                 break;
-            case LibraryOfPrefixes.REGISTRATION:
+            case REGISTRATION:
                 if (arr[1].equals("true")) {
                     registrationFrame.registrationSuccessful();
                 } else {
@@ -149,67 +149,67 @@ public class Handler implements SocketThreadListener, WorkingWithHandler {
                 }
                 socketThread.close();
                 break;
-            case LibraryOfPrefixes.SEARCH_OPPONENT:
+            case SEARCH_OPPONENT:
                 isNotExitToMapBuilder = true;
                 preparingForGameFrame.setOpponentNickname(arr[1]);
                 break;
-            case LibraryOfPrefixes.DISCONNECT_OPPONENT:
+            case DISCONNECT_OPPONENT:
                 if (isNotExitToMapBuilder) {
                     JOptionPane.showMessageDialog(null, "Connect with your opponent was lost", "ERROR", JOptionPane.ERROR_MESSAGE);
                     reRegistration();
                 }
                 break;
-            case LibraryOfPrefixes.LIST_OF_DATA_MAP:
+            case LIST_OF_DATA_MAP:
                 writeDataIntoTheList(arr);
                 preparingForGameFrame.updateDataMap();
                 break;
-            case LibraryOfPrefixes.SUCCESSFUL_SAVE:
+            case SUCCESSFUL_SAVE:
                 preparingForGameFrame.successfulSave();
                 break;
-            case LibraryOfPrefixes.FAIL_SAVE:
+            case FAIL_SAVE:
                 preparingForGameFrame.failSave();
                 break;
-            case LibraryOfPrefixes.DUPLICATE_NAME:
+            case DUPLICATE_NAME:
                 preparingForGameFrame.showMessageAboutDuplicateNameOfSaving();
                 break;
-            case LibraryOfPrefixes.CHAT_MESSAGE:
+            case CHAT_MESSAGE:
                 onlineGameWindow.setChatMessage(arr[1]);
                 break;
-            case LibraryOfPrefixes.TURN:
+            case TURN:
                 onlineGameWindow.setTurnOfUser(arr[1]);
                 break;
-            case LibraryOfPrefixes.CHANGE_TURN:
+            case CHANGE_TURN:
                 onlineGameWindow.changeTurn();
                 break;
-            case LibraryOfPrefixes.EXIT_TO_MAP_BUILDER:
+            case EXIT_TO_MAP_BUILDER:
                 isNotExitToMapBuilder = false;
                 reRegistration();
                 break;
-            case LibraryOfPrefixes.CODE_OF_GAME_TURN:
+            case CODE_OF_GAME_TURN:
                 onlineGameWindow.processDataOfOpponentTurn(arr[1]);
                 break;
-            case LibraryOfPrefixes.CODE_OF_RESULT_TURN:
+            case CODE_OF_RESULT_TURN:
                 onlineGameWindow.processDataOfResultTurn(arr[1]);
                 break;
-            case LibraryOfPrefixes.LOG_MESSAGE:
+            case LOG_MESSAGE:
                 onlineGameWindow.appendIntoLog(arr[1]);
                 break;
-            case LibraryOfPrefixes.VICTORY:
+            case VICTORY:
                 onlineGameWindow.victory();
                 break;
-            case LibraryOfPrefixes.CODE_OF_MAP_AFTER_GAME:
+            case CODE_OF_MAP_AFTER_GAME:
                 onlineGameWindow.openMapOfOpponent(arr[1]);
                 break;
-            case LibraryOfPrefixes.LOG_LAST_MESSAGE:
+            case LOG_LAST_MESSAGE:
                 onlineGameWindow.setLastPartOfMessageForLog(arr[1]);
                 break;
-            case LibraryOfPrefixes.PLAY_AGAIN:
+            case PLAY_AGAIN:
                 onlineGameWindow.playAgain();
                 break;
-            case LibraryOfPrefixes.READY_PLAY_AGAIN:
+            case READY_PLAY_AGAIN:
                 preparingForGameFrame.verifyReadinessForPlayAgain();
                 break;
-            case LibraryOfPrefixes.START_PLAY_AGAIN:
+            case START_PLAY_AGAIN:
                 isNotExitToMapBuilder=true;
                 preparingForGameFrame.startToPlayAgain();
                 break;
@@ -284,6 +284,6 @@ public class Handler implements SocketThreadListener, WorkingWithHandler {
     //this message for sending yourself and calling method 'reRegistration'
     @Override
     public void exitToMapBuilder() {
-        sendMessageToServer(LibraryOfPrefixes.EXIT_TO_MAP_BUILDER);
+        sendMessageToServer(EXIT_TO_MAP_BUILDER);
     }
 }

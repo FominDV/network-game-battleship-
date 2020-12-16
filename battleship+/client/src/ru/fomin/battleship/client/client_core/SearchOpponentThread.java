@@ -2,10 +2,6 @@ package ru.fomin.battleship.client.client_core;
 
 import ru.fomin.battleship.client.gui.PreparingForGameFrame;
 import ru.fomin.battleship.client.gui.SearchingOpponent;
-import ru.fomin.battleship.common.LibraryOfPrefixes;
-
-import java.io.Closeable;
-import java.io.IOException;
 
 public class SearchOpponentThread extends Thread {
     private final long TIME_OUT = 1000L;

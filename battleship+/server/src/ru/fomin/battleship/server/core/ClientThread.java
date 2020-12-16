@@ -1,6 +1,6 @@
 package ru.fomin.battleship.server.core;
 
-import ru.fomin.battleship.common.LibraryOfPrefixes;
+import static ru.fomin.battleship.common.LibraryOfPrefixes.*;
 import ru.fomin.network.SocketThread;
 import ru.fomin.network.SocketThreadListener;
 
@@ -55,16 +55,16 @@ public class ClientThread extends SocketThread {
     void authAccept(String nickname) {
         isAuthorized = true;
         this.nickname = nickname;
-        sendMessage(LibraryOfPrefixes.getAuthAccept(nickname));
+        sendMessage(getAuthAccept(nickname));
     }
 
     void authFail() {
-        sendMessage(LibraryOfPrefixes.getAuthDenied());
+        sendMessage(getAuthDenied());
         close();
     }
 
     void msgFormatError(String msg) {
-        sendMessage(LibraryOfPrefixes.getMsgFormatError(msg));
+        sendMessage(getMsgFormatError(msg));
         close();
     }
 public void setLogin(String login){
@@ -75,7 +75,7 @@ public void setLogin(String login){
     }
 
     public void updateDataMap(Vector<String> dataMap) {
-        sendMessage(LibraryOfPrefixes.getDataOfMapList(dataMap));
+        sendMessage(getDataOfMapList(dataMap));
     }
 
 }

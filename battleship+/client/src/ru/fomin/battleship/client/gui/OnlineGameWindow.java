@@ -3,7 +3,7 @@ package ru.fomin.battleship.client.gui;
 import ru.fomin.battleship.client.client_core.WorkingWithHandler;
 import ru.fomin.battleship.client.map.Cell;
 import ru.fomin.battleship.client.map.OnlineGamePreparingForGameMapBuilder;
-import ru.fomin.battleship.common.LibraryOfPrefixes;
+import static ru.fomin.battleship.common.LibraryOfPrefixes.*;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -293,7 +293,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         lastPartOfMessageForLog = "";
         LOG.append(message + "\n");
         LOG.setCaretPosition(LOG.getDocument().getLength());
-        listener.sendMessageToServer(LibraryOfPrefixes.getLogMessage(message));
+        listener.sendMessageToServer(getLogMessage(message));
     }
 
     private String createMessageAboutNextTurn(boolean isActionAgain) {
@@ -421,7 +421,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     private void sendMessageIntoChat(String message) {
-        listener.sendMessageToServer(LibraryOfPrefixes.getChatMessage(message));
+        listener.sendMessageToServer(getChatMessage(message));
         Date date = new Date();
         CHAT.append(format("YOU(%tR):\n%s\n", date, message));
         CHAT.setCaretPosition(CHAT.getDocument().getLength());
@@ -459,12 +459,12 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     public void sendMessageAboutChangeTurn() {
-        listener.sendMessageToServer(LibraryOfPrefixes.CHANGE_TURN);
+        listener.sendMessageToServer(CHANGE_TURN);
         increaseRechargingPoints();
     }
 
     public void sendCodeOfGameTurn(String codeOfGameTurn) {
-        listener.sendMessageToServer(LibraryOfPrefixes.getCodeOfGameTurnMessage(codeOfGameTurn));
+        listener.sendMessageToServer(getCodeOfGameTurnMessage(codeOfGameTurn));
     }
 
     public void processDataOfOpponentTurn(String codeOfGameTurn) {
@@ -472,7 +472,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     public void sendCodeResultOfGameTurn(String codeOfTurnResult) {
-        listener.sendMessageToServer(LibraryOfPrefixes.getCodeResultOfTurn(codeOfTurnResult));
+        listener.sendMessageToServer(getCodeResultOfTurn(codeOfTurnResult));
     }
 
     public void processDataOfResultTurn(String codeOfResultTurn) {
@@ -485,7 +485,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
 
     private void sendMessageAboutLostModeForLog(String modeName) {
         String message = String.format("*%s lost mode of '%s'\n", NICK_NAME, modeName);
-        listener.sendMessageToServer(LibraryOfPrefixes.getLogLastPartMessage(message));
+        listener.sendMessageToServer(getLogLastPartMessage(message));
     }
 
     public void blockTurnsForVolley() {
@@ -643,12 +643,12 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
     }
 
     public void gameIsLost() {
-        listener.sendMessageToServer(LibraryOfPrefixes.VICTORY);
+        listener.sendMessageToServer(VICTORY);
     }
 
     public void victory() {
         mapBuilderOfOpponent.openSpaceCells();
-        listener.sendMessageToServer(LibraryOfPrefixes.getCodeOfMapAfterGameMessage(mapBuilderOfUser.getCodeOfMapAfterGame()));
+        listener.sendMessageToServer(getCodeOfMapAfterGameMessage(mapBuilderOfUser.getCodeOfMapAfterGame()));
         SwingUtilities.invokeLater(() -> showEndOfTheGame(1));
     }
 
@@ -690,7 +690,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
             PANEL_OF_ENDING.setVisible(false);
             LABEL_OF_ENDING.setText("<html><br>PLEASE WAIT DECISION OF YOUR OPPONENT</html>");
             add(LABEL_OF_ENDING, BorderLayout.NORTH);
-            listener.sendMessageToServer(LibraryOfPrefixes.PLAY_AGAIN);
+            listener.sendMessageToServer(PLAY_AGAIN);
         }
     }
 
@@ -704,7 +704,7 @@ public class OnlineGameWindow extends JFrame implements ActionListener {
         } else {
             if (isConfirmMessage(opponentNickname + " suggest you to play again\nDo you agree?")) {
                 isPlayAgain = true;
-                listener.sendMessageToServer(LibraryOfPrefixes.PLAY_AGAIN);
+                listener.sendMessageToServer(PLAY_AGAIN);
                 startNewGameWithPastOpponent();
             } else {
                 exitToMapBuilder();
