@@ -6,7 +6,7 @@ import java.util.Random;
 import java.util.Vector;
 
 
-public class OnlineGamePreparingForGameMapBuilder extends MapBuilder {
+public class OnlineGameMapBuilder extends MapBuilder {
 
     private Random random;
     private String delimiterAboutDestroyed = "d";
@@ -20,7 +20,7 @@ public class OnlineGamePreparingForGameMapBuilder extends MapBuilder {
     private final int[] IMAGES_OF_DAMAGED_SHIP2 = {2110, 2120, 2210, 2220};
     private final int[] IMAGES_OF_DAMAGED_SHIP4 = {4110, 4120, 4130, 4140, 4210, 4220, 4230, 4240};
 
-    public OnlineGamePreparingForGameMapBuilder(Cell[][] map, OnlineGameWindow onlineGameWindow) {
+    public OnlineGameMapBuilder(Cell[][] map, OnlineGameWindow onlineGameWindow) {
         this.map = map;
         this.onlineGameWindow = onlineGameWindow;
         count4Ship = MAX_OF_SHIP4;
